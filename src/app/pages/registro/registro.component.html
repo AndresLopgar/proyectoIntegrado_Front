@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="registro">
+        <h2><u>Registro</u></h2>
+        <form id="registroForm">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" pInputText>
+            </div>
+            <div class="form-group">
+                <label for="correo">Correo:</label>
+                <input type="email" id="correo" name="correo" pInputText>
+            </div>
+            <div class="form-group">
+                <label for="contraseña">Contraseña:</label>
+                <input type="password" id="contraseña" name="contraseña" pPassword>
+            </div>
+            <div class="form-group">
+                <label for="foto">Foto de Perfil:</label>
+                <input type="file" id="foto" name="foto" pFileUpload mode="basic">
+                <p (click)="navegaLogin()"><u>Tengo cuenta</u></p>
+            </div>
+            <button class="botonRegistro" type="button" (click)="registro()" pButton>Aceptar</button>
+            <button type="button" (click)="borrar('registroForm')" pButton>Limpiar</button>
+        </form>
+    </div>
+</div>
