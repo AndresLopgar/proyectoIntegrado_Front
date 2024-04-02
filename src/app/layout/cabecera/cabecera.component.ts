@@ -42,7 +42,7 @@ export class CabeceraComponent implements OnInit{
         this.titulo = 'Login';
         break;
       case '/registro':
-        this.titulo = 'Registro';
+        this.titulo = 'Registro Usuario';
         break;
       case '/perfil':
         this.titulo = 'Perfil';
@@ -58,6 +58,9 @@ export class CabeceraComponent implements OnInit{
         break;
       case '/moderar':
         this.titulo = 'Moderación';
+        break;
+      case '/companiaRegistro':
+        this.titulo = 'Registro Compañía';
         break;
       default:
         this.titulo = 'Error';

@@ -3,15 +3,20 @@
         <h2>Login</h2>
         <form #loginForm="ngForm"> <!-- Creo una referencia al formulario -->
             <div class="form-group">
-                <label for="usuario"><b>Usuario</b> (nombre o correo):</label>
+                <label for="usuario"><b>Usuario/Compañía</b></label>
                 <!-- establezco el valor de usuario al valor del input -->
-                <input type="text" id="usuario" name="usuario" pInputText [(ngModel)]="loginData.usuario"> 
+                <input type="text" id="usuario/compañia" name="usuario" pInputText [(ngModel)]="loginData.usuario"> 
             </div>
             <div class="form-group">
                 <label for="contraseñaLogin"><b>Contraseña:</b></label>
                 <!-- establezco el valor de la contraseña al valor del input -->
                 <input type="password" id="contraseñaLogin" name="contraseñaLogin" pPassword [(ngModel)]="loginData.contrasenaLogin">
-                <div class="registrarse" (click)="navegaRegistro()"><u>Registrarse</u></div>
+                <div class="registros">
+                    <p>Registra:</p>
+                    <div class="registrarse" (click)="navegaRegistroUsuario()"><u>Usuario</u></div>
+                    <div class="registrarse" (click)="navegaRegistroCompania()"><u>Compañía</u></div>
+                </div>
+                
             </div>
             <button type="button" (click)="login()" pButton>Aceptar</button>
             <button type="button" (click)="borrar()" pButton>Limpiar</button>

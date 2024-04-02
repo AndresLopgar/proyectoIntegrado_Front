@@ -1,5 +1,5 @@
 .container{
-    margin-top: 12%;
+    margin-top: 10%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -26,15 +26,23 @@
                 margin-bottom: 4%;
             }
 
-            .registrarse{
-                margin-top: 5%;
-                width: 20%;
-                cursor: pointer; /* Cambia el cursor al pasar por encima del texto */
-
-                :hover{
-                    color:#f663c7;
+            .registros{
+                font-size: x-large;
+                width: 100%;
+                display: flex;
+                .registrarse{
+                    margin-left: 2%;
+                    margin-top: 8%;
+                    width: 60%;
+                    cursor: pointer; /* Cambia el cursor al pasar por encima del texto */
+    
+                    :hover{
+                        color:#f663c7;
+                    }
                 }
+
             }
+            
             
         }
 

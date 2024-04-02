@@ -7,6 +7,7 @@ import { BuscarComponent } from './pages/buscar/buscar.component';
 import { MensajesComponent } from './pages/mensajes/mensajes.component';
 import { NotificacionesComponent } from './pages/notificaciones/notificaciones.component';
 import { ModerarComponent } from './pages/moderar/moderar.component';
+import { RegistroComapaniaComponent } from './pages/registro-comapania/registro-comapania.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -18,4 +19,5 @@ export const routes: Routes = [
     {path: 'mensajes', component: MensajesComponent},
     {path: 'notificaciones', component: NotificacionesComponent},
     {path: 'moderar', component: ModerarComponent},
+    {path: 'companiaRegistro', component: RegistroComapaniaComponent}
 ];

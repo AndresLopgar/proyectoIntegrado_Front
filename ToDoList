@@ -1,0 +1,7 @@
+-- Hacer que cada usuario pueda crear una compañía desde el componente perfil
+
+-- Desarrollar componente(buscar, mensajes, moderar, notificaciones, perfil)
+
+-- Validar formularios y pasar la información de los mismo al back para almacenarla en la BBDD
+
+--Crear registro para compañias

@@ -30,7 +30,11 @@ export class LoginComponent {
     this.loginForm.reset(); // Resetea el formulario utilizando el método reset() de PrimeNG
   }
 
-  navegaRegistro(){
+  navegaRegistroUsuario(){
     this.router.navigateByUrl('/registro');
+  }
+
+  navegaRegistroCompania(){
+    this.router.navigateByUrl('/companiaRegistro');
   }
 }
