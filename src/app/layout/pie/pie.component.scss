@@ -1,10 +1,10 @@
 .cabecera {
     background-color: #A20E98;
-    border-top: 3px solid black;
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
     color: white;
     position: fixed;
     width: 100%;
-    height: 8%;
+    height: 6%;
     bottom: 0;
     left: 0;
     display: flex; /* Convertir el contenedor en un contenedor flexible */
@@ -12,18 +12,19 @@
     justify-content: space-between;
 
     .autor {
+        height: 100%;
         margin-left: 5%;
         font-size: x-small;
     }
 
     .nav {
-        margin-right: 5%;
-
+        height: 100%;
+        width: 15%;
         nav {
             ul {
                 li {
                     display: inline;
-                    margin-right: 20px;
+                    padding: 7%;
 
                     a {
                         color: white;
@@ -52,6 +53,9 @@
                             line-height: 35px; /* Ajusta según el tamaño deseado */
                         }
                     }
+                }
+                li:hover{
+                    border-top: 2px solid white;
                 }
             }
         }

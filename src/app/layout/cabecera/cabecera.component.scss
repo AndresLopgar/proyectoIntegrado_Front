@@ -1,6 +1,6 @@
 .cabecera {
     background-color: #A20E98;
-    border-bottom: 3px solid black;
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
     color: white;
     position: fixed;
     width: 100%;
@@ -21,13 +21,13 @@
     }
 
     .nav {
-        margin-right: 5%;
+        width: 25%;
 
         nav {
             ul {
                 li {
                     display: inline;
-                    margin-right: 20px;
+                    padding: 7%;
 
                     a {
                         color: white;
@@ -56,6 +56,10 @@
                             line-height: 35px; /* Ajusta según el tamaño deseado */
                         }
                     }
+                }
+
+                li:hover{
+                    border-bottom:2px solid white;
                 }
             }
         }
