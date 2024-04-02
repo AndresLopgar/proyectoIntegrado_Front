@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
@@ -11,11 +11,14 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './registro.component.scss'
 })
 export class RegistroComponent {
+
+  @ViewChild('registroForm') loginForm!: NgForm; // Referencia al formulario
+
   constructor(private router: Router) {}
   registroData = {
     nombre: '',
     correo: '',
-    contraseña: '',
+    contrasena: '',
     foto: null // Aquí podrías manejar la foto como un objeto o cualquier otra representación que necesites
   };
 
@@ -25,13 +28,8 @@ export class RegistroComponent {
     this.router.navigateByUrl('/home'); // Redirige a la ruta '/home'
   }
 
-  borrar(formulario: string) {
-      this.registroData = {
-        nombre: '',
-        correo: '',
-        contraseña: '',
-        foto: null
-      };
+  borrar() {
+    this.loginForm.reset(); // Resetea el formulario utilizando el método reset() de PrimeNG
   }
 
   navegaLogin(){

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -11,10 +12,12 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+  @ViewChild('loginForm') loginForm!: NgForm; // Referencia al formulario
+
   constructor(private router: Router) {}
   loginData = {
     usuario: '',
-    contraseñaLogin: ''
+    contrasenaLogin: ''
   };
 
   login() {
@@ -23,11 +26,8 @@ export class LoginComponent {
     this.router.navigateByUrl('/home'); // Redirige a la ruta '/home'
   }
 
-  borrar(formulario: string) {
-      this.loginData = {
-        usuario: '',
-        contraseñaLogin: ''
-      };
+  borrar() {
+    this.loginForm.reset(); // Resetea el formulario utilizando el método reset() de PrimeNG
   }
 
   navegaRegistro(){
