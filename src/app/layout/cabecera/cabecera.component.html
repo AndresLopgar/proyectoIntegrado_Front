@@ -3,27 +3,27 @@
         <h2>{{titulo}}</h2>
     </div>
     <div class="nombrePag">
-        <h1>ARTCONNECT</h1>
+        <h1 (click)="navegarHome()">ARTCONNECT</h1>
     </div>
     <div class="nav">
         <nav>
             <ul *ngIf="tipoUsuario === 'registrado'">
-                <li><a href="#"><i class="pi pi-search" style="font-size: 1.5rem"></i></a></li>
-                <li><a href="#"><i class="pi pi-send" style="font-size: 1.5rem"></i></a></li>
-                <li><a href="#"><i class="pi pi-bell" style="font-size: 1.5rem"></i></a></li>
-                <li><a class="img" href="https://htmlcolorcodes.com/es/"><img src="#"></a></li>
+                <li><a href="buscar"><i class="pi pi-search" style="font-size: 1.5rem"></i></a></li>
+                <li><a href="mensajes"><i class="pi pi-send" style="font-size: 1.5rem"></i></a></li>
+                <li><a href="notificaciones"><i class="pi pi-bell" style="font-size: 1.5rem"></i></a></li>
+                <li><a class="img" href="perfil"><img src="#"></a></li>
             </ul>
             <ul *ngIf="tipoUsuario === 'noRegistrado'">
-                <li><a href="#"><i class="pi pi-search" style="font-size: 1.5rem"></i></a></li>
-                <li><a href="#"><i class="pi pi-send" style="font-size: 1.5rem"></i></a></li>
-                <li><a href="#"><i class="pi pi-bell" style="font-size: 1.5rem"></i></a></li>
+                <li><a href="login"><i class="pi pi-search" style="font-size: 1.5rem"></i></a></li>
+                <li><a href="login"><i class="pi pi-send" style="font-size: 1.5rem"></i></a></li>
+                <li><a href="login"><i class="pi pi-bell" style="font-size: 1.5rem"></i></a></li>
                 <li><a class="img" href="login"><i class="pi pi-user" style="font-size: 1.5rem"></i></a></li>
             </ul>
             <ul *ngIf="tipoUsuario === 'gestor'">
-                <li><a href="#"><i class="pi pi-search" style="font-size: 1.5rem"></i></a></li>
-                <li><a href="#"><i class="pi pi-send" style="font-size: 1.5rem"></i></a></li>
-                <li><a href="#"><i class="pi pi-bell" style="font-size: 1.5rem"></i></a></li>
-                <li><a href="https://htmlcolorcodes.com/es/"><i class="pi pi-wrench" style="font-size: 1.5rem"></i></a></li>
+                <li><a href="buscar"><i class="pi pi-search" style="font-size: 1.5rem"></i></a></li>
+                <li><a href="moderar"><i class="pi pi-wrench" style="font-size: 1.5rem"></i></a></li>
+                <li><a href="notificaciones"><i class="pi pi-bell" style="font-size: 1.5rem"></i></a></li>
+                <li><a class="img" href="perfil"><i class="pi pi-user" style="font-size: 1.5rem"></i></a></li>
             </ul>
         </nav>
     </div>

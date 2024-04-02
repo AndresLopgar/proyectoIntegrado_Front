@@ -20,6 +20,8 @@ export class CabeceraComponent implements OnInit{
   ) { }
 
   ngOnInit(): void {
+    console.log("el usuario es: " + this.tipoUsuario);
+    
     // Escucha cambios en la ruta para actualizar el título
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -42,6 +44,21 @@ export class CabeceraComponent implements OnInit{
       case '/registro':
         this.titulo = 'Registro';
         break;
+      case '/perfil':
+        this.titulo = 'Perfil';
+        break;
+      case '/buscar':
+        this.titulo = 'Buscar';
+        break;
+      case '/mensajes':
+        this.titulo = 'Mensajes';
+        break;
+      case '/notificaciones':
+        this.titulo = 'Notificaciones';
+        break;
+      case '/moderar':
+        this.titulo = 'Moderación';
+        break;
       default:
         this.titulo = 'Error';
         break;
@@ -50,6 +67,10 @@ export class CabeceraComponent implements OnInit{
 
   navegarlogin(){
     this.router.navigateByUrl('/login'); 
+  }
+
+  navegarHome(){
+    this.router.navigateByUrl('/home'); 
   }
 
 }

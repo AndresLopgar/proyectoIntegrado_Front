@@ -22,7 +22,7 @@ export class RegistroComponent {
   registro() {
     // Aquí puedes agregar la lógica para procesar los datos del formulario de registro
     console.log('Datos de registro:', this.registroData);
-    // Puedes hacer una petición HTTP aquí para enviar los datos al servidor, por ejemplo
+    this.router.navigateByUrl('/home'); // Redirige a la ruta '/home'
   }
 
   borrar(formulario: string) {

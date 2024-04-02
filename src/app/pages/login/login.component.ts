@@ -20,7 +20,6 @@ export class LoginComponent {
   login() {
     // Aquí puedes agregar la lógica para procesar los datos del formulario de login
     console.log('Datos de login:', this.loginData);
-    // Puedes hacer una petición HTTP aquí para autenticar al usuario, por ejemplo
     this.router.navigateByUrl('/home'); // Redirige a la ruta '/home'
   }
 
