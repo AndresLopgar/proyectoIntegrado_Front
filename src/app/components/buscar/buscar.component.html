@@ -1,3 +1,19 @@
 <div class="container">
-    <p>Este es el componente buscar</p>
+    <div class="arriba">
+        <!-- Div para los filtros -->
+        <div class="filtros">
+            <p>Filtros</p>
+            <p><a (click)="holaLog()"><i class="pi pi-filter-fill" style="font-size: 1.5rem"></i></a></p>
+        </div>
+        <!-- Div para la barra de búsqueda -->
+        <div class="busqueda">
+            <input type="text" placeholder="Buscar...">
+            <button type="button" pButton>Aceptar</button>
+        </div>
+        <!-- Div para los historal -->
+        <div class="historial">
+            <p>Historial</p>
+            <p><a></a><i class="pi pi-history" style="font-size: 1.5rem"></i></p>
+        </div>
+    </div>
 </div>
