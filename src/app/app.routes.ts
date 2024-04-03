@@ -1,13 +1,14 @@
 import { Routes} from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
-import { LoginComponent } from './pages/login/login.component';
-import { RegistroComponent } from './pages/registro/registro.component';
-import { PerfilComponent } from './pages/perfil/perfil.component';
-import { BuscarComponent } from './pages/buscar/buscar.component';
-import { MensajesComponent } from './pages/mensajes/mensajes.component';
-import { NotificacionesComponent } from './pages/notificaciones/notificaciones.component';
-import { ModerarComponent } from './pages/moderar/moderar.component';
-import { RegistroComapaniaComponent } from './pages/registro-comapania/registro-comapania.component';
+import { BuscarComponent } from './components/buscar/buscar.component';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { MensajesComponent } from './components/mensajes/mensajes.component';
+import { ModerarComponent } from './components/moderar/moderar.component';
+import { NotificacionesComponent } from './components/notificaciones/notificaciones.component';
+import { PerfilComponent } from './components/perfil/perfil.component';
+import { RegistroComapaniaComponent } from './components/registro-comapania/registro-comapania.component';
+import { RegistroComponent } from './components/registro/registro.component';
+
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
