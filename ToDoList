@@ -5,3 +5,5 @@
 -- Validar formularios y pasar la información de los mismo al back para almacenarla en la BBDD
 
 --Crear registro para compañias
+
+--Meter guards para los no registrados
