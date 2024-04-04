@@ -8,53 +8,112 @@
         color: white;
         display: flex;
         justify-content: center;
-        align-items: center;
-        flex-wrap: wrap; // Añadimos flex-wrap para que los elementos se ajusten si no caben en una sola línea
+        flex-wrap: wrap;
+        height: 80vh;
 
         .filtros, .historial {
+            height: 95%;
             font-size: x-large;
             margin-top: 2.1%;
-            border: solid 2px black;
-            background-color: #A20E98;
+            background-color: var(--color-primario);
             border-radius: 10px;
             width: 25%;
             margin-right: 1%;
             margin-left: 1%;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
 
-            a{
-                cursor: pointer;
+            .checkbox{
+                label{
+                    font-size: medium;
+                }
             }
+            
         }
 
-        .busqueda {
-            background-color: #A20E98;
-            border-radius: 10px;
-            margin-top: 1.8%;
-            flex-grow: 1; // Hace que el div de búsqueda ocupe el resto del espacio disponible
-            border: solid 2px black;
-            padding: 1%;
-            display: flex;
-            align-items: center;
-
-            input[type="text"] {
+        .medio{
+            width: 40%;
+            height: 95%;
+            
+            .busqueda {
+                height: 10%;
+                background-color: var(--color-primario);
                 border-radius: 10px;
-                flex: 1;
-                height: 100%;
-                padding: 2%;
+                margin-top: 5.2%;
+                padding: 1%;
+                display: flex;
+                align-items: center;
+    
+                input[type="text"] {
+                    font-size: large;
+                    border-radius: 10px;
+                    flex: 1;
+                    height: 100%;
+                    padding: 2%;
+                    border-color: var(--color-primario);
+                }
+    
+                button {
+                    font-size: large;
+                    border-radius: 10px;
+                    margin-left: 5px;
+                    background-color: white;
+                    color: black;
+                    border-color: var(--color-primario);
+                    height: 100%;
+                }
             }
 
-            button {
+            .resultados {
+                padding: 1%;
+                display: flex;
+                align-items: center;
+                margin-top: 3%;
+                background-color: var(--color-primario);
                 border-radius: 10px;
-                margin-left: 5px;
-                background-color: white;
-                color: black;
-                border: 1px solid black;
-                height: 100%;
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+                max-height: 87%;
+                border: solid 2px var(--color-primario); // Borde con el color primario
+
+                &::-webkit-scrollbar {
+                    width: 10px;
+                }
+            
+                &::-webkit-scrollbar-track {
+                    background: var(--color-primario);
+                }
+            
+                &::-webkit-scrollbar-thumb {
+                    background-color: var(--color-enlaces-hover);
+                    border-radius: 10px;
+                    border: solid 2px var(--color-primario);
+                }
+            
+                .usuario {
+                    margin-top: 2%;
+                    padding: 1%;
+                    margin-bottom: 3%;
+                    display: flex; // Utiliza un contenedor flexible para alinear los elementos horizontalmente
+                    text-align: center;
+                    align-items: center; // Alinea verticalmente los elementos al centro
+                    justify-content: space-between;
+                    flex-direction: column;
+                    width: 100%;
+                    border: solid 2px white;
+                    border-radius: 10px;
+            
+                    img {
+                        width: 50px; // Ajusta el tamaño de la imagen según sea necesario
+                        height: 50px; // Ajusta el tamaño de la imagen según sea necesario
+                        margin-right: 10px; // Añade un espacio entre la imagen y los textos
+                        border-radius: 50%;
+                        border: 2px solid white; /* Borde blanco */
+                        text-align: center;
+                        line-height: 40px; /* Ajusta según el tamaño deseado */
+                    }
+                }
             }
         }
-
+        
     }
 }

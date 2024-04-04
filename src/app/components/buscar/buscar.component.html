@@ -1,19 +1,55 @@
-<div class="container">
-    <div class="arriba">
-        <!-- Div para los filtros -->
-        <div class="filtros">
-            <p>Filtros</p>
-            <p><a (click)="holaLog()"><i class="pi pi-filter-fill" style="font-size: 1.5rem"></i></a></p>
-        </div>
-        <!-- Div para la barra de búsqueda -->
-        <div class="busqueda">
-            <input type="text" placeholder="Buscar...">
-            <button type="button" pButton>Aceptar</button>
-        </div>
-        <!-- Div para los historal -->
-        <div class="historial">
-            <p>Historial</p>
-            <p><a></a><i class="pi pi-history" style="font-size: 1.5rem"></i></p>
+    <div class="container">
+        <div class="arriba">
+            <div class="filtros">
+                <p>Filtros</p>
+                <div class="checkbox">
+                    <label for="tipoUsuario">Tipo de Usuario:</label><br>
+                    <input type="checkbox" id="usuarioEstandar" name="tipoUsuario" value="usuarioEstandar">
+                    <label for="usuarioEstandar">Usuario Estándar</label><br>
+                    <input type="checkbox" id="compania" name="tipoUsuario" value="compania">
+                    <label for="compania">Compañía</label><br>
+
+                    <label for="edad">Edad Mínima:</label>
+                    <input type="text" id="edad" name="edad" value="edad"><br>
+
+                    <label for="edad">Edad Máxima:</label>
+                    <input type="text" id="edad" name="edad" value="edad"><br>
+
+                    <label for="profesion">Profesión:</label><br>
+                    <input type="checkbox" id="actor" name="tipoUsuario" value="actor">
+                    <label for="actor">Actor/iz</label><br>
+
+                    <input type="checkbox" id="bailarin" name="tipoUsuario" value="bailarin">
+                    <label for="bailarin">Bailarín/a</label><br>
+
+                    <input type="checkbox" id="escenografo" name="tipoUsuario" value="escenografo">
+                    <label for="escenografo">Escenógrafo/a</label><br>
+
+                    <input type="checkbox" id="maquillador" name="tipoUsuario" value="maquillador">
+                    <label for="maquillador">Maquillador/a</label><br>
+
+                    <input type="checkbox" id="guionista" name="tipoUsuario" value="guionista">
+                    <label for="guionista">Guionista</label><br>
+
+                    <input type="checkbox" id="estilista" name="tipoUsuario" value="estilista">
+                    <label for="estilista">Estilista</label><br>
+                </div>
+            </div>
+            <div class="medio">
+                <div class="busqueda">
+                    <input type="text" placeholder="Buscar...">
+                    <button type="button" pButton>Aceptar</button>
+                </div>
+                <div class="resultados">
+                    <div *ngFor="let usuario of usuarios" class="usuario">
+                        <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
+                        <p>{{ usuario.nombreUsuario.toUpperCase() }}</p>
+                        <p>{{ usuario.tipoUsuario.toUpperCase() }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="historial">
+                <p>Historial</p>
+            </div>
         </div>
     </div>
-</div>

@@ -8,3 +8,25 @@ body{
     background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('assets/fondo.png');
     background-repeat: repeat;
 }
+
+:root{
+    --color-primario: #A20E98;
+    --color-enlaces-hover: #f663c7;
+}
+
+body::-webkit-scrollbar {
+    width: 12px;               
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: var(--color-primario);       
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background-color: var(--color-enlaces-hover);
+    border-radius: 20px;    
+    border: 3px solid var(--color-primario);  
+  }
+
+
+
