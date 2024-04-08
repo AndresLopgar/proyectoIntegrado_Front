@@ -1,20 +1,21 @@
-.container{
-    margin-top: 10%;
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
-    
+    height: 82vh;
 
     .login {
-        font-size: x-large;
-        padding: 3%;
+        font-size: large;
+        padding: 5%;
         background-color: var(--color-primario);
-        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.75);
         border-radius: 10px;
+        align-self: center; // Centra verticalmente el contenedor login
 
-        h2{
-            text-align:  center;
+        h2 {
+            text-align: center;
+            margin-bottom: 10%;
         }
 
         .form-group {
@@ -26,36 +27,34 @@
                 margin-bottom: 4%;
             }
 
-            .registros{
+            .registros {
+                margin-top: 8%;
                 font-size: x-large;
                 width: 100%;
                 display: flex;
-                .registrarse{
+                .registrarse {
                     margin-left: 2%;
-                    margin-top: 8%;
                     width: 60%;
-                    cursor: pointer; /* Cambia el cursor al pasar por encima del texto */
+                    cursor: pointer;
     
-                    :hover{
-                        color:var(--color-enlaces-hover);
+                    &:hover {
+                        color: var(--color-enlaces-hover);
                     }
                 }
-
             }
-            
-            
         }
 
-        button{
+        button {
             margin-top: 4%;
             margin-left: 12%;
         }
 
-        .p-button {
+        .custom-button {
+            padding: 2%;
             border-radius: 10px;
             background-color: white !important;
             color: black; /* Cambia el color de fondo de los botones pButton */
             border-color: black;
-          }
+        }
     }
 }

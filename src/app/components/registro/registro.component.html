@@ -2,25 +2,41 @@
     <div class="registro">
         <h2>Registro Usuario</h2>
         <form #registroForm="ngForm">
-            <div class="form-group">
-                <label for="nombre"><b>Nombre:</b></label>
-                <input type="text" id="nombre" name="nombre" pInputText [(ngModel)]="registroData.nombre">
+            <div class="row">
+                <div class="col-md-6 col-sm-12"> <!-- Cambiado para dispositivos medianos y pequeños -->
+                    <div class="form-group">
+                        <label for="nombre"><b>Nombre:</b></label>
+                        <input type="text" id="nombre" name="nombre" pInputText [(ngModel)]="registroData.nombre">
+                    </div>
+                    <div class="form-group">
+                        <label for="edad"><b>Edad:</b></label>
+                        <input type="number" id="edad" name="edad" pInputNumber [(ngModel)]="registroData.edad">
+                    </div>
+                    <div class="form-group">
+                        <label for="correo"><b>Correo:</b></label>
+                        <input type="email" id="correo" name="correo" pInputText [(ngModel)]="registroData.correo">
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12"> <!-- Cambiado para dispositivos medianos y pequeños -->
+                    <div class="form-group">
+                        <label for="profesion"><b>Profesión:</b></label>
+                        <input type="text" id="profesion" name="profesion" pInputText [(ngModel)]="registroData.profesion">
+                    </div>
+                    <div class="form-group">
+                        <label for="contraseña"><b>Contraseña:</b></label>
+                        <input type="password" id="contraseña" name="contraseña" pPassword [(ngModel)]="registroData.contrasena">
+                    </div>
+                    <div class="form-group">
+                        <label for="foto"><b>Foto de Perfil:</b></label>
+                        <input type="file" id="foto" name="foto" pFileUpload mode="basic" [(ngModel)]="registroData.foto">
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="correo"><b>Correo:</b></label>
-                <input type="email" id="correo" name="correo" pInputText [(ngModel)]="registroData.correo">
+            <div class="logearse" (click)="navegaLogin()"><u>Tengo cuenta</u></div>
+            <div class="botones">
+                <button type="button" (click)="registro()" pButton>Aceptar</button>
+                <button type="button" (click)="borrar()" pButton>Limpiar</button>
             </div>
-            <div class="form-group">
-                <label for="contraseña"><b>Contraseña:</b></label>
-                <input type="password" id="contraseña" name="contraseña" pPassword [(ngModel)]="registroData.contrasena">
-            </div>
-            <div class="form-group">
-                <label for="foto"><b>Foto de Perfil:</b></label>
-                <input type="file" id="foto" name="foto" pFileUpload mode="basic" [(ngModel)]="registroData.foto">
-                <div class="logearse" (click)="navegaLogin()"><u>Tengo cuenta</u></div>
-            </div>
-            <button class="botonRegistro" type="button" (click)="registro()" pButton>Aceptar</button>
-            <button type="button" (click)="borrar()" pButton>Limpiar</button>
         </form>
     </div>
 </div>

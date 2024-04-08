@@ -17,6 +17,8 @@ export class RegistroComponent {
   constructor(private router: Router) {}
   registroData = {
     nombre: '',
+    edad:'',
+    profesion:'',
     correo: '',
     contrasena: '',
     foto: null // Aquí podrías manejar la foto como un objeto o cualquier otra representación que necesites

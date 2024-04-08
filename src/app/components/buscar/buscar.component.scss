@@ -67,8 +67,8 @@
                 display: flex;
                 align-items: center;
                 margin-top: 3%;
-                background-color: var(--color-primario);
                 border-radius: 10px;
+                background-color: var(--color-primario);
                 display: flex;
                 flex-direction: column;
                 overflow-y: auto;
@@ -90,6 +90,7 @@
                 }
             
                 .usuario {
+                    background-color: var(--color-enlaces-hover);
                     margin-top: 2%;
                     padding: 1%;
                     margin-bottom: 3%;

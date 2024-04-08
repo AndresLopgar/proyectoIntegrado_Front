@@ -5,21 +5,20 @@
             <div class="form-group">
                 <label for="usuario"><b>Usuario/Compañía</b></label>
                 <!-- establezco el valor de usuario al valor del input -->
-                <input type="text" id="usuario/compañia" name="usuario" pInputText [(ngModel)]="loginData.usuario"> 
+                <input type="text" id="usuario/compañia" name="usuario" class="form-control" [(ngModel)]="loginData.usuario"> 
             </div>
             <div class="form-group">
                 <label for="contraseñaLogin"><b>Contraseña:</b></label>
                 <!-- establezco el valor de la contraseña al valor del input -->
-                <input type="password" id="contraseñaLogin" name="contraseñaLogin" pPassword [(ngModel)]="loginData.contrasenaLogin">
+                <input type="password" id="contraseñaLogin" name="contraseñaLogin" class="form-control" [(ngModel)]="loginData.contrasenaLogin">
                 <div class="registros">
                     <p>Registra:</p>
                     <div class="registrarse" (click)="navegaRegistroUsuario()"><u>Usuario</u></div>
                     <div class="registrarse" (click)="navegaRegistroCompania()"><u>Compañía</u></div>
                 </div>
-                
             </div>
-            <button type="button" (click)="login()" pButton>Aceptar</button>
-            <button type="button" (click)="borrar()" pButton>Limpiar</button>
+            <button type="button" class="custom-button" (click)="login()">Aceptar</button>
+            <button type="button" class="custom-button" (click)="borrar()">Limpiar</button>
         </form>
     </div>
 </div>

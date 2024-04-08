@@ -1,19 +1,21 @@
 .container{
-    margin-top: 7%;
+    margin-top: 3%;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
+    max-height: 80vh;
 
     .registro {
-        font-size: x-large;
-        padding: 3%;
+        font-size: large;
+        padding: 2%;
         background-color: var(--color-primario);
         box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
         border-radius: 10px;
 
         h2{
             text-align:  center;
+            margin-bottom: 5%;
         }
 
         .form-group {
@@ -25,30 +27,35 @@
                 margin-bottom: 4%;
             }
 
-            .logearse{
-                margin-top: 5%;
-                width: 50%;
-                cursor: pointer; /* Cambia el cursor al pasar por encima del texto */
+        }
 
-                :hover{
-                    color:var(--color-enlaces-hover);
-                }
+        .logearse{
+            text-align: center;
+            margin-top: 5%;
+            width: 100%;
+            cursor: pointer; /* Cambia el cursor al pasar por encima del texto */
+
+            :hover{
+                color:var(--color-enlaces-hover);
             }
         }
 
-        .botonRegistro {
-            margin-left: 15%; // Establece un margen izquierdo del 5%
+
+        .botones{
+            text-align: center;
+
+            button{
+                margin-top: 4%;
+                margin-left: 4%;
+            }
+            .p-button {
+                border-radius: 10px;
+                background-color: white !important;
+                color: black; /* Cambia el color de fondo de los botones pButton */
+                border-color: black; /* Cambia el color de fondo de los botones pButton */
+              }
         }
-    
-        button{
-            margin-top: 4%;
-            margin-left: 4%;
-        }
-        .p-button {
-            border-radius: 10px;
-            background-color: white !important;
-            color: black; /* Cambia el color de fondo de los botones pButton */
-            border-color: black; /* Cambia el color de fondo de los botones pButton */
-          }
+     
+        overflow-y: auto;
     }
 }
