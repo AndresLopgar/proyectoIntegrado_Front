@@ -1,56 +1,33 @@
-.cabecera {
+.pie {
     background-color: var(--color-primario);
     box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
     color: white;
-    position: fixed;
     width: 100%;
-    height: 6%;
-    bottom: 0;
-    left: 0;
-    display: flex; /* Convertir el contenedor en un contenedor flexible */
-    align-items: center; /* Centrar los elementos verticalmente */
+    display: flex;
+    align-items: center;
     justify-content: space-between;
 
     .autor {
-        height: 100%;
         margin-left: 5%;
-        font-size: x-small;
+        h2{
+            font-size: 120%;
+        }
     }
 
     .nav {
-        height: 100%;
-        width: 15%;
+        margin-right: 5%;
+        width: 70%;
+        justify-content: flex-end;
         nav {
             ul {
                 li {
-                    display: inline;
-                    padding: 7%;
-
                     a {
                         color: white;
                         text-decoration: none;
-                        display: inline-block; /* Asegura que la lista se comporte como un elemento de bloque */
-
-                        &.img {
-                            display: inline-block;
-                            position: relative;
-                            width: 40px; /* Ajusta según el tamaño deseado */
-                            height: 40px; /* Ajusta según el tamaño deseado */
-                            border-radius: 50%;
-                            border: 2px solid white; /* Borde blanco */
-                            text-align: center;
-                            line-height: 40px; /* Ajusta según el tamaño deseado */
-                        }
+                        display: inline-block;
 
                         &.pi-cog {
-                            display: inline-block;
-                            position: relative;
-                            width: 40px; /* Ajusta según el tamaño deseado */
-                            height: 40px; /* Ajusta según el tamaño deseado */
-                            border-radius: 50%;
-                            border: 2px solid white; /* Borde blanco */
-                            text-align: center;
-                            line-height: 35px; /* Ajusta según el tamaño deseado */
+                            line-height: 35px;
                         }
                     }
                 }

@@ -12,7 +12,7 @@ import { filter } from 'rxjs';
   styleUrl: './cabecera.component.scss'
 })
 export class CabeceraComponent implements OnInit{
-  tipoUsuario: string = "registrado";
+  tipoUsuario: string = "gestor";
   titulo: string = "";
 
   constructor(
