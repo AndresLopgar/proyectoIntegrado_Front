@@ -25,6 +25,26 @@
                 margin-bottom: 4%;
             }
 
+            .contraseña{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                i{
+                    margin-left: 3%;
+                }
+            }
+
+            .nombre{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                i{
+                    margin-left: 3%;
+                }
+            }
+            
             .registros {
                 margin-top: 8%;
                 font-size: x-large;
@@ -42,17 +62,21 @@
             }
         }
 
-        button {
-            margin-top: 4%;
-            margin-left: 12%;
-        }
-
-        .custom-button {
-            padding: 2%;
-            border-radius: 10px;
-            background-color: white !important;
-            color: black; /* Cambia el color de fondo de los botones pButton */
-            border-color: black;
+        .botones{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            
+    
+            .custom-button {
+                width: 40%;
+                padding: 2%;
+                border-radius: 10px;
+                background-color: white !important;
+                color: black; /* Cambia el color de fondo de los botones pButton */
+                border-color: black;
+            }
         }
     }
 }
