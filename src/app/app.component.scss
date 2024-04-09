@@ -1,5 +1,37 @@
-.cuerpo{
-    margin-top: 3%;
-    margin-bottom: 3%;
-    min-height: calc(100vh - 224px);
+/* Para pantallas con un ancho máximo de 700px*/
+@media only screen and (max-width: 700px) {
+    .cuerpo {
+        margin-top: 3%;
+        margin-bottom: 3%;
+        min-height: calc(100vh - 164px); 
+    }
 }
+
+/* Para pantallas con un ancho máximo de */
+@media only screen and (min-width: 701px) and (max-width: 1000px) {
+    .cuerpo {
+        margin-top: 3%;
+        margin-bottom: 3%;
+        min-height: calc(100vh - 150px); 
+    }
+}
+
+
+/* Para pantallas medianas, como tablets*/
+@media only screen and (min-width: 1001px) and (max-width: 1025px) {
+    .cuerpo {
+        margin-top: 3%;
+        margin-bottom: 3%;
+        min-height: calc(100vh - 170px); 
+    }
+}
+
+/* Para pantallas más grandes, como ordenadores */
+@media only screen and (min-width: 1026px) {
+    .cuerpo {
+        margin-top: 3%;
+        margin-bottom: 3%;
+        min-height: calc(100vh - 224px); 
+    }
+}
+

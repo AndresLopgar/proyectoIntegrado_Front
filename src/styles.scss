@@ -3,11 +3,13 @@
 @import 'primeng/resources/primeng.min.css';
 @import 'primeicons/primeicons.css';
 
-body{
-    font-family: serif;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('assets/fondo.png');
-    background-repeat: repeat;
+body {
+  font-family: serif;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('assets/fondo.png');
+  background-repeat: repeat;
+  background-size: 100px;
 }
+
 
 :root{
     --color-primario: #A20E98;
