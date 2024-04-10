@@ -43,5 +43,16 @@ export const usuariosMock: usuario[] = [
         fechaRegistro: '2024-04-03',
         fotoPerfil: new Uint8Array(),
         tipoUsuario: 'gestor'
+    },
+    {
+        idUsuario: 4,
+        nombreUsuario: 'Usuario4',
+        edad: 18,
+        correoElectronico: 'usuario1@example.com',
+        password: 'contraseña1',
+        profesion: 'bailarin',
+        fechaRegistro: '2024-04-01',
+        fotoPerfil: new Uint8Array(),
+        tipoUsuario: 'registrado'
     }
 ];

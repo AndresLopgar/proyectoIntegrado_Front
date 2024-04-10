@@ -1,5 +1,4 @@
 .container {
-    margin-top: 5%;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -7,9 +6,9 @@
     .arriba {
         color: white;
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         flex-wrap: wrap;
-        height: 80vh;
+        height: 720px;
 
         .filtros, .historial {
             height: 95%;
@@ -18,8 +17,8 @@
             background-color: var(--color-primario);
             border-radius: 10px;
             width: 25%;
-            margin-right: 1%;
             margin-left: 1%;
+            margin-right: 1%;
 
             .checkbox{
                 label{
@@ -31,10 +30,10 @@
 
         .medio{
             width: 40%;
-            height: 95%;
+            height: 100%;
             
             .busqueda {
-                height: 10%;
+                height: 8%;
                 background-color: var(--color-primario);
                 border-radius: 10px;
                 margin-top: 5.2%;
@@ -63,6 +62,7 @@
             }
 
             .resultados {
+                height: 85%;
                 padding: 1%;
                 display: flex;
                 align-items: center;
@@ -72,7 +72,7 @@
                 display: flex;
                 flex-direction: column;
                 overflow-y: auto;
-                max-height: 87%;
+                max-height: 85%;
                 border: solid 2px var(--color-primario); // Borde con el color primario
 
                 &::-webkit-scrollbar {
