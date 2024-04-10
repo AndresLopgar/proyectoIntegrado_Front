@@ -6,7 +6,10 @@
                 <div class="col-md-6 col-sm-12"> <!-- Cambiado para dispositivos medianos y pequeños -->
                     <div class="form-group">
                         <label for="nombre"><b>Nombre:</b></label>
-                        <input type="text" id="nombre" name="nombre" pInputText [(ngModel)]="registroData.nombre">
+                        <div class="nombre">
+                            <input type="text" id="nombre" name="nombre" pInputText [(ngModel)]="registroData.nombre">
+                            <i class="pi pi-lock" style="font-size: 1.5rem; color: #f663c7;"></i>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="edad"><b>Edad:</b></label>
@@ -24,7 +27,10 @@
                     </div>
                     <div class="form-group">
                         <label for="contraseña"><b>Contraseña:</b></label>
-                        <input type="password" id="contraseña" name="contraseña" pPassword [(ngModel)]="registroData.contrasena">
+                        <div class="contraseña">
+                            <input type="password" id="contraseñaLogin" name="contraseñaLogin" class="form-control" [(ngModel)]="registroData.contrasena">
+                            <i class="pi" [ngClass]="{ 'pi-eye-slash': !showPassword, 'pi-eye': showPassword }" style="font-size: 1.5rem; cursor: pointer; color: #f663c7;" (click)="togglePasswordVisibility()"></i>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="foto"><b>Foto de Perfil:</b></label>

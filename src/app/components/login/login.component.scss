@@ -25,17 +25,11 @@
                 margin-bottom: 4%;
             }
 
-            .contraseña{
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-
-                i{
-                    margin-left: 3%;
-                }
+            input{
+                width: 85%;
             }
 
-            .nombre{
+            .contraseña{
                 display: flex;
                 flex-direction: row;
                 align-items: center;

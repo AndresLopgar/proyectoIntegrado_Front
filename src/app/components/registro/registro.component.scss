@@ -25,6 +25,29 @@
                 margin-bottom: 4%;
             }
 
+            input{
+                width: 85%;
+            }
+
+            .contraseña{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                i{
+                    margin-left: 3%;
+                }
+            }
+
+            .nombre{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                i{
+                    margin-left: 3%;
+                }
+            }
         }
 
         .logearse{
