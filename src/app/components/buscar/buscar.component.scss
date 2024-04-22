@@ -1,19 +1,17 @@
-.container {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-
-    .arriba {
+.arriba {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
         color: white;
         display: flex;
+        flex-wrap: 1;
         justify-content: space-around;
         flex-wrap: wrap;
         height: 720px;
 
         .filtros, .historial {
-            height: 95%;
+            height: 100%;
             font-size: x-large;
-            margin-top: 2.1%;
             background-color: var(--color-primario);
             border-radius: 10px;
             width: 25%;
@@ -36,7 +34,6 @@
                 height: 8%;
                 background-color: var(--color-primario);
                 border-radius: 10px;
-                margin-top: 5.2%;
                 padding: 1%;
                 display: flex;
                 align-items: center;
@@ -62,7 +59,7 @@
             }
 
             .resultados {
-                height: 85%;
+                height: 100%;
                 padding: 1%;
                 display: flex;
                 align-items: center;
@@ -72,7 +69,7 @@
                 display: flex;
                 flex-direction: column;
                 overflow-y: auto;
-                max-height: 85%;
+                max-height: 89%;
                 border: solid 2px var(--color-primario); // Borde con el color primario
 
                 &::-webkit-scrollbar {
@@ -94,14 +91,17 @@
                     margin-top: 2%;
                     padding: 1%;
                     margin-bottom: 3%;
-                    display: flex; // Utiliza un contenedor flexible para alinear los elementos horizontalmente
-                    text-align: center;
-                    align-items: center; // Alinea verticalmente los elementos al centro
-                    justify-content: space-between;
-                    flex-direction: column;
+                    display: flex; 
+                    align-items: stretch; 
+                    justify-content: space-around;
+                    flex-direction: row;
                     width: 100%;
                     border: solid 2px white;
                     border-radius: 10px;
+
+                    &:hover{
+                        cursor: pointer;
+                    }
             
                     img {
                         width: 50px; // Ajusta el tamaño de la imagen según sea necesario
@@ -112,9 +112,24 @@
                         text-align: center;
                         line-height: 40px; /* Ajusta según el tamaño deseado */
                     }
+
+                    p {
+                        margin-top: 2.5%;// Centra los elementos p dentro de la clase .usuario
+                    }
+
+                    .custom-button {
+                        display: flex;
+                        justify-content: space-around;
+                        align-items:  center;
+                        width: 15%;
+                        padding: 1%;
+                        border-radius: 10px;
+                        background-color: white !important;
+                        color: black; /* Cambia el color de fondo de los botones pButton */
+                        border-color: black;
+                    }
                 }
             }
         }
         
     }
-}

@@ -46,6 +46,7 @@ usuario: usuario = {
   }
 
   registro() {
+    this.usuario.fechaRegistro = new Date().toISOString();
     // Aquí puedes agregar la lógica para procesar los datos del formulario de registro
     console.log('Datos de registro:', this.usuario);
   

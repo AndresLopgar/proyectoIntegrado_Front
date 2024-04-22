@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-login',
@@ -17,18 +18,48 @@ export class LoginComponent {
 
   showPassword: boolean = false;
   iconName: string = 'pi pi-lock';
+  usuarios: any;
 
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private usuarioService: UsuarioService) {}
   loginData = {
     usuario: '',
     contrasenaLogin: ''
   };
 
   login() {
-    // Aquí puedes agregar la lógica para procesar los datos del formulario de login
-    console.log('Datos de login:', this.loginData);
-    this.router.navigateByUrl('/home'); // Redirige a la ruta '/home'
+    this.usuarioService.getAllUsuarios().subscribe(
+      data => {
+        this.usuarios = data;
+        const usuarioEncontrado = this.usuarios.find((usuario: any) => 
+          usuario.nombre === this.loginData.usuario && usuario.contrasena === this.loginData.contrasenaLogin
+        );
+
+        if (usuarioEncontrado) {
+          console.log('Inicio de sesión exitoso.');
+          // Aquí podrías guardar la información del usuario en el localStorage o en el servicio de autenticación
+          this.router.navigateByUrl('/perfil/'+usuarioEncontrado.id); // Redirige a la ruta '/home'
+        } else {
+          console.log('Nombre de usuario o contraseña no válidos.');
+          // Aquí podrías mostrar un mensaje de error en el formulario de inicio de sesión
+        }
+      },
+      error => {
+        console.log('Error al recuperar usuarios:', error);
+      }
+    );
+  }
+
+  getAllUsuario(){
+    this.usuarioService.getAllUsuarios().subscribe(
+      data => {
+        this.usuarios = data;
+        console.log(this.usuarios);
+      },
+      error => {
+        console.log('Error al recuperar usuarios:', error);
+      }
+    );
   }
 
   togglePasswordVisibility() {

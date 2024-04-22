@@ -18,4 +18,14 @@ export class UsuarioService {
   createUsuario(usuario: usuario): Observable<number> {
     return this.http.post<number>(this.baseUrl, usuario);
   }
+
+  deleteUsuario(id: number): Observable<void> {
+    const url = `${this.baseUrl}/${id}`;
+    return this.http.delete<void>(url);
+  }
+
+  getUsuarioById(id: number): Observable<usuario> {
+    const url = `${this.baseUrl}/${id}`;
+    return this.http.get<usuario>(url);
+  }
 }

@@ -1,4 +1,4 @@
-    <div class="container">
+
         <div class="arriba">
             <div class="filtros">
                 <p>Filtros</p>
@@ -41,10 +41,11 @@
                     <button type="button" pButton>Aceptar</button>
                 </div>
                 <div class="resultados">
-                    <div *ngFor="let usuario of usuarios" class="usuario">
+                    <div *ngFor="let usuario of usuarios" class="usuario" (click)="goPerfil(usuario.id)">
                         <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
                         <p>{{ usuario.nombre.toUpperCase() }}</p>
                         <p>{{ usuario.tipoUsuario.toUpperCase() }}</p>
+                        <button type="button" class="custom-button" (click)="seguirUsuario($event)">Seguir<i class="pi pi-user-plus" style="font-size: 1.2rem;"></i> </button>
                     </div>
                 </div>
             </div>
@@ -52,4 +53,3 @@
                 <p>Historial</p>
             </div>
         </div>
-    </div>

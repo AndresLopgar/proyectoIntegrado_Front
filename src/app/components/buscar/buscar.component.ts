@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { usuario} from '../../model/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-buscar',
@@ -15,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 export class BuscarComponent implements OnInit{
   usuarios: usuario[] = [];
 
-  constructor(private usuarioService: UsuarioService) { }
+  constructor(private usuarioService: UsuarioService, private router: Router) { }
 
   ngOnInit(): void {
     this.getAllUsuario();
@@ -38,5 +39,15 @@ export class BuscarComponent implements OnInit{
   toggleCamposUsuarioEstandar(event: any) {
     this.usuarioEstandarChecked = event.target.checked;
   }
+
+  goPerfil(usuarioId: number) {
+    // Aquí puedes definir la lógica para redirigir a la página de perfil
+    this.router.navigate(['/perfil', usuarioId]); // Suponiendo que la ruta para el perfil sea '/perfil'
+}
+
+seguirUsuario(event: Event) {
+  event.stopPropagation(); // Evitar la propagación del evento clic
+}
+
 
 }

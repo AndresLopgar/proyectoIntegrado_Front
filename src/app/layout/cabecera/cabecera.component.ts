@@ -12,7 +12,7 @@ import { filter } from 'rxjs';
   styleUrl: './cabecera.component.scss'
 })
 export class CabeceraComponent implements OnInit{
-  tipoUsuario: string = "registrado";
+  tipoUsuario: string = "noRegistrado";
   titulo: string = "";
 
   constructor(
@@ -44,9 +44,6 @@ export class CabeceraComponent implements OnInit{
       case '/registro':
         this.titulo = 'Registro Usuario';
         break;
-      case '/perfil':
-        this.titulo = 'Perfil';
-        break;
       case '/buscar':
         this.titulo = 'Buscar';
         break;
@@ -63,7 +60,11 @@ export class CabeceraComponent implements OnInit{
         this.titulo = 'Registro Compañía';
         break;
       default:
-        this.titulo = 'Error';
+        if (currentRoute.startsWith('/perfil')) {
+          this.titulo = 'Perfil';
+        } else {
+          this.titulo = 'Error';
+        }
         break;
     }
   }
