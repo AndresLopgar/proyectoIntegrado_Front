@@ -43,7 +43,7 @@
                 <div class="resultados">
                     <div *ngFor="let usuario of usuarios" class="usuario">
                         <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
-                        <p>{{ usuario.nombreUsuario.toUpperCase() }}</p>
+                        <p>{{ usuario.nombre.toUpperCase() }}</p>
                         <p>{{ usuario.tipoUsuario.toUpperCase() }}</p>
                     </div>
                 </div>

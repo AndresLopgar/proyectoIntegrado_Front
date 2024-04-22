@@ -3,6 +3,8 @@ import { Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { UsuarioService } from '../../services/usuario.service';
+import { usuario } from '../../model/usuario';
 
 @Component({
   selector: 'app-registro',
@@ -16,15 +18,20 @@ export class RegistroComponent {
   @ViewChild('registroForm') loginForm!: NgForm; // Referencia al formulario
   showPassword: boolean = false;
 
-  constructor(private router: Router) {}
-  registroData = {
-    nombre: '',
-    edad:'',
-    profesion:'',
-    correo: '',
-    contrasena: '',
-    foto: null // Aquí podrías manejar la foto como un objeto o cualquier otra representación que necesites
-  };
+  constructor(private router: Router, private usuarioService: UsuarioService) { 
+}
+  
+usuario: usuario = {
+  id: 0, // Puedes dejarlo como 0 si el ID se generará automáticamente en el backend
+  nombre: '',
+  edad: 0,
+  correoElectronico: '',
+  contrasena: '',
+  profesion: '',
+  fechaRegistro: '', // Debe ser establecido por el backend
+  fotoPerfil: '', // Puedes dejarlo vacío si la foto no se proporciona en este paso
+  tipoUsuario: '', // Dependiendo de tu lógica de negocio
+};
 
   togglePasswordVisibility() {
     if (!this.showPassword) {
@@ -40,9 +47,22 @@ export class RegistroComponent {
 
   registro() {
     // Aquí puedes agregar la lógica para procesar los datos del formulario de registro
-    console.log('Datos de registro:', this.registroData);
-    this.router.navigateByUrl('/home'); // Redirige a la ruta '/home'
+    console.log('Datos de registro:', this.usuario);
+  
+    // Llamar al servicio para registrar al usuario
+    this.usuarioService.createUsuario(this.usuario).subscribe(
+      id => {
+        console.log(`Usuario registrado con ID: ${id}`);
+        // Redirigir a la página de inicio después de que el usuario se registre exitosamente
+        this.router.navigateByUrl('/home');
+      },
+      error => {
+        console.error('Error al registrar usuario:', error);
+        // Manejar el error aquí
+      }
+    );
   }
+  
 
   borrar() {
     this.loginForm.reset(); // Resetea el formulario utilizando el método reset() de PrimeNG

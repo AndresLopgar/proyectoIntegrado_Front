@@ -1,27 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { usuario, usuariosMock } from '../model/usuario';
+import { Observable } from 'rxjs';
+import { usuario } from '../model/usuario';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsuarioService {
-
-  /*EndPoint correcto
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl = 'http://localhost:8081/api/usuarios';
 
   constructor(private http: HttpClient) { }
 
   getAllUsuarios(): Observable<usuario[]> {
     return this.http.get<usuario[]>(this.baseUrl);
   }
-  */
-
-  constructor() { }
-
-  getAllUsuarios(): Observable<usuario[]> {
-    // Aquí puedes usar datos mockeados en lugar de hacer una solicitud HTTP
-    return of(usuariosMock);
+  
+  createUsuario(usuario: usuario): Observable<number> {
+    return this.http.post<number>(this.baseUrl, usuario);
   }
 }
