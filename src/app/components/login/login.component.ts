@@ -37,11 +37,10 @@ export class LoginComponent {
 
         if (usuarioEncontrado) {
           console.log('Inicio de sesión exitoso.');
-          // Aquí podrías guardar la información del usuario en el localStorage o en el servicio de autenticación
-          this.router.navigateByUrl('/perfil/'+usuarioEncontrado.id); // Redirige a la ruta '/home'
+          this.usuarioService.usuarioEncontrado = usuarioEncontrado; // Guardar usuario
+          this.router.navigateByUrl('/perfil/' + usuarioEncontrado.id);
         } else {
           console.log('Nombre de usuario o contraseña no válidos.');
-          // Aquí podrías mostrar un mensaje de error en el formulario de inicio de sesión
         }
       },
       error => {

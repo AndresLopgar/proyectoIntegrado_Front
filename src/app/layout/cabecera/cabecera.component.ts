@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit} from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd} from '@angular/router';
 import { filter } from 'rxjs';
 
 
@@ -12,7 +12,7 @@ import { filter } from 'rxjs';
   styleUrl: './cabecera.component.scss'
 })
 export class CabeceraComponent implements OnInit{
-  tipoUsuario: string = "noRegistrado";
+  tipoUsuario = "registrado";
   titulo: string = "";
 
   constructor(
@@ -20,8 +20,6 @@ export class CabeceraComponent implements OnInit{
   ) { }
 
   ngOnInit(): void {
-    console.log("el usuario es: " + this.tipoUsuario);
-    
     // Escucha cambios en la ruta para actualizar el título
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
