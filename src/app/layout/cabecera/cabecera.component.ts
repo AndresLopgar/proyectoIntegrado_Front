@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit} from '@angular/core';
-import { Router, NavigationEnd} from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute} from '@angular/router';
 import { filter } from 'rxjs';
 
 
@@ -12,7 +12,7 @@ import { filter } from 'rxjs';
   styleUrl: './cabecera.component.scss'
 })
 export class CabeceraComponent implements OnInit{
-  tipoUsuario = "registrado";
+  tipoUsuario = "noRegistrado";
   titulo: string = "";
 
   constructor(
@@ -30,42 +30,42 @@ export class CabeceraComponent implements OnInit{
 
   ActualizaTitulo(): void {
     const currentRoute = this.router.routerState.snapshot.url;
-
-    // Asigna los títulos según la ruta actual
-    switch (currentRoute) {
-      case '/home':
-        this.titulo = 'Inicio';
-        break;
-      case '/login':
-        this.titulo = 'Login';
-        break;
-      case '/registro':
-        this.titulo = 'Registro Usuario';
-        break;
-      case '/buscar':
-        this.titulo = 'Buscar';
-        break;
-      case '/mensajes':
-        this.titulo = 'Mensajes';
-        break;
-      case '/notificaciones':
-        this.titulo = 'Notificaciones';
-        break;
-      case '/moderar':
-        this.titulo = 'Moderación';
-        break;
-      case '/companiaRegistro':
-        this.titulo = 'Registro Compañía';
-        break;
-      default:
-        if (currentRoute.startsWith('/perfil')) {
-          this.titulo = 'Perfil';
-        } else {
-          this.titulo = 'Error';
-        }
-        break;
+  
+        switch (currentRoute) {
+          case '/home':
+            this.titulo = 'Inicio';
+            break;
+          case '/login':
+            this.titulo = 'Login';
+            break;
+          case '/registro':
+            this.titulo = 'Registro Usuario';
+            break;
+          case '/buscar':
+            this.titulo = 'Buscar';
+            break;
+          case '/mensajes':
+            this.titulo = 'Mensajes';
+            break;
+          case '/notificaciones':
+            this.titulo = 'Notificaciones';
+            break;
+          case '/moderar':
+            this.titulo = 'Moderación';
+            break;
+          case '/companiaRegistro':
+            this.titulo = 'Registro Compañía';
+            break;
+          default:
+            if (currentRoute.startsWith('/perfil')) {
+              this.titulo = 'Perfil';
+            } else {
+              this.titulo = 'Error';
+            }
+            break;
+      }
     }
-  }
+  
 
   navegarlogin(){
     this.router.navigateByUrl('/login'); 

@@ -30,7 +30,7 @@ usuario: usuario = {
   profesion: '',
   fechaRegistro: '', // Debe ser establecido por el backend
   fotoPerfil: '', // Puedes dejarlo vacío si la foto no se proporciona en este paso
-  tipoUsuario: '', // Dependiendo de tu lógica de negocio
+  tipoUsuario: 'estandar', // Dependiendo de tu lógica de negocio
 };
 
   togglePasswordVisibility() {

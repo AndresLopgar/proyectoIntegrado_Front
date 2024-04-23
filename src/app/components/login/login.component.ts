@@ -34,7 +34,7 @@ export class LoginComponent {
         const usuarioEncontrado = this.usuarios.find((usuario: any) => 
           usuario.nombre === this.loginData.usuario && usuario.contrasena === this.loginData.contrasenaLogin
         );
-
+  
         if (usuarioEncontrado) {
           console.log('Inicio de sesión exitoso.');
           this.usuarioService.usuarioEncontrado = usuarioEncontrado; // Guardar usuario
