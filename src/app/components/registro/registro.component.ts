@@ -4,7 +4,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { UsuarioService } from '../../services/usuario.service';
-import { usuario } from '../../model/usuario';
+import { Usuario } from '../../model/usuario';
 
 @Component({
   selector: 'app-registro',
@@ -21,7 +21,7 @@ export class RegistroComponent {
   constructor(private router: Router, private usuarioService: UsuarioService) { 
 }
   
-usuario: usuario = {
+usuario: Usuario = {
   id: 0, // Puedes dejarlo como 0 si el ID se generará automáticamente en el backend
   nombre: '',
   edad: 0,

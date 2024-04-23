@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { usuario } from '../../model/usuario';
+import { Usuario } from '../../model/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { CommonModule } from '@angular/common';
 
@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class HomeComponent implements OnInit {
 
-  usuarios: usuario[] = [];
+  usuarios: Usuario[] = [];
 
   constructor(private usuarioService: UsuarioService) { }
 

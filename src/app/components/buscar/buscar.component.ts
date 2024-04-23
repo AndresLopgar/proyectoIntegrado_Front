@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { usuario} from '../../model/usuario';
+import { Usuario} from '../../model/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   styleUrl: './buscar.component.scss'
 })
 export class BuscarComponent implements OnInit{
-  usuarios: usuario[] = [];
+  usuarios: Usuario[] = [];
 
   constructor(private usuarioService: UsuarioService, private router: Router) { }
 

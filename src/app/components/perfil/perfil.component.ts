@@ -1,40 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../services/usuario.service';
-import { ActivatedRoute } from '@angular/router';
-import { usuario } from '../../model/usuario';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Usuario } from '../../model/usuario';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss']
 })
-export class PerfilComponent implements OnInit{
+export class PerfilComponent implements OnInit {
 
-  constructor(private usuarioService: UsuarioService, private route: ActivatedRoute) { }
+  constructor(private usuarioService: UsuarioService, private route: ActivatedRoute, private router: Router) { }
+  
   usuarioId!: number;
-  usuario!: usuario;
+  usuario!: Usuario;
 
   ngOnInit() {
-    // Recuperar el ID del usuario de la ruta
-    this.route.params.subscribe(params => {
-        this.usuarioId = +params['id']; // Convierte el parámetro de ruta a un número
-        // Ahora puedes utilizar this.usuarioId en tu lógica para cargar el perfil del usuario correspondiente
-    });
-    this.loadUsuarioById(this.usuarioId);
-}
-
-loadUsuarioById(id: number) {
-  this.usuarioService.getUsuarioById(id).subscribe(
-    (usuario: usuario) => {
-      this.usuario = usuario;
-      console.log('Perfil del usuario cargado exitosamente:', this.usuario);
-    },
-    error => {
-      console.error('Error al cargar perfil del usuario:', error);
-      // Manejar el error aquí
+    // Recuperar el usuario almacenado en Local Storage
+    const usuarioLocalStorage = localStorage.getItem('usuario');
+    if (usuarioLocalStorage) {
+      const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
+      // Obtener el ID del usuario almacenado
+      this.usuarioId = usuarioAlmacenado.id;
+      // Cargar el perfil del usuario utilizando el ID
+      this.loadUsuarioById(this.usuarioId);
     }
-  );
-}
+  }
+
+  loadUsuarioById(id: number) {
+    this.usuarioService.getUsuarioById(id).subscribe(
+      (usuario: Usuario) => {
+        this.usuario = usuario;
+        console.log('Perfil del usuario cargado exitosamente:', this.usuario);
+      },
+      error => {
+        console.error('Error al cargar perfil del usuario:', error);
+        // Manejar el error aquí
+      }
+    );
+  }
 
   eliminarUsuario(id: number) {
     // Preguntar al usuario si realmente quiere eliminar al usuario
@@ -57,4 +61,24 @@ loadUsuarioById(id: number) {
       console.log('Eliminación cancelada por el usuario');
     }
   }
+
+  cerrarSesion() {
+    // Preguntar al usuario si realmente quiere cerrar la sesión
+    const confirmacion = window.confirm('¿Estás seguro de que quieres cerrar la sesión?');
+    
+    if (confirmacion) {
+      // Eliminar el usuario del Local Storage
+      localStorage.removeItem('usuario');
+      // Establecer manualmente el tipo de usuario como "noRegistrado"
+      localStorage.setItem('tipoUsuario', 'noRegistrado');
+      console.log('Sesión cerrada exitosamente');
+      // Redirigir a la página de inicio de sesión u otra página apropiada después de cerrar sesión
+      this.router.navigateByUrl('/login');
+    } else {
+      // Si el usuario cancela, no hacer nada
+      console.log('Cierre de sesión cancelado por el usuario');
+    }
+  }
+  
+  
 }
