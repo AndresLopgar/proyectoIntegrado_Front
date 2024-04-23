@@ -55,7 +55,7 @@ usuario: Usuario = {
       id => {
         console.log(`Usuario registrado con ID: ${id}`);
         // Redirigir a la página de inicio después de que el usuario se registre exitosamente
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('/login');
       },
       error => {
         console.error('Error al registrar usuario:', error);
