@@ -5,12 +5,16 @@
     width: 100%;
 
     .titulo {
-        margin-left: 5%;
+        text-align: center;
     }
 
     .nombrePag {
-        margin-left: 16%;
+        text-align: center;
+        margin-left: 15%;
         cursor: pointer;
+        :hover{
+            box-shadow: 0px 0px 20px 0px var(--color-enlaces-hover);
+        }
     }
 
     .nav {
