@@ -50,10 +50,13 @@
             :hover{
                 box-shadow: 0px 0px 20px 0px var(--color-enlaces-hover);
             }
+            .p-button {
+                margin: 0 10px;
+                border-radius: 10px;
+                background-color: white !important;
+                color: black; /* Cambia el color de fondo de los botones pButton */
+                border-color: black; /* Cambia el color de fondo de los botones pButton */
+              }
         }
-    }
-
-    .custom-button {
-        margin: 0 10px; /* Ajusta el margen entre los botones según sea necesario */
     }
 }
