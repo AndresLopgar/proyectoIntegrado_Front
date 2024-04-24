@@ -6,7 +6,6 @@ import { MensajesComponent } from './components/mensajes/mensajes.component';
 import { ModerarComponent } from './components/moderar/moderar.component';
 import { NotificacionesComponent } from './components/notificaciones/notificaciones.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
-import { RegistroComapaniaComponent } from './components/registro-comapania/registro-comapania.component';
 import { RegistroComponent } from './components/registro/registro.component';
 
 
@@ -20,5 +19,4 @@ export const routes: Routes = [
     {path: 'mensajes', component: MensajesComponent},
     {path: 'notificaciones', component: NotificacionesComponent},
     {path: 'moderar', component: ModerarComponent},
-    {path: 'companiaRegistro', component: RegistroComapaniaComponent}
 ];

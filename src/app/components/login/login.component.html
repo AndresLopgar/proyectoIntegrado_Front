@@ -1,31 +1,33 @@
 <div class="container">
-    <div class="login">
-        <h2>Login</h2>
-        <form #loginForm="ngForm"> <!-- Creo una referencia al formulario -->
-            <div class="form-group">
-                <label for="usuario"><b>Usuario/Compañía</b></label>
-                <!-- establezco el valor de usuario al valor del input -->
-                <div class="iconos">
-                    <input type="text" id="usuario/compañia" name="usuario" class="form-control" [(ngModel)]="loginData.usuario">
-                    <i class="pi pi-user" style="font-size: 1.5rem;"></i> 
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-5"> <!-- Esto ocupará la mitad del ancho en pantallas medianas y grandes -->
+            <div class="login">
+                <h2>Login</h2>
+                <form #loginForm="ngForm"> <!-- Creo una referencia al formulario -->
+                    <div class="form-group">
+                        <label for="usuario"><b>Usuario/Compañía</b></label>
+                        <!-- establezco el valor de usuario al valor del input -->
+                        <div class="iconos">
+                            <input type="text" id="usuario/compañia" name="usuario" class="form-control" [(ngModel)]="loginData.usuario">
+                            <i class="pi pi-user" style="font-size: 1.5rem; margin-top: 2%; margin-left: 2%;"></i> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contraseñaLogin"><b>Contraseña:</b></label>
+                        <div class="iconos">
+                            <input type="password" id="contraseñaLogin" name="contraseñaLogin" class="form-control" [(ngModel)]="loginData.contrasenaLogin">
+                            <i class="pi" [ngClass]="{ 'pi-eye-slash': !showPassword, 'pi-eye': showPassword }" style="font-size: 1.5rem; cursor: pointer; margin-top: 2%; margin-left: 2%;" (click)="togglePasswordVisibility()"></i>
+                        </div>
+                        <div class="registros">
+                            <div class="registrarse" (click)="navegaRegistroUsuario()"><u>Registrar usuario</u></div>
+                        </div>
+                    </div>
+                </form>
+                <div class="botones">
+                    <button type="button" class="custom-button" (click)="login()">Aceptar</button>
+                    <button type="button" class="custom-button" (click)="borrar()">Limpiar</button>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="contraseñaLogin"><b>Contraseña:</b></label>
-                <div class="iconos">
-                    <input type="password" id="contraseñaLogin" name="contraseñaLogin" class="form-control" [(ngModel)]="loginData.contrasenaLogin">
-                    <i class="pi" [ngClass]="{ 'pi-eye-slash': !showPassword, 'pi-eye': showPassword }" style="font-size: 1.5rem; cursor: pointer;" (click)="togglePasswordVisibility()"></i>
-                </div>
-                <div class="registros">
-                    <p>Registra:</p>
-                    <div class="registrarse" (click)="navegaRegistroUsuario()"><u>Usuario</u></div>
-                    <div class="registrarse" (click)="navegaRegistroCompania()"><u>Compañía</u></div>
-                </div>
-            </div>
-        </form>
-        <div class="botones">
-            <button type="button" class="custom-button" (click)="login()">Aceptar</button>
-            <button type="button" class="custom-button" (click)="borrar()">Limpiar</button>
         </div>
     </div>
 </div>

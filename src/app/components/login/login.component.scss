@@ -1,98 +1,59 @@
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     color: white;
 
     .login {
-        margin-top: 2%;
         font-size: large;
-        padding: 5%;
         background-color: var(--color-primario);
-        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.75);
+        padding: 5%;
+        box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
         border-radius: 10px;
 
         h2 {
             text-align: center;
-            margin-bottom: 10%;
+            margin-bottom: 20px;
         }
 
         .form-group {
+            margin-bottom: 20px;
+        }
+
+        .input-container {
             display: flex;
             flex-direction: column;
-            margin-bottom: 4%;
+            margin-bottom: 10px;
 
             label {
-                margin-bottom: 4%;
-            }
-
-            input{
-                width: 85%;
-            }
-
-            .iconos{
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                i{
-                    margin-left: 3%;
-                }
-            }
-            
-            .registros {
-                margin-top: 8%;
-                font-size: x-large;
-                width: 100%;
-                display: flex;
-                .registrarse {
-                    margin-left: 2%;
-                    width: 60%;
-                    cursor: pointer;
-    
-                    &:hover {
-                        color: var(--color-enlaces-hover);
-                    }
-                }
+                font-weight: bold;
             }
         }
 
-        .botones{
-            width: 100%;
+        .iconos {
             display: flex;
-            flex-direction: row;
-            justify-content: space-around;
+            justify-content: flex-end; /* Coloca el ícono a la derecha */
+            margin-top: 5px; /* Ajusta el margen superior según sea necesario */
+        }
+
+        .registrarse{
+            margin-top: 5%;
+            width: 60%;
+            :hover{
+                color: var(--color-enlaces-hover);
+            }
+            
+            
+        }
+
+        .botones {
+            display: flex;
+            justify-content: center;
 
             :hover{
                 box-shadow: 0px 0px 20px 0px var(--color-enlaces-hover);
             }
-            
-    
-            .custom-button {
-                width: 40%;
-                padding: 2%;
-                border-radius: 10px;
-                background-color: white !important;
-                color: black; /* Cambia el color de fondo de los botones pButton */
-                border-color: black;
-            }
         }
+    }
+
+    .custom-button {
+        margin: 0 10px; /* Ajusta el margen entre los botones según sea necesario */
     }
 }
-
-    @media (max-width: 1025px) {
-        .login {
-            width: 90%; /* Cambia el ancho del formulario en dispositivos más pequeños */
-        }
-
-        .form-group {
-            input {
-                width: 100%; /* Haz que el campo de entrada ocupe todo el ancho del formulario en dispositivos más pequeños */
-            }
-        }
-
-        .botones {
-            flex-direction: row; /* Cambia la dirección de la fila para que los botones estén en línea en dispositivos más pequeños */
-            margin-top: 4%;
-        }
-    }
-

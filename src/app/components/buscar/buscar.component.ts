@@ -15,18 +15,26 @@ import { Router } from '@angular/router';
 })
 export class BuscarComponent implements OnInit{
   usuarios: Usuario[] = [];
+  usuarioLocalStorage: Usuario | null = null;
 
   constructor(private usuarioService: UsuarioService, private router: Router) { }
 
   ngOnInit(): void {
-    this.getAllUsuario();
+    this.getAllUsuarios();
+    const usuarioString = localStorage.getItem('usuario');
+  if (usuarioString !== null) {
+    this.usuarioLocalStorage = JSON.parse(usuarioString);
+  }
   }
 
-  getAllUsuario(){
+  getAllUsuarios() {
     this.usuarioService.getAllUsuarios().subscribe(
       data => {
-        this.usuarios = data;
-        console.log(this.usuarios);
+        if (this.usuarioLocalStorage) {
+          this.usuarios = data.filter(usuario => usuario.id !== this.usuarioLocalStorage?.id);
+        } else {
+          this.usuarios = data;
+        }
       },
       error => {
         console.log('Error al recuperar usuarios:', error);
@@ -41,7 +49,6 @@ export class BuscarComponent implements OnInit{
   }
 
   goPerfil(usuarioId: number) {
-    // Aquí puedes definir la lógica para redirigir a la página de perfil
     this.router.navigate(['/perfil', usuarioId]); // Suponiendo que la ruta para el perfil sea '/perfil'
 }
 

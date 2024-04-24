@@ -81,8 +81,4 @@ export class LoginComponent {
   navegaRegistroUsuario(){
     this.router.navigateByUrl('/registro');
   }
-
-  navegaRegistroCompania(){
-    this.router.navigateByUrl('/companiaRegistro');
-  }
 }
