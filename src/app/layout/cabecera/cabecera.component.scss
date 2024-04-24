@@ -8,19 +8,24 @@
         text-align: center;
     }
 
+    .row{
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .nombrePag {
         text-align: center;
-        margin-left: 15%;
         cursor: pointer;
     }
 
     .nav {
-        margin-left: 15%;
+        text-align: right;
+        justify-content: center;
             .navbar-nav{
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
-                width: 80%;
+                width: 60%;
 
                 li{
                     text-align: center;
@@ -30,7 +35,7 @@
                         text-decoration: none;
     
                         &.img {
-                            margin-left: 15%;
+                            margin-left: 18%;
                             border-radius: 50%;
                             border: 2px solid white;
                             text-align: center;
