@@ -7,7 +7,7 @@ import { Usuario } from '../model/usuario';
   providedIn: 'root',
 })
 export class UsuarioService {
-  private baseUrl = 'http://localhost:8081/api/usuarios';
+  private baseUrl = 'https://artconnectback-2e6d8ccea4f7.herokuapp.com/api/usuarios';
   usuarioEncontrado: any;
 
   constructor(private http: HttpClient) { }
