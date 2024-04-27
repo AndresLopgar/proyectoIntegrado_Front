@@ -67,12 +67,11 @@ export class CabeceraComponent implements OnInit {
       case '/companiaRegistro':
         this.titulo = 'Registro Compañía';
         break;
+      case '/perfil':
+        this.titulo = 'Perfil';
+        break;
       default:
-        if (currentRoute.startsWith('/perfil')) {
-          this.titulo = 'Perfil';
-        } else {
           this.titulo = 'Error';
-        }
         break;
     }
   }

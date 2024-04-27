@@ -38,7 +38,7 @@ export class LoginComponent {
         if (usuarioEncontrado) {
           console.log('Inicio de sesión exitoso.');
           localStorage.setItem('usuario', JSON.stringify(usuarioEncontrado)); // Guardar usuario en Local Storage
-          this.router.navigateByUrl('/perfil/' + usuarioEncontrado.id);
+          this.router.navigateByUrl('/perfil');
         } else {
           console.log('Nombre de usuario o contraseña no válidos.');
         }
