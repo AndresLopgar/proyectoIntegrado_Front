@@ -44,7 +44,15 @@
                     <div class="form-group">
                         <label for="profesion"><b>Profesión:</b></label>
                         <div class="iconos">
-                            <input type="text" id="profesion" name="profesion" pInputText [(ngModel)]="usuario.profesion" required>
+                            <select id="profesion" name="profesion" class="form-control" [(ngModel)]="usuario.profesion" required>
+                                <option value="">Sin determinar</option>
+                                <option value="actor">Actor/iz</option>
+                                <option value="bailarin">Bailarín/a</option>
+                                <option value="escenografo">Escenógrafo/a</option>
+                                <option value="maquillador">Maquillador/a</option>
+                                <option value="guionista">Guionista</option>
+                                <option value="estilista">Estilista</option>
+                            </select>
                             <i class="pi pi-briefcase" style="font-size: 1.5rem;"></i> 
                         </div>
                         <div *ngIf="registroForm.controls['profesion'].errors?.['required']">La profesión es requerida.</div>

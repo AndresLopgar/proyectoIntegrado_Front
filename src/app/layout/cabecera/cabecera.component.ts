@@ -42,38 +42,39 @@ export class CabeceraComponent implements OnInit {
   ActualizaTitulo(): void {
     const currentRoute = this.router.routerState.snapshot.url;
   
-    switch (currentRoute) {
-      case '/home':
+    switch (true) {
+      case currentRoute === '/home':
         this.titulo = 'Inicio';
         break;
-      case '/login':
+      case currentRoute === '/login':
         this.titulo = 'Inicio Sesión';
         break;
-      case '/registro':
+      case currentRoute === '/registro':
         this.titulo = 'Registro Usuario';
         break;
-      case '/buscar':
+      case currentRoute === '/buscar':
         this.titulo = 'Buscar';
         break;
-      case '/mensajes':
+      case currentRoute === '/mensajes':
         this.titulo = 'Mensajes';
         break;
-      case '/notificaciones':
+      case currentRoute === '/notificaciones':
         this.titulo = 'Notificaciones';
         break;
-      case '/moderar':
+      case currentRoute === '/moderar':
         this.titulo = 'Moderación';
         break;
-      case '/companiaRegistro':
+      case currentRoute === '/companiaRegistro':
         this.titulo = 'Registro Compañía';
         break;
-      case '/perfil':
+      case currentRoute.startsWith('/perfil'):
         this.titulo = 'Perfil';
         break;
       default:
-          this.titulo = 'Error';
+        this.titulo = 'Error';
         break;
     }
+    
   }
 
   navegarlogin(){
