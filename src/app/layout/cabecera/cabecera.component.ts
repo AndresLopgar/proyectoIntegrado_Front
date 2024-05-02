@@ -47,7 +47,7 @@ export class CabeceraComponent implements OnInit {
         this.titulo = 'Inicio';
         break;
       case '/login':
-        this.titulo = 'Login';
+        this.titulo = 'Inicio Sesión';
         break;
       case '/registro':
         this.titulo = 'Registro Usuario';

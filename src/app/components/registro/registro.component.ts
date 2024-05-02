@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../model/usuario';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registro',
@@ -56,10 +57,18 @@ usuario: Usuario = {
         console.log(`Usuario registrado con ID: ${id}`);
         // Redirigir a la página de inicio después de que el usuario se registre exitosamente
         this.router.navigateByUrl('/login');
+        Swal.fire({
+          icon: 'success',
+          title: 'Registro de usuario exitoso',
+          text: '¡Inicia sesión para empezar a navegar!'
+        });
       },
       error => {
-        console.error('Error al registrar usuario:', error);
-        // Manejar el error aquí
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Comprueba que los datos introducidos sean correctos'
+        });
       }
     );
   }

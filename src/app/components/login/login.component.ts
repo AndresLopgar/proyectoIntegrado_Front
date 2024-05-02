@@ -5,6 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../services/usuario.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -36,12 +37,22 @@ export class LoginComponent {
         );
   
         if (usuarioEncontrado) {
-          console.log('Inicio de sesión exitoso.');
           localStorage.setItem('usuario', JSON.stringify(usuarioEncontrado)); // Guardar usuario en Local Storage
-          this.router.navigateByUrl('/perfil');
+          this.router.navigateByUrl('/perfil/' + usuarioEncontrado.id);
+          Swal.fire({
+            icon: 'success',
+            title: 'Inicio de sesión exitoso',
+            text: '¡Bienvenido/a, ' + usuarioEncontrado.nombre + '!'
+          });
         } else {
           console.log('Nombre de usuario o contraseña no válidos.');
-        }
+        // Mostrar SweetAlert de error
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Nombre de usuario o contraseña no válidos.'
+        });
+      }
       },
       error => {
         console.log('Error al recuperar usuarios:', error);
