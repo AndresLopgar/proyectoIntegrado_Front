@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../services/usuario.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from '../../model/usuario';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
+  standalone: true,
+  imports: [CommonModule],
   styleUrls: ['./perfil.component.scss']
 })
 export class PerfilComponent implements OnInit {
@@ -14,16 +17,18 @@ export class PerfilComponent implements OnInit {
   
   usuarioId!: number;
   usuario!: Usuario;
+  usuarioIdFromLocalStorage!: number;
 
   ngOnInit() {
-    // Recuperar el usuario almacenado en Local Storage
+    this.route.params.subscribe(params => {
+      this.usuarioId = +params['id'];
+      // Cargar el perfil del usuario utilizando el ID
+      this.loadUsuarioById(this.usuarioId);
+    });
     const usuarioLocalStorage = localStorage.getItem('usuario');
     if (usuarioLocalStorage) {
       const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
-      // Obtener el ID del usuario almacenado
-      this.usuarioId = usuarioAlmacenado.id;
-      // Cargar el perfil del usuario utilizando el ID
-      this.loadUsuarioById(this.usuarioId);
+      this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
     }
   }
 

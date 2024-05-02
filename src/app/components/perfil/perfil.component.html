@@ -1,6 +1,11 @@
 <div class="container">
-    <p>Este es el componente perfil</p>
-    <p>¡Hola, soy {{ usuario.nombre }}!</p>
-    <button (click)="eliminarUsuario(usuarioId)">Eliminar usuario</button>
-    <button (click)="cerrarSesion()">Cerrar Sesión</button>
+    <ng-container *ngIf="usuario && usuario.id === usuarioIdFromLocalStorage">
+        <p>Este es el componente perfil</p>
+        <p>¡Hola, soy {{ usuario.nombre }}!</p>
+        <button (click)="eliminarUsuario(usuarioId)">Eliminar usuario</button>
+        <button (click)="cerrarSesion()">Cerrar Sesión</button>
+    </ng-container>
+    <ng-container *ngIf="!(usuario && usuario.id === usuarioIdFromLocalStorage)">
+        <p>Este es el perfil de {{ usuario?.nombre }}</p>
+    </ng-container>
 </div>
