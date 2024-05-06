@@ -70,9 +70,6 @@ export class CabeceraComponent implements OnInit {
       case currentRoute.startsWith('/perfil'):
         this.titulo = 'Perfil';
         break;
-      default:
-        this.titulo = 'Error';
-        break;
     }
     
   }
