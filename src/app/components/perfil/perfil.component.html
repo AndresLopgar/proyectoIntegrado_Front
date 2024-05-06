@@ -2,7 +2,6 @@
     <ng-container *ngIf="usuario && usuario.id === usuarioIdFromLocalStorage">
       <div class="row">
         <div class="col-md-3">
-          <h1>Acciones</h1>
           <h3>usuario:  {{ usuario.nombre }}</h3>
           <div class="botones">
             <button type="button" (click)="eliminarUsuario(usuarioId)" pButton>Eliminar usuario</button>
@@ -54,7 +53,7 @@
             </form>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-5">
             <h1>Publicaciones</h1>
           </div>
         <div class="col-md-3">
