@@ -34,7 +34,7 @@
                 </select>
                 
                 <label for="fotoPerfil">Foto de perfil:</label>
-                <input type="text" id="fotoPerfil" name="fotoPerfil" [(ngModel)]="usuario.fotoPerfil" pInputText>
+                <input type="file" id="foto" name="foto" pFileUpload mode="basic" [(ngModel)]="usuario.fotoPerfil">
                 
                 <button type="submit" [disabled]="updateForm.invalid">Guardar cambios</button>
                 <button type="button" (click)="cancelarModificacion()">Cancelar</button>
