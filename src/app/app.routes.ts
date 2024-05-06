@@ -19,4 +19,5 @@ export const routes: Routes = [
     {path: 'mensajes', component: MensajesComponent},
     {path: 'notificaciones', component: NotificacionesComponent},
     {path: 'moderar', component: ModerarComponent},
+    { path: '**', redirectTo: '/home' }
 ];
