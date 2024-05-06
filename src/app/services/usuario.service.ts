@@ -34,4 +34,9 @@ export class UsuarioService {
     const url = `${this.baseUrl}/${id}`;
     return this.http.get<Usuario>(url);
   }
+
+  updateUsuario(id: number, usuario: Usuario): Observable<number> {
+    const url = `${this.baseUrl}/${id}`;
+    return this.http.put<number>(url, usuario);
+  }
 }

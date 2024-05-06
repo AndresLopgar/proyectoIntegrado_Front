@@ -3,7 +3,32 @@
         <p>Este es el componente perfil</p>
         <p>¡Hola, soy {{ usuario.nombre }}!</p>
         <button (click)="eliminarUsuario(usuarioId)">Eliminar usuario</button>
+        <button (click)="mostrarFormularioModificar()">Modificar usuario</button>
         <button (click)="cerrarSesion()">Cerrar Sesión</button>
+        <div *ngIf="mostrandoFormularioModificar">
+            <form (submit)="modificarUsuario()">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" [(ngModel)]="usuario.nombre">
+                
+                <label for="edad">Edad:</label>
+                <input type="number" id="edad" name="edad" [(ngModel)]="usuario.edad">
+                
+                <label for="correo">Correo electrónico:</label>
+                <input type="email" id="correo" name="correo" [(ngModel)]="usuario.correoElectronico">
+                
+                <label for="contrasena">Contraseña:</label>
+                <input type="password" id="contrasena" name="contrasena" [(ngModel)]="usuario.contrasena">
+                
+                <label for="profesion">Profesión:</label>
+                <input type="text" id="profesion" name="profesion" [(ngModel)]="usuario.profesion">
+                
+                <label for="fotoPerfil">Foto de perfil:</label>
+                <input type="text" id="fotoPerfil" name="fotoPerfil" [(ngModel)]="usuario.fotoPerfil">
+                
+                <button type="submit">Guardar cambios</button>
+                <button type="button" (click)="cancelarModificacion()">Cancelar</button>
+            </form>
+        </div>
     </ng-container>
     <ng-container *ngIf="!(usuario && usuario.id === usuarioIdFromLocalStorage)">
         <p>Este es el perfil de {{ usuario.nombre }}</p>

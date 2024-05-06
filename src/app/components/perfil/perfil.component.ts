@@ -4,12 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from '../../model/usuario';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   styleUrls: ['./perfil.component.scss']
 })
 export class PerfilComponent implements OnInit {
@@ -19,6 +20,7 @@ export class PerfilComponent implements OnInit {
   usuarioId!: number;
   usuario!: Usuario;
   usuarioIdFromLocalStorage!: number;
+  mostrandoFormularioModificar: boolean = false;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -46,60 +48,107 @@ export class PerfilComponent implements OnInit {
     );
   }
 
-  eliminarUsuario(id: number) {
-    // Preguntar al usuario si realmente quiere eliminar al usuario
-    const confirmacion = window.confirm('¿Estás seguro de que quieres eliminar este usuario?');
-    
-    if (confirmacion) {
-      // Si el usuario confirma la eliminación, llamar al servicio para eliminar al usuario
-      this.usuarioService.deleteUsuario(id).subscribe(
-        () => {
-          console.log('Usuario eliminado exitosamente');
-          // Aquí puedes redirigir a la página deseada o actualizar la lista de usuarios, etc.
-        },
-        error => {
-          console.error('Error al eliminar usuario:', error);
-          // Manejar el error aquí
-        }
-      );
+  async eliminarUsuario(id: number) {
+     // Mostrar un cuadro de diálogo de confirmación con SweetAlert
+     const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Esta acción eliminará el usuario y no se podrá deshacer más tarde.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+ 
+    // Verificar la opción seleccionada por el usuario
+    if (result.isConfirmed) {
+      // Llamar al servicio para eliminar la publicación
+      this.usuarioService.deleteUsuario(id)
+        .subscribe(
+          () => {
+            console.log(`Publicación con ID ${id} eliminada correctamente`);
+            // Recargar la página después de eliminar la publicación
+            window.location.reload();
+          },
+          error => {
+            console.error('Error al eliminar la publicación:', error);
+          }
+        );
     } else {
-      // Si el usuario cancela la eliminación, no hacer nada
-      console.log('Eliminación cancelada por el usuario');
+      // El usuario ha cancelado la acción
+      console.log('La acción ha sido cancelada');
     }
   }
 
-  cerrarSesion() {
-    // Preguntar al usuario si realmente quiere cerrar la sesión
-    const confirmacion = window.confirm('¿Estás seguro de que quieres cerrar la sesión?');
+  mostrarFormularioModificar(): void {
+    this.mostrandoFormularioModificar = true;
+  }
+
+  modificarUsuario() {
+    if (this.usuario) {
+      try {
+        this.usuarioService.updateUsuario(this.usuario.id, this.usuario).toPromise();
+        console.log("Usuario modificado exitosamente.");
+        this.mostrandoFormularioModificar = false; // Ocultar el formulario después de modificar el usuario
+        Swal.fire({
+          icon: 'success',
+          title: 'Modificación de usuario exitosa',
+          text: '¡Usuario modificado correctamente!'
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '¡Modificación de usuario cancelada!'
+        });
+        console.error("Error al modificar el usuario:", error);
+      }
+    }
+  }
+  cancelarModificacion(): void {
+    this.mostrandoFormularioModificar = false;
+    Swal.fire({
+      icon: 'warning',
+      title: 'Advertencia',
+      text: '¡Modificación de usuario cancelada!'
+    });
+}
+
+async cerrarSesion() {
+    const confirmacion = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Estás seguro de que quieres cerrar la sesión?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar'
+    });
     
-    if (confirmacion) {
-      // Eliminar el usuario del Local Storage
-      localStorage.removeItem('usuario');
-      // Establecer manualmente el tipo de usuario como "noRegistrado"
-      localStorage.setItem('tipoUsuario', 'noRegistrado');
-      console.log('Sesión cerrada exitosamente');
-      // Redirigir a la página de inicio de sesión u otra página apropiada después de cerrar sesión
-      Swal.fire({
-        icon: 'success',
-        title: 'Inicio de sesión exitoso',
-        text: '¡Sesión cerrada correctamente!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.router.navigateByUrl('/login').then(() =>{
-            window.location.reload();
-          });
-        }
-      });
+    if (confirmacion.isConfirmed) {
+      try {
+        localStorage.removeItem('usuario');
+        localStorage.setItem('tipoUsuario', 'noRegistrado');
+        console.log('Sesión cerrada exitosamente');
+        await Swal.fire({
+          icon: 'success',
+          title: 'Cierre de sesión exitoso',
+          text: '¡Sesión cerrada correctamente!'
+        });
+        await this.router.navigateByUrl('/login');
+        window.location.reload();
+      } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '¡Error al cerrar sesión!'
+        });
+      }
     } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: '¡Cierre de sesión cancelado!'
-      });
-      // Si el usuario cancela, no hacer nada
       console.log('Cierre de sesión cancelado por el usuario');
     }
   }
-  
-  
 }
