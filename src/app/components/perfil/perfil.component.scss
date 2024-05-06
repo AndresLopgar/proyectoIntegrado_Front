@@ -10,6 +10,7 @@
         margin: 0;
 
         .col-md-5 {
+            padding: 2%;
             border-radius: 10px;
             display: flex;
             text-align: center;
@@ -19,6 +20,7 @@
         }
 
         .col-md-3 {
+            padding: 2%;
             border-radius: 10px;
             display: flex;
             text-align: center;
@@ -50,6 +52,10 @@
                     display: flex;
                     justify-content: center; /* Centrar horizontalmente */
                     align-items: center; /* Centrar verticalmente */
+                }
+
+                i{
+                    
                 }
             }
 

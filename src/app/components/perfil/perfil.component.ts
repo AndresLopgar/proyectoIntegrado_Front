@@ -167,4 +167,8 @@ async cerrarSesion() {
       console.log('Cierre de sesión cancelado por el usuario');
     }
   }
+
+  seguirUsuario(event: Event) {
+    event.stopPropagation(); // Evitar la propagación del evento clic
+  }
 }
