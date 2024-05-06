@@ -5,13 +5,14 @@ import { Usuario } from '../../model/usuario';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { FormsModule, NgForm } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  styleUrls: ['./perfil.component.scss']
+  imports: [CommonModule, FormsModule, ButtonModule],
+  styleUrl: './perfil.component.scss'
 })
 export class PerfilComponent implements OnInit {
   @ViewChild('updateForm') loginForm!: NgForm; // Referencia al formulario
@@ -81,12 +82,12 @@ export class PerfilComponent implements OnInit {
       this.usuarioService.deleteUsuario(id)
         .subscribe(
           () => {
-            console.log(`Publicación con ID ${id} eliminada correctamente`);
+            console.log(`Usario con ID ${id} eliminado correctamente`);
             // Recargar la página después de eliminar la publicación
             window.location.reload();
           },
           error => {
-            console.error('Error al eliminar la publicación:', error);
+            console.error('Error al eliminar el usuario:', error);
           }
         );
     } else {
