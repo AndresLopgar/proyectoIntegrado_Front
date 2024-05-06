@@ -6,6 +6,6 @@
         <button (click)="cerrarSesion()">Cerrar Sesión</button>
     </ng-container>
     <ng-container *ngIf="!(usuario && usuario.id === usuarioIdFromLocalStorage)">
-        <p>Este es el perfil de {{ usuario?.nombre }}</p>
+        <p>Este es el perfil de {{ usuario.nombre }}</p>
     </ng-container>
 </div>

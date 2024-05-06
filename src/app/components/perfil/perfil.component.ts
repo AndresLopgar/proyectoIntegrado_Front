@@ -3,6 +3,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from '../../model/usuario';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-perfil',
@@ -78,8 +79,23 @@ export class PerfilComponent implements OnInit {
       localStorage.setItem('tipoUsuario', 'noRegistrado');
       console.log('Sesión cerrada exitosamente');
       // Redirigir a la página de inicio de sesión u otra página apropiada después de cerrar sesión
-      this.router.navigateByUrl('/login');
+      Swal.fire({
+        icon: 'success',
+        title: 'Inicio de sesión exitoso',
+        text: '¡Sesión cerrada correctamente!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigateByUrl('/login').then(() =>{
+            window.location.reload();
+          });
+        }
+      });
     } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: '¡Cierre de sesión cancelado!'
+      });
       // Si el usuario cancela, no hacer nada
       console.log('Cierre de sesión cancelado por el usuario');
     }

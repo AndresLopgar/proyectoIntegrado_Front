@@ -37,12 +37,17 @@ export class LoginComponent {
         );
   
         if (usuarioEncontrado) {
-          localStorage.setItem('usuario', JSON.stringify(usuarioEncontrado)); // Guardar usuario en Local Storage
-          this.router.navigateByUrl('/perfil/' + usuarioEncontrado.id);
           Swal.fire({
             icon: 'success',
             title: 'Inicio de sesión exitoso',
             text: '¡Bienvenido/a, ' + usuarioEncontrado.nombre + '!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              localStorage.setItem('usuario', JSON.stringify(usuarioEncontrado)); // Guardar usuario en Local Storage
+              this.router.navigateByUrl('/perfil/' + usuarioEncontrado.id).then(() =>{
+                window.location.reload();
+              });
+            }
           });
         } else {
           console.log('Nombre de usuario o contraseña no válidos.');
