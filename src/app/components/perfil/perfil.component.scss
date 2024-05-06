@@ -10,11 +10,16 @@
         margin: 0;
 
         .col-md-3 {
+            border-radius: 10px;
             display: flex;
             text-align: center;
             background-color: var(--color-primario);
             max-height: 100%;
             flex-direction: column;
+
+            .amistades{
+                border-top: 2px solid var(--color-enlaces-hover);
+            }
 
             .botones {
                 display: flex;

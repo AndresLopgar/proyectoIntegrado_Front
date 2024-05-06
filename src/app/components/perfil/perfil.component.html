@@ -2,13 +2,6 @@
     <ng-container *ngIf="usuario && usuario.id === usuarioIdFromLocalStorage">
       <div class="row">
         <div class="col-md-3">
-          <h1>Compañías</h1>
-          <h1>Amistades</h1>
-        </div>
-        <div class="col-md-3">
-          <h1>Publicaciones</h1>
-        </div>
-        <div class="col-md-3">
           <h1>Acciones</h1>
           <h3>usuario:  {{ usuario.nombre }}</h3>
           <div class="botones">
@@ -61,6 +54,13 @@
             </form>
           </div>
         </div>
+        <div class="col-md-3">
+            <h1>Publicaciones</h1>
+          </div>
+        <div class="col-md-3">
+            <h1>Compañías</h1>
+            <h1 class="amistades">Amistades</h1>
+          </div>
       </div>
     </ng-container>
     <ng-container *ngIf="!(usuario && usuario.id === usuarioIdFromLocalStorage)">
