@@ -6,26 +6,37 @@
         <button (click)="mostrarFormularioModificar()">Modificar usuario</button>
         <button (click)="cerrarSesion()">Cerrar Sesión</button>
         <div *ngIf="mostrandoFormularioModificar">
-            <form (submit)="modificarUsuario()">
+            <form (submit)="modificarUsuario()" #updateForm="ngForm">
                 <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" [(ngModel)]="usuario.nombre">
+                <input type="text" id="nombre" name="nombre" [(ngModel)]="usuario.nombre" pInputText pattern="[a-zA-Z]*">
+                <div *ngIf="updateForm.controls['nombre'].errors?.['pattern']">El nombre no puede contener números.</div>
                 
                 <label for="edad">Edad:</label>
-                <input type="number" id="edad" name="edad" [(ngModel)]="usuario.edad">
+                <input type="number" id="edad" name="edad" [(ngModel)]="usuario.edad" pInputNumber min="16" max="100">
+                <div *ngIf="updateForm.controls['edad'].errors?.['min'] || updateForm.controls['edad'].errors?.['max']">La edad debe estar entre 16 y 100.</div>
                 
                 <label for="correo">Correo electrónico:</label>
-                <input type="email" id="correo" name="correo" [(ngModel)]="usuario.correoElectronico">
+                <input type="email" id="correo" name="correo" [(ngModel)]="usuario.correoElectronico" pInputText>
                 
                 <label for="contrasena">Contraseña:</label>
-                <input type="password" id="contrasena" name="contrasena" [(ngModel)]="usuario.contrasena">
+                <input type="password" id="contrasena" name="contrasena" [(ngModel)]="usuario.contrasena" pInputText>
+                <i class="pi" [ngClass]="{ 'pi-eye-slash': !showPassword, 'pi-eye': showPassword }" style="font-size: 1.5rem; cursor: pointer;" (click)="togglePasswordVisibility()"></i>
                 
                 <label for="profesion">Profesión:</label>
-                <input type="text" id="profesion" name="profesion" [(ngModel)]="usuario.profesion">
+                <select id="profesion" name="profesion" [(ngModel)]="usuario.profesion" pInputText>
+                    <option value="">Sin determinar</option>
+                    <option value="actor">Actor/iz</option>
+                    <option value="bailarin">Bailarín/a</option>
+                    <option value="escenografo">Escenógrafo/a</option>
+                    <option value="maquillador">Maquillador/a</option>
+                    <option value="guionista">Guionista</option>
+                    <option value="estilista">Estilista</option>
+                </select>
                 
                 <label for="fotoPerfil">Foto de perfil:</label>
-                <input type="text" id="fotoPerfil" name="fotoPerfil" [(ngModel)]="usuario.fotoPerfil">
+                <input type="text" id="fotoPerfil" name="fotoPerfil" [(ngModel)]="usuario.fotoPerfil" pInputText>
                 
-                <button type="submit">Guardar cambios</button>
+                <button type="submit" [disabled]="updateForm.invalid">Guardar cambios</button>
                 <button type="button" (click)="cancelarModificacion()">Cancelar</button>
             </form>
         </div>

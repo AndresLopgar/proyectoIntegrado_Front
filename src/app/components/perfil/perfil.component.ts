@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UsuarioService } from '../../services/usuario.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from '../../model/usuario';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-perfil',
@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./perfil.component.scss']
 })
 export class PerfilComponent implements OnInit {
+  @ViewChild('updateForm') loginForm!: NgForm; // Referencia al formulario
 
   constructor(private usuarioService: UsuarioService, private route: ActivatedRoute, private router: Router) { }
   
@@ -21,6 +22,7 @@ export class PerfilComponent implements OnInit {
   usuario!: Usuario;
   usuarioIdFromLocalStorage!: number;
   mostrandoFormularioModificar: boolean = false;
+  showPassword: boolean = false;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -32,6 +34,18 @@ export class PerfilComponent implements OnInit {
     if (usuarioLocalStorage) {
       const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
       this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
+    }
+  }
+
+  togglePasswordVisibility() {
+    if (!this.showPassword) {
+      this.showPassword = true;
+      const inputField = document.getElementById('contrasena') as HTMLInputElement;
+      inputField.type = 'text';
+    } else {
+      this.showPassword = false;
+      const inputField = document.getElementById('contrasena') as HTMLInputElement;
+      inputField.type = 'password';
     }
   }
 
@@ -106,6 +120,7 @@ export class PerfilComponent implements OnInit {
       }
     }
   }
+
   cancelarModificacion(): void {
     this.mostrandoFormularioModificar = false;
     Swal.fire({
@@ -113,7 +128,7 @@ export class PerfilComponent implements OnInit {
       title: 'Advertencia',
       text: '¡Modificación de usuario cancelada!'
     });
-}
+  }
 
 async cerrarSesion() {
     const confirmacion = await Swal.fire({
