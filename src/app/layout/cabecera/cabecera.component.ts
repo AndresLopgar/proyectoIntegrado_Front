@@ -14,7 +14,7 @@ import { filter } from 'rxjs';
 export class CabeceraComponent implements OnInit {
   tipoUsuario = "";
   titulo: string = "";
-  idUsuario:number | undefined;
+  idUsuario!:number;
 
   constructor(private router: Router) {}
 
@@ -67,12 +67,16 @@ export class CabeceraComponent implements OnInit {
       case currentRoute === '/companiaRegistro':
         this.titulo = 'Registro Compañía';
         break;
-      case currentRoute.startsWith('/perfil'):
+      case currentRoute.includes('/perfil'):
         this.titulo = 'Perfil';
         break;
     }
     
   }
+
+  goPerfil(usuarioId: number) {
+    this.router.navigate(['/perfil', usuarioId]); // Suponiendo que la ruta para el perfil sea '/perfil'
+}
 
   navegarlogin(){
     this.router.navigateByUrl('/login'); 
