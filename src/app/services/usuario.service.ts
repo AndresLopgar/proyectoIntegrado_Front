@@ -26,7 +26,7 @@ export class UsuarioService {
   }
 
   deleteUsuario(id: number): Observable<void> {
-    const url = `${this.baseUrl}/${id}`;
+    const url = `${this.baseUrl}/delete/${id}`;
     return this.http.delete<void>(url);
   }
 
@@ -36,7 +36,7 @@ export class UsuarioService {
   }
 
   updateUsuario(id: number, usuario: Usuario): Observable<number> {
-    const url = `${this.baseUrl}/${id}`;
+    const url = `${this.baseUrl}/update/${id}`;
     return this.http.put<number>(url, usuario);
   }
 }

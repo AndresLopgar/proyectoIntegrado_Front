@@ -78,18 +78,19 @@ export class PerfilComponent implements OnInit {
  
     // Verificar la opción seleccionada por el usuario
     if (result.isConfirmed) {
+      localStorage.removeItem('usuario');
+        localStorage.setItem('tipoUsuario', 'noRegistrado');
       // Llamar al servicio para eliminar la publicación
-      this.usuarioService.deleteUsuario(id)
-        .subscribe(
-          () => {
+      this.usuarioService.deleteUsuario(id).subscribe( () => {
             console.log(`Usario con ID ${id} eliminado correctamente`);
-            // Recargar la página después de eliminar la publicación
-            window.location.reload();
           },
           error => {
             console.error('Error al eliminar el usuario:', error);
           }
         );
+        await this.router.navigateByUrl('/login');
+        window.location.reload();
+
     } else {
       // El usuario ha cancelado la acción
       console.log('La acción ha sido cancelada');
@@ -170,5 +171,13 @@ async cerrarSesion() {
 
   seguirUsuario(event: Event) {
     event.stopPropagation(); // Evitar la propagación del evento clic
+  }
+
+  quitarLocalStorage(){
+    localStorage.removeItem('usuario');
+    localStorage.setItem('tipoUsuario', 'noRegistrado');
+    console.log('Sesión cerrada exitosamente');
+    this.router.navigateByUrl('/login');
+    window.location.reload();
   }
 }
