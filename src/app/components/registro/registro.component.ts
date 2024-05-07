@@ -29,7 +29,7 @@ usuario: Usuario = {
   correoElectronico: '',
   contrasena: '',
   profesion: '',
-  fechaRegistro: '', // Debe ser establecido por el backend
+  fechaRegistro: '', 
   fotoPerfil: '', // Puedes dejarlo vacío si la foto no se proporciona en este paso
   tipoUsuario: 'estandar', // Dependiendo de tu lógica de negocio
 };

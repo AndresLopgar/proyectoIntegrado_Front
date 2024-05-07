@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { CompaniaService } from '../../services/compania.service';
+import { Compania } from '../../model/compania';
 
 @Component({
   selector: 'app-perfil',
@@ -15,28 +17,49 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './perfil.component.scss'
 })
 export class PerfilComponent implements OnInit {
-  @ViewChild('updateForm') loginForm!: NgForm; // Referencia al formulario
+  @ViewChild('updateForm') updateForm!: NgForm; // Referencia al formulario
+  @ViewChild('createForm') CreacionCompaniaForm!: NgForm; // Referencia al formulario
 
-  constructor(private usuarioService: UsuarioService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private usuarioService: UsuarioService, private route: ActivatedRoute, private router: Router, private companiaService: CompaniaService) { }
   
+  companias: Compania[] = [];
   usuarioId!: number;
   usuario!: Usuario;
   usuarioIdFromLocalStorage!: number;
   mostrandoFormularioModificar: boolean = false;
+  mostrandoFormularioEliminar: boolean = false;
   showPassword: boolean = false;
+  compania!: Compania;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.usuarioId = +params['id'];
       // Cargar el perfil del usuario utilizando el ID
       this.loadUsuarioById(this.usuarioId);
+      const usuarioLocalStorage = localStorage.getItem('usuario');
+      if (usuarioLocalStorage) {
+        const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
+        this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
+  
+        // Actualizar el idCreador después de obtenerlo del localStorage
+        this.compania = {
+          id: 0,
+          nombre: "",
+          descripcion: "",
+          fotoPerfil: "",
+          fechaCreacion: "",
+          miembros: 1,
+          idCreador: this.usuarioIdFromLocalStorage
+        };
+      }
     });
-    const usuarioLocalStorage = localStorage.getItem('usuario');
-    if (usuarioLocalStorage) {
-      const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
-      this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
-    }
+  
+    this.loadCompaniasByIdCreador(this.usuarioIdFromLocalStorage);
+    console.log(this.companias);
+    
   }
+
+  
 
   togglePasswordVisibility() {
     if (!this.showPassword) {
@@ -61,6 +84,46 @@ export class PerfilComponent implements OnInit {
         // Manejar el error aquí
       }
     );
+  } 
+
+  loadCompaniasByIdCreador(id:number){
+    this.companiaService.getCompaniasByIdCreador(id).subscribe(
+      (companias: Compania[]) => {
+        this.companias = companias;
+        console.log(this.companias);
+        
+        
+      },
+      (error) => {
+        // Manejar errores
+        console.error('Error al obtener las compañías:', error);
+      }
+    );
+  }
+
+
+  crearCompania(){
+    this.compania.fechaCreacion = new Date().toISOString();
+    // Llamar al servicio para registrar al usuario
+    this.companiaService.createCompania(this.compania).subscribe(
+      id => {
+        console.log(`compañía registrada con ID: ${id}`);
+        // Redirigir a la página de inicio después de que el usuario se registre exitosamente
+        this.router.navigateByUrl('/home');
+        Swal.fire({
+          icon: 'success',
+          title: 'Registro de compañía exitoso',
+        });
+      },
+      error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Comprueba que los datos introducidos sean correctos'
+        });
+      }
+    );
+    this.mostrandoFormularioEliminar = false; // Ocultar el formulario después de crear la compañia
   }
 
   async eliminarUsuario(id: number) {
@@ -101,6 +164,10 @@ export class PerfilComponent implements OnInit {
     this.mostrandoFormularioModificar = true;
   }
 
+  mostrarFormularioEliminar(): void {
+    this.mostrandoFormularioEliminar = true;
+  }
+
   modificarUsuario() {
     if (this.usuario) {
       try {
@@ -129,6 +196,15 @@ export class PerfilComponent implements OnInit {
       icon: 'warning',
       title: 'Advertencia',
       text: '¡Modificación de usuario cancelada!'
+    });
+  }
+
+  cancelarCreacionCompania(): void {
+    this.mostrandoFormularioEliminar = false;
+    Swal.fire({
+      icon: 'warning',
+      title: 'Advertencia',
+      text: 'Creación de compania de usuario cancelada!'
     });
   }
 
