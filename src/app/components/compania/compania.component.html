@@ -4,10 +4,12 @@
           <h3>Compañía:  {{ compania.nombre }}</h3>
           <h3>Descripción:  {{ compania.descripcion }}</h3>
           <h3>Miembros:  {{ compania.miembros }}</h3>
-          <div class="botones">
+          <div class="botones" *ngIf="compania.idCreador === usuarioId">
             <button type="button" (click)="mostrarFormularioModificar()" pButton>Modificar compañía</button>
             <button type="button" (click)="eliminarCompania(companiaId)" pButton>Eliminar compañía</button>
-          </div>
+        </div>
+        <button *ngIf="compania.idCreador !== usuarioId" type="button" (click)="abandonarCompania()" pButton>Abandonar compañía</button>
+        
           
           <div *ngIf="mostrandoFormularioModificar">
             <form (submit)="modificarCompania()" #updateForm="ngForm">
@@ -35,8 +37,15 @@
             <h1>Publicaciones</h1>
         </div>
         <div class="col-md-3 order-2">
-            <h1 class="miembros">Miembros</h1>
-          </div>
+            <h1 class="miembros-name">Miembros</h1>
+            <div *ngFor="let usuario of usuarios" class="miembros" (click)="goPerfil(usuario.id)">
+              <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
+              <p>{{ usuario.nombre.toUpperCase() }}</p>
+              <p>{{ usuario.tipoUsuario.toUpperCase() }}</p>
+              <button *ngIf="usuario.id !== usuarioId" type="button" class="custom-button">Eliminar</button>
+              <i *ngIf="usuario.id == compania.idCreador" class="pi pi-crown" style="font-size: 1.5rem"></i>
+            </div>
+        </div>
       </div>
   </div>
   

@@ -30,9 +30,58 @@
             max-height: 100%;
             flex-direction: column;
 
-            .miembros{
+            .miembros-name{
                 border-bottom: 2px solid var(--color-enlaces-hover);
             }
+
+            .miembros{
+                background-color: var(--color-enlaces-hover);
+                margin-top: 2%;
+                padding: 1%;
+                margin-bottom: 3%;
+                display: flex; 
+                align-items: stretch; 
+                justify-content: space-around;
+                flex-direction: row;
+                width: 100%;
+                border: solid 2px white;
+                border-radius: 10px;
+
+                &:hover{
+                    cursor: pointer;
+                }
+        
+                img {
+                    width: 50px; // Ajusta el tamaño de la imagen según sea necesario
+                    height: 50px; // Ajusta el tamaño de la imagen según sea necesario
+                    margin-right: 10px; // Añade un espacio entre la imagen y los textos
+                    border-radius: 50%;
+                    border: 2px solid white; /* Borde blanco */
+                    text-align: center;
+                    line-height: 40px; /* Ajusta según el tamaño deseado */
+                }
+
+                i{
+                    margin-top: 3%;
+                }
+
+                p {
+                    margin-top: 2.5%;// Centra los elementos p dentro de la clase .usuario
+                }
+
+                .custom-button {
+                    display: flex;
+                    justify-content: space-around;
+                    align-items:  center;
+                    width: 20%;
+                    padding: 1%;
+                    border-radius: 10px;
+                    background-color: white !important;
+                    color: black; /* Cambia el color de fondo de los botones pButton */
+                    border-color: black;
+                }
+            }
+        
 
             .botones {
                 display: flex;

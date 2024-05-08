@@ -6,6 +6,8 @@ import { Compania } from '../../model/compania';
 import { CompaniaService } from '../../services/compania.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { Usuario } from '../../model/usuario';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-compania',
@@ -19,9 +21,11 @@ export class CompaniaComponent  implements OnInit{
   compania!: Compania;
   companiaId!: number;
   usuarioId!: number;
+  usuarios: Usuario[] =[];
   mostrandoFormularioModificar: boolean = false;
+  usuarioLocalStorage: any;
 
-  constructor(private companiaService: CompaniaService, private route: ActivatedRoute,private router: Router){}
+  constructor(private companiaService: CompaniaService, private route: ActivatedRoute,private router: Router, private usuarioService: UsuarioService){}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -32,6 +36,7 @@ export class CompaniaComponent  implements OnInit{
         this.usuarioId = usuarioAlmacenado.id;
       }
       this.loadCompania();
+      this.getAllUsuarios();
     })
   }
 
@@ -45,6 +50,23 @@ export class CompaniaComponent  implements OnInit{
         console.error('Error al cargar la compañía:', error);
       })
   }
+
+  getAllUsuarios() {
+    this.usuarioService.getAllUsuarios().subscribe(
+      usuarios => {
+        this.usuarios = usuarios;
+        console.log(usuarios);
+      },
+      error => {
+        console.log('Error al recuperar usuarios:', error);
+      }
+    );
+  }
+
+  goPerfil(usuarioId: number) {
+    this.router.navigate(['/perfil', usuarioId]); // Suponiendo que la ruta para el perfil sea '/perfil'
+  }
+  
 
   async eliminarCompania(id: number) {
     const result = await Swal.fire({
@@ -112,5 +134,9 @@ export class CompaniaComponent  implements OnInit{
       title: 'Advertencia',
       text: '¡Modificación de usuario cancelada!'
     });
+  }
+
+  abandonarCompania(){
+    
   }
 }
