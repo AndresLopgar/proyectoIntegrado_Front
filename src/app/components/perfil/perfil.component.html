@@ -2,10 +2,11 @@
     <ng-container *ngIf="usuario && usuario.id === usuarioIdFromLocalStorage">
       <div class="row flex-sm-row flex-column custom-margin-bottom">
         <div class="col-md-3 order-1 order-md-0">
-          <h3>Usuario:  {{ usuario.nombre }}</h3>
-          <h3>Correo:  {{ usuario.correoElectronico }}</h3>
-          <h3>Edad:  {{ usuario.edad }}</h3>
-          <h3>Profesión:  {{ usuario.profesion }}</h3>
+          <h4>Usuario:  {{ usuario.nombre }}</h4>
+          <h4>Correo:  {{ usuario.correoElectronico }}</h4>
+          <h4>Edad:  {{ usuario.edad }}</h4>
+          <h4>Profesión:  {{ usuario.profesion }}</h4>
+          <h4>Fecha registro: {{ usuario.fechaRegistro | date:'dd/MM/yyyy' }}</h4>
           <div class="botones">
             <button type="button" (click)="mostrarFormularioModificar()" pButton>Modificar usuario</button>
             <button type="button" (click)="eliminarUsuario(usuarioId)" pButton>Eliminar usuario</button>

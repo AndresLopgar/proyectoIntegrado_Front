@@ -1,9 +1,10 @@
 <div class="container">
       <div class="row flex-sm-row flex-column custom-margin-bottom">
         <div class="col-md-3 order-1 order-md-0">
-          <h3>Compañía:  {{ compania.nombre }}</h3>
-          <h3>Descripción:  {{ compania.descripcion }}</h3>
-          <h3>Miembros:  {{ compania.miembros }}</h3>
+          <h4>Compañía:  {{ compania.nombre }}</h4>
+          <h4>Descripción:  {{ compania.descripcion }}</h4>
+          <h4>Miembros:  {{ compania.miembros }}</h4>
+          <h4>Fecha Creación: {{ compania.fechaCreacion | date:'dd/MM/yyyy' }}</h4>
           <div class="botones" *ngIf="compania.idCreador === usuarioId">
             <button type="button" (click)="mostrarFormularioModificar()" pButton>Modificar compañía</button>
             <button type="button" (click)="eliminarCompania(companiaId)" pButton>Eliminar compañía</button>
