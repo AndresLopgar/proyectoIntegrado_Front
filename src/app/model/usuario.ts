@@ -8,4 +8,5 @@ export class Usuario{
     fechaRegistro!: string;
     fotoPerfil!: string;
     tipoUsuario!: string;
+    companiaSeguida!: number;
 }

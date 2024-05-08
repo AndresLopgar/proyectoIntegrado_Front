@@ -39,7 +39,7 @@
         </div>
         <div class="col-md-3 order-2">
             <h1 class="miembros-name">Miembros</h1>
-            <div *ngFor="let usuario of usuarios" class="miembros" (click)="goPerfil(usuario.id)">
+            <div *ngFor="let usuario of usuariosSeguidores" class="miembros" (click)="goPerfil(usuario.id)">
               <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
               <p>{{ usuario.nombre.toUpperCase() }}</p>
               <p>Edad: {{ usuario.edad }}</p>

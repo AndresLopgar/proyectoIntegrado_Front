@@ -21,7 +21,8 @@ export class CompaniaComponent  implements OnInit{
   compania!: Compania;
   companiaId!: number;
   usuarioId!: number;
-  usuarios: Usuario[] =[];
+  usuarios: Usuario[] = [];
+  usuariosSeguidores: Usuario[] =[];
   mostrandoFormularioModificar: boolean = false;
   usuarioLocalStorage: any;
 
@@ -44,7 +45,7 @@ export class CompaniaComponent  implements OnInit{
     this.companiaService.getCompaniaById(this.companiaId).subscribe(
       (compania) => {
         this.compania = compania;
-        console.log('Compañía cargada exitosamente:', this.compania);
+        this.usuariosSeguidores = this.usuarios.filter(usuario => usuario.companiaSeguida === this.companiaId);
       },
       (error) => {
         console.error('Error al cargar la compañía:', error);

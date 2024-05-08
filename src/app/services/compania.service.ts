@@ -41,7 +41,7 @@ export class CompaniaService {
     return this.http.put<number>(url, compania);
   }
 
-  getCompaniasByIdCreador(id: number): Observable<Compania> {
+  getCompaniaByIdCreador(id: number): Observable<Compania> {
     const url = `${this.baseUrl}/creator/${id}`;
     return this.http.get<Compania>(url);
   }

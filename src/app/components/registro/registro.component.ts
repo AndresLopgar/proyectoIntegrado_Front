@@ -32,6 +32,7 @@ usuario: Usuario = {
   fechaRegistro: '', 
   fotoPerfil: '', // Puedes dejarlo vacío si la foto no se proporciona en este paso
   tipoUsuario: 'estandar', // Dependiendo de tu lógica de negocio
+  companiaSeguida: 0
 };
 
   togglePasswordVisibility() {

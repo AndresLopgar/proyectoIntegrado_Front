@@ -51,21 +51,21 @@ export class PerfilComponent implements OnInit {
           miembros: 1,
           idCreador: this.usuarioIdFromLocalStorage
         };
-  
+
         // Llamar a loadCompaniasByIdCreador después de obtener usuarioIdFromLocalStorage
-        this.loadCompaniasByIdCreador(this.usuarioIdFromLocalStorage);
+        this.loadCompaniaByIdCreador(this.usuarioIdFromLocalStorage);
       }
     });
   }
   
-  loadCompaniasByIdCreador(id:number){
-    this.companiaService.getCompaniasByIdCreador(id).subscribe(
-      (companias) => {
-        this.compania = companias;
+  loadCompaniaByIdCreador(id:number){
+    this.companiaService.getCompaniaByIdCreador(id).subscribe(
+      (compania) => {
+        this.compania = compania;
       },
       (error) => {
         // Manejar errores
-        console.error('Error al obtener las compañías:', error);
+        console.error('Este usuario no tiene compañia');
       }
     );
   }
@@ -90,11 +90,9 @@ export class PerfilComponent implements OnInit {
     this.usuarioService.getUsuarioById(id).subscribe(
       (usuario: Usuario) => {
         this.usuario = usuario;
-        console.log('Perfil del usuario cargado exitosamente:', this.usuario);
       },
       error => {
         console.error('Error al cargar perfil del usuario:', error);
-        // Manejar el error aquí
       }
     );
   } 
@@ -105,8 +103,10 @@ export class PerfilComponent implements OnInit {
     // Llamar al servicio para registrar al usuario
     this.companiaService.createCompania(this.compania).subscribe(
       id => {
-        console.log(`compañía registrada con ID: ${id}`);
-        // Redirigir a la página de inicio después de que el usuario se registre exitosamente
+        console.log("Compaña con id: " + id + " creada correctamente");
+        this.usuario.companiaSeguida = id;
+        console.log(this.usuario);
+        
         this.router.navigateByUrl('/home');
         Swal.fire({
           icon: 'success',
@@ -143,7 +143,6 @@ export class PerfilComponent implements OnInit {
         localStorage.setItem('tipoUsuario', 'noRegistrado');
       // Llamar al servicio para eliminar la publicación
       this.usuarioService.deleteUsuario(id).subscribe( () => {
-            console.log(`Usario con ID ${id} eliminado correctamente`);
           },
           error => {
             console.error('Error al eliminar el usuario:', error);
@@ -170,7 +169,6 @@ export class PerfilComponent implements OnInit {
     if (this.usuario) {
       try {
         this.usuarioService.updateUsuario(this.usuario.id, this.usuario).toPromise();
-        console.log("Usuario modificado exitosamente.");
         this.mostrandoFormularioModificar = false; // Ocultar el formulario después de modificar el usuario
         Swal.fire({
           icon: 'success',
@@ -222,7 +220,6 @@ async cerrarSesion() {
       try {
         localStorage.removeItem('usuario');
         localStorage.setItem('tipoUsuario', 'noRegistrado');
-        console.log('Sesión cerrada exitosamente');
         await Swal.fire({
           icon: 'success',
           title: 'Cierre de sesión exitoso',

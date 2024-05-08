@@ -35,8 +35,6 @@ export class CabeceraComponent implements OnInit {
     }else{
       this.tipoUsuario= "noRegistrado";
     }
-    console.log(this.tipoUsuario);
-    
   }
 
   ActualizaTitulo(): void {
