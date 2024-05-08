@@ -80,7 +80,7 @@
                 <div class="form-group">
                   <label for="correo">Descripción:</label>
                   <input type="text" id="descripcion" name="descripcion" [(ngModel)]="compania.descripcion" pInputText required>
-                  <div *ngIf="createForm.controls['descripcion'].errors?.['required']">La descripción es requerido.</div>
+                  <div *ngIf="createForm.controls['descripcion'].errors?.['required']">La descripción es requerida.</div>
                 </div>
                 <div class="form-group">
                   <label for="fotoPerfil">Foto de perfil:</label>
