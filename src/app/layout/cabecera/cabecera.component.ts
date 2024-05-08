@@ -64,8 +64,8 @@ export class CabeceraComponent implements OnInit {
       case currentRoute === '/moderar':
         this.titulo = 'Moderación';
         break;
-      case currentRoute === '/companiaRegistro':
-        this.titulo = 'Registro Compañía';
+      case currentRoute.includes('/compania'):
+        this.titulo = 'Compañía';
         break;
       case currentRoute.includes('/perfil'):
         this.titulo = 'Perfil';

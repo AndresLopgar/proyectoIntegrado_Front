@@ -35,7 +35,7 @@
                         text-decoration: none;
     
                         &.img {
-                            margin-left: 25%;
+                            margin-left: 20%;
                             border-radius: 50%;
                             border: 2px solid white;
                             text-align: center;
@@ -46,6 +46,7 @@
                 }
 
                 li:hover {
+                    cursor: pointer;
                     border-bottom: 2px solid white;
                 }
 

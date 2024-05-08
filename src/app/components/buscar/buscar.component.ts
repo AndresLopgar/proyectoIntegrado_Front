@@ -5,6 +5,8 @@ import { Usuario} from '../../model/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { CompaniaService } from '../../services/compania.service';
+import { Compania } from '../../model/compania';
 
 @Component({
   selector: 'app-buscar',
@@ -14,13 +16,15 @@ import { Router } from '@angular/router';
   styleUrl: './buscar.component.scss'
 })
 export class BuscarComponent implements OnInit{
+  companias: Compania[] = [];
   usuarios: Usuario[] = [];
   usuarioLocalStorage: Usuario | null = null;
 
-  constructor(private usuarioService: UsuarioService, private router: Router) { }
+  constructor(private usuarioService: UsuarioService, private router: Router, private companiaService: CompaniaService) { }
 
   ngOnInit(): void {
     this.getAllUsuarios();
+    this.getAllCompanias();
     const usuarioString = localStorage.getItem('usuario');
   if (usuarioString !== null) {
     this.usuarioLocalStorage = JSON.parse(usuarioString);
@@ -29,12 +33,23 @@ export class BuscarComponent implements OnInit{
 
   getAllUsuarios() {
     this.usuarioService.getAllUsuarios().subscribe(
-      data => {
+      usuarios => {
         if (this.usuarioLocalStorage) {
-          this.usuarios = data.filter(usuario => usuario.id !== this.usuarioLocalStorage?.id);
+          this.usuarios = usuarios.filter(usuario => usuario.id !== this.usuarioLocalStorage?.id);
         } else {
-          this.usuarios = data;
+          this.usuarios = usuarios;
         }
+      },
+      error => {
+        console.log('Error al recuperar usuarios:', error);
+      }
+    );
+  }
+
+  getAllCompanias(){
+    this.companiaService.getAllCompanias().subscribe(
+      companias=>{
+        this.companias = companias;
       },
       error => {
         console.log('Error al recuperar usuarios:', error);
@@ -50,7 +65,11 @@ export class BuscarComponent implements OnInit{
 
   goPerfil(usuarioId: number) {
     this.router.navigate(['/perfil', usuarioId]); // Suponiendo que la ruta para el perfil sea '/perfil'
-}
+  }
+
+  goCompania(companiaID: number){
+    this.router.navigate(['/compania', companiaID]);
+  }
 
 seguirUsuario(event: Event) {
   event.stopPropagation(); // Evitar la propagación del evento clic

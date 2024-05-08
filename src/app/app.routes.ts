@@ -7,6 +7,7 @@ import { ModerarComponent } from './components/moderar/moderar.component';
 import { NotificacionesComponent } from './components/notificaciones/notificaciones.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
 import { RegistroComponent } from './components/registro/registro.component';
+import { CompaniaComponent } from './components/compania/compania.component';
 
 
 export const routes: Routes = [
@@ -19,5 +20,6 @@ export const routes: Routes = [
     {path: 'mensajes', component: MensajesComponent},
     {path: 'notificaciones', component: NotificacionesComponent},
     {path: 'moderar', component: ModerarComponent},
+    {path: 'compania/:id', component: CompaniaComponent},
     { path: '**', redirectTo: '/home' }
 ];

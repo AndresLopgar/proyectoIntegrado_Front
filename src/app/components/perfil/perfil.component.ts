@@ -51,16 +51,32 @@ export class PerfilComponent implements OnInit {
           miembros: 1,
           idCreador: this.usuarioIdFromLocalStorage
         };
+  
+        // Llamar a loadCompaniasByIdCreador después de obtener usuarioIdFromLocalStorage
+        this.loadCompaniasByIdCreador(this.usuarioIdFromLocalStorage);
       }
     });
   
-    this.loadCompaniasByIdCreador(this.usuarioIdFromLocalStorage);
-    console.log(this.companias);
-    
+    console.log(this.compania);
   }
-
   
-
+  loadCompaniasByIdCreador(id:number){
+    this.companiaService.getCompaniasByIdCreador(id).subscribe(
+      (companias) => {
+        this.compania = companias;
+        console.log(this.compania);
+      },
+      (error) => {
+        // Manejar errores
+        console.error('Error al obtener las compañías:', error);
+      }
+    );
+  }
+  
+  goCompania(companiaID: number){
+    this.router.navigate(['/compania', companiaID]);
+  }
+  
   togglePasswordVisibility() {
     if (!this.showPassword) {
       this.showPassword = true;
@@ -85,21 +101,6 @@ export class PerfilComponent implements OnInit {
       }
     );
   } 
-
-  loadCompaniasByIdCreador(id:number){
-    this.companiaService.getCompaniasByIdCreador(id).subscribe(
-      (companias: Compania[]) => {
-        this.companias = companias;
-        console.log(this.companias);
-        
-        
-      },
-      (error) => {
-        // Manejar errores
-        console.error('Error al obtener las compañías:', error);
-      }
-    );
-  }
 
 
   crearCompania(){

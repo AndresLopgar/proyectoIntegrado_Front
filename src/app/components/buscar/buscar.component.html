@@ -49,6 +49,12 @@
                 <p>{{ usuario.tipoUsuario.toUpperCase() }}</p>
                 <button type="button" class="custom-button" (click)="seguirUsuario($event)">Seguir<i class="pi pi-user-plus" style="font-size: 1.2rem;"></i> </button>
             </div>
+            <div *ngFor="let compania of companias" class="usuario" (click)="goCompania(compania.id)">
+                <img [src]="compania.fotoPerfil" alt="Foto de perfil">
+                <p>{{ compania.nombre.toUpperCase() }}</p>
+                <p>Miembros: {{ compania.miembros}}</p>
+                <button type="button" class="custom-button" (click)="seguirUsuario($event)">Solicitar<i class="pi pi-user-plus" style="font-size: 1.2rem;"></i> </button>
+            </div>
         </div>
     </div>
         <div class="col-md-3 order-2">
