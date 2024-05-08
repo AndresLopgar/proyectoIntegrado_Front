@@ -56,15 +56,12 @@ export class PerfilComponent implements OnInit {
         this.loadCompaniasByIdCreador(this.usuarioIdFromLocalStorage);
       }
     });
-  
-    console.log(this.compania);
   }
   
   loadCompaniasByIdCreador(id:number){
     this.companiaService.getCompaniasByIdCreador(id).subscribe(
       (companias) => {
         this.compania = companias;
-        console.log(this.compania);
       },
       (error) => {
         // Manejar errores
