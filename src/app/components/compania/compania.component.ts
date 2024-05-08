@@ -55,12 +55,20 @@ export class CompaniaComponent  implements OnInit{
     this.usuarioService.getAllUsuarios().subscribe(
       usuarios => {
         this.usuarios = usuarios;
-        console.log(usuarios);
+        this.moveCreatorToTop();
       },
       error => {
         console.log('Error al recuperar usuarios:', error);
       }
     );
+  }
+
+  moveCreatorToTop() {
+    const creatorIndex = this.usuarios.findIndex(usuario => usuario.id === this.compania.idCreador);
+    if (creatorIndex !== -1) {
+      const creator = this.usuarios.splice(creatorIndex, 1)[0];
+      this.usuarios.unshift(creator);
+    }
   }
 
   goPerfil(usuarioId: number) {

@@ -41,7 +41,7 @@
             <div *ngFor="let usuario of usuarios" class="miembros" (click)="goPerfil(usuario.id)">
               <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
               <p>{{ usuario.nombre.toUpperCase() }}</p>
-              <p>{{ usuario.tipoUsuario.toUpperCase() }}</p>
+              <p>Edad: {{ usuario.edad }}</p>
               <button *ngIf="usuario.id !== usuarioId" type="button" class="custom-button">Eliminar</button>
               <i *ngIf="usuario.id == compania.idCreador" class="pi pi-crown" style="font-size: 1.5rem"></i>
             </div>
