@@ -25,17 +25,21 @@ export class CompaniaComponent  implements OnInit{
   usuariosSeguidores: Usuario[] =[];
   mostrandoFormularioModificar: boolean = false;
   usuarioLocalStorage: any;
+  usuarioActual!: Usuario;
 
   constructor(private companiaService: CompaniaService, private route: ActivatedRoute,private router: Router, private usuarioService: UsuarioService){}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.companiaId = +params['id'];
+      
       const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
         this.usuarioId = usuarioAlmacenado.id;
+        this.loadUsuarioById(this.usuarioId);
       }
+      
       this.loadCompania();
       this.getAllUsuarios();
     })
@@ -57,12 +61,14 @@ export class CompaniaComponent  implements OnInit{
       usuarios => {
         this.usuarios = usuarios;
         this.moveCreatorToTop();
+        this.loadCompania();
       },
       error => {
         console.log('Error al recuperar usuarios:', error);
       }
     );
   }
+  
 
   moveCreatorToTop() {
     const creatorIndex = this.usuarios.findIndex(usuario => usuario.id === this.compania.idCreador);
@@ -76,6 +82,17 @@ export class CompaniaComponent  implements OnInit{
     this.router.navigate(['/perfil', usuarioId]); // Suponiendo que la ruta para el perfil sea '/perfil'
   }
   
+  loadUsuarioById(id: number) {
+    this.usuarioService.getUsuarioById(id).subscribe(
+      (usuario: Usuario) => {
+        this.usuarioActual = usuario;
+        console.log(this.usuarioActual);
+      },
+      error => {
+        console.error('Error al cargar perfil del usuario:', error);
+      }
+    );
+  } 
 
   async eliminarCompania(id: number) {
     const result = await Swal.fire({
@@ -88,11 +105,16 @@ export class CompaniaComponent  implements OnInit{
       confirmButtonText: 'Eliminar',
       cancelButtonText: 'Cancelar'
     });
-
+  
     if (result.isConfirmed) {
       try {
         await this.companiaService.deleteCompania(id).toPromise();
         console.log(`Compañía con ID ${id} eliminada correctamente`);
+        if (this.usuarioActual) {
+          this.usuarioActual.companiaSeguida = 0;
+          console.log(this.usuarioActual);
+        }
+  
         await this.router.navigateByUrl('/'); // Redirigir a la página principal o a donde desees
         Swal.fire({
           icon: 'success',
@@ -111,6 +133,7 @@ export class CompaniaComponent  implements OnInit{
       console.log('La acción ha sido cancelada');
     }
   }
+  
 
   async modificarCompania() {
     try {

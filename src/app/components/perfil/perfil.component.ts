@@ -22,6 +22,7 @@ export class PerfilComponent implements OnInit {
 
   constructor(private usuarioService: UsuarioService, private route: ActivatedRoute, private router: Router, private companiaService: CompaniaService) { }
   
+  usuarioStorage!: Usuario;
   companias: Compania[] = [];
   usuarioId!: number;
   usuario!: Usuario;
@@ -39,6 +40,8 @@ export class PerfilComponent implements OnInit {
       const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
+        console.log(usuarioAlmacenado);
+        
         this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
   
         // Actualizar el idCreador después de obtenerlo del localStorage
@@ -98,14 +101,29 @@ export class PerfilComponent implements OnInit {
   } 
 
 
-  crearCompania(){
+  crearCompania() {
     this.compania.fechaCreacion = new Date().toISOString();
-    // Llamar al servicio para registrar al usuario
+    // Llamar al servicio para registrar la compañía
     this.companiaService.createCompania(this.compania).subscribe(
       id => {
-        console.log("Compaña con id: " + id + " creada correctamente");
-        this.usuario.companiaSeguida = id;
-        console.log(this.usuario);
+        console.log("Compañía con id: " + id + " creada correctamente");
+        
+        // Obtener el usuario actual
+        const usuarioLocalStorage = localStorage.getItem('usuario');
+        if (usuarioLocalStorage) {
+          const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
+          const userId = usuarioAlmacenado.id;
+          
+          // Actualizar el atributo companiaSeguida del usuario
+          this.usuarioService.updateCompaniaSeguida(userId, id).subscribe(
+            () => {
+              console.log('companiaSeguida actualizado correctamente');
+            },
+            error => {
+              console.error('Error al actualizar companiaSeguida:', error);
+            }
+          );
+        }
         
         this.router.navigateByUrl('/home');
         Swal.fire({
@@ -121,8 +139,9 @@ export class PerfilComponent implements OnInit {
         });
       }
     );
-    this.mostrandoFormularioEliminar = false; // Ocultar el formulario después de crear la compañia
+    this.mostrandoFormularioEliminar = false; // Ocultar el formulario después de crear la compañía
   }
+  
 
   async eliminarUsuario(id: number) {
      // Mostrar un cuadro de diálogo de confirmación con SweetAlert

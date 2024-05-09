@@ -39,4 +39,10 @@ export class UsuarioService {
     const url = `${this.baseUrl}/update/${id}`;
     return this.http.put<number>(url, usuario);
   }
+
+  updateCompaniaSeguida(userId: number, nuevaCompaniaSeguida: number): Observable<void> {
+    const url = `${this.baseUrl}/update/${userId}/companiaSeguida?companiaSeguida=${nuevaCompaniaSeguida}`;
+    return this.http.put<void>(url, {}); // Aquí se envía un cuerpo vacío
+  }
+  
 }
