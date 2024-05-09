@@ -9,7 +9,17 @@
             <button type="button" (click)="mostrarFormularioModificar()" pButton>Modificar compañía</button>
             <button type="button" (click)="eliminarCompania(companiaId)" pButton>Eliminar compañía</button>
         </div>
-        <button *ngIf="compania.idCreador !== usuarioId" type="button" (click)="abandonarCompania()" pButton>Abandonar compañía</button>
+        <div class="botones">
+          <h1 *ngIf="usuarioActual.companiaSeguida !== companiaId && usuarioActual.id !== compania.idCreador">Solo puedes pertenecer a una compañía</h1>
+          <button *ngIf="!(usuarioActual.companiaSeguida !== 0 || usuarioActual.id !== compania.idCreador)" type="button" (click)="entrarCompania(companiaId)" pButton>Entrar a compañía</button>
+          <button *ngIf="!(usuarioActual.companiaSeguida !== 0 || usuarioActual.id !== compania.idCreador)" type="button" (click)="abandonarCompania(companiaId)" pButton>Abandonar compañía</button>
+          
+          <!-- usuario no creador y sin compañia -->
+          <button *ngIf="usuarioActual.companiaSeguida === 0 && usuarioActual.id !== compania.idCreador" type="button" (click)="entrarCompania(companiaId)" pButton>Entrar a compañía</button>
+          <button *ngIf="usuarioActual.companiaSeguida === companiaId && usuarioActual.id !== compania.idCreador" type="button" (click)="abandonarCompania(companiaId)" pButton>Abandonar compañía</button>
+
+        </div>
+        
         
           
           <div *ngIf="mostrandoFormularioModificar">

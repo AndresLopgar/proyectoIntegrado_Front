@@ -45,4 +45,10 @@ export class CompaniaService {
     const url = `${this.baseUrl}/creator/${id}`;
     return this.http.get<Compania>(url);
   }
+
+  updateMiembrosCompania(id: number, nuevosMiembros: number): Observable<number> {
+    const url = `${this.baseUrl}/updateMiembros/${id}`;
+    return this.http.put<number>(url, nuevosMiembros);
+  }
+  
 }

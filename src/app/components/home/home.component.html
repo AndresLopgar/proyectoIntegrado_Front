@@ -19,6 +19,23 @@
       </li>
     </ul>
   </div>
+
+  <div *ngIf="companias">
+    <h2>Listado de compañías</h2>
+    <ul>
+      <li *ngFor="let compania of companias">
+        <div>
+          <p><strong>ID:</strong> {{ compania.id }}</p>
+          <p><strong>Nombre:</strong> {{ compania.nombre }}</p>
+          <p><strong>Descripción:</strong> {{ compania.descripcion }}</p>
+          <p><strong>Fecha de Creacion:</strong> {{ compania.fechaCreacion }}</p>
+          <p><strong>Foto de Perfil:</strong> {{ compania.fotoPerfil }}</p>
+          <p><strong>Nº Miembros:</strong> {{ compania.miembros }}</p>
+        </div>
+        <hr>
+      </li>
+    </ul>
+  </div>
   
   <div *ngIf="!usuarios">
     <p>No se encontraron usuarios.</p>

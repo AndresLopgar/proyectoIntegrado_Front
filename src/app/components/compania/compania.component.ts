@@ -110,9 +110,16 @@ export class CompaniaComponent  implements OnInit{
       try {
         await this.companiaService.deleteCompania(id).toPromise();
         console.log(`Compañía con ID ${id} eliminada correctamente`);
-        if (this.usuarioActual) {
-          this.usuarioActual.companiaSeguida = 0;
-          console.log(this.usuarioActual);
+  
+        // Obtener el usuario actual
+        const usuarioLocalStorage = localStorage.getItem('usuario');
+        if (usuarioLocalStorage) {
+          const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
+          const userId = usuarioAlmacenado.id;
+  
+          // Actualizar el atributo companiaSeguida del usuario a cero
+          await this.usuarioService.updateCompaniaSeguida(userId, 0).toPromise();
+          console.log('companiaSeguida actualizado correctamente');
         }
   
         await this.router.navigateByUrl('/'); // Redirigir a la página principal o a donde desees
@@ -133,6 +140,7 @@ export class CompaniaComponent  implements OnInit{
       console.log('La acción ha sido cancelada');
     }
   }
+  
   
 
   async modificarCompania() {
@@ -168,7 +176,88 @@ export class CompaniaComponent  implements OnInit{
     });
   }
 
-  abandonarCompania(){
-    
+  abandonarCompania(idCompania: number) {
+    // Obtener el usuario actual
+    const usuarioLocalStorage = localStorage.getItem('usuario');
+    if (usuarioLocalStorage) {
+      const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
+      const userId = usuarioAlmacenado.id;
+      
+      // Actualizar el atributo companiaSeguida del usuario a 0
+      this.usuarioService.updateCompaniaSeguida(userId, 0).subscribe(
+        () => {
+          console.log('companiaSeguida actualizado a 0 correctamente');
+          
+          // Obtener el valor actual del atributo miembros de la compañía
+          this.companiaService.getCompaniaById(idCompania).subscribe(
+            (compania: Compania) => {
+              const nuevosMiembros = compania.miembros - 1;
+              // Actualizar el atributo miembros de la compañía
+              this.companiaService.updateMiembrosCompania(idCompania, nuevosMiembros).subscribe(
+                () => {
+                  console.log('Atributo miembros decrementado correctamente.');
+                  this.router.navigateByUrl('/home');
+                },
+                error => {
+                  console.error('Error al decrementar el atributo miembros:', error);
+                }
+              );
+            },
+            error => {
+              console.error('Error al obtener la compañía:', error);
+            }
+          );
+        },
+        error => {
+          console.error('Error al actualizar companiaSeguida:', error);
+        }
+      );
+    } else {
+      this.router.navigateByUrl('/home');
+    }
   }
+  
+  entrarCompania(idCompania: number) {
+    // Obtener el usuario actual
+    const usuarioLocalStorage = localStorage.getItem('usuario');
+    if (usuarioLocalStorage) {
+      const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
+      const userId = usuarioAlmacenado.id;
+      
+      // Actualizar el atributo companiaSeguida del usuario
+      this.usuarioService.updateCompaniaSeguida(userId, idCompania).subscribe(
+        () => {
+          console.log('companiaSeguida actualizado correctamente');
+          
+          // Obtener el valor actual del atributo miembros de la compañía
+          this.companiaService.getCompaniaById(idCompania).subscribe(
+            (compania: Compania) => {
+              const nuevosMiembros = compania.miembros + 1;
+              // Actualizar el atributo miembros de la compañía
+              this.companiaService.updateMiembrosCompania(idCompania, nuevosMiembros).subscribe(
+                () => {
+                  console.log('Atributo miembros incrementado correctamente.');
+                  this.router.navigateByUrl('/home');
+                },
+                error => {
+                  console.error('Error al incrementar el atributo miembros:', error);
+                }
+              );
+            },
+            error => {
+              console.error('Error al obtener la compañía:', error);
+            }
+          );
+        },
+        error => {
+          console.error('Error al actualizar companiaSeguida:', error);
+        }
+      );
+    } else {
+      this.router.navigateByUrl('/home');
+    }
+  }
+  
+  
+  
 }

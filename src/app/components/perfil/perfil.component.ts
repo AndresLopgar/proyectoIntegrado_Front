@@ -40,8 +40,6 @@ export class PerfilComponent implements OnInit {
       const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
-        console.log(usuarioAlmacenado);
-        
         this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
   
         // Actualizar el idCreador después de obtenerlo del localStorage
