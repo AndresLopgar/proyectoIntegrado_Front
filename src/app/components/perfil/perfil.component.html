@@ -133,7 +133,18 @@
           <h3>Edad:  {{ usuario.edad }}</h3>
           <h3>Profesión:  {{ usuario.profesion }}</h3>
           <div class="botones">
-            <button type="button" (click)="seguirUsuario()" class="botonSeguirPerfil">Seguir<i class="pi pi-user-plus" style="font-size: 1.2rem;"></i> </button>
+            <ng-container *ngIf="!estaEnAmistad; else dejarDeSeguir">
+              <button type="button" (click)="seguirUsuario()" class="botonSeguirPerfil">
+                Seguir<i class="pi pi-user-plus" style="font-size: 1.2rem;"></i>
+              </button>
+            </ng-container>
+            <ng-template #dejarDeSeguir>
+              <ng-container *ngIf="compania.idCreador !== usuarioIdFromLocalStorage">
+                <button type="button" (click)="dejarDeSeguirUsuario()" class="botonDejarDeSeguirPerfil">
+                  Dejar de seguir<i class="pi pi-user-minus" style="font-size: 1.2rem;"></i>
+                </button>
+              </ng-container>
+            </ng-template>
           </div>
         </div>
         <div class="col-md-5">
@@ -156,14 +167,16 @@
             </div>
           </ng-template>
           <h1 *ngIf="usuario.tipoUsuario == 'estandar'" class="amistad">Amistades</h1>
-          <div class="amistades">
+          <div *ngIf="estaEnAmistad" class="amistades">
             <div *ngFor="let amistad of amistadesBySeguidor" class="usuario" (click)="goPerfil(usuarioSeguidor.id)">
-              <img [src]="usuarioSeguidor.fotoPerfil" alt="Foto de perfil">
-              <p>{{ usuarioSeguidor.nombre.toUpperCase() }}</p>
-              <p>Edad: {{usuarioSeguidor.edad}}</p>
+              <ng-container *ngIf="usuarioId === amistad.idSeguidor || usuarioId === amistad.idSeguido">
+                <img [src]="usuarioSeguidor.fotoPerfil" alt="Foto de perfil">
+                <p>{{ usuarioSeguidor.nombre.toUpperCase() }}</p>
+                <p>Edad: {{usuarioSeguidor.edad}}</p>
+              </ng-container>
             </div>
           </div>
-          </div>
+        </div>
       </div>
     </ng-container>
   </div>

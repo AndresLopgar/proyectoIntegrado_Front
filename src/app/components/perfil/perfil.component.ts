@@ -38,7 +38,9 @@ export class PerfilComponent implements OnInit {
   showPassword: boolean = false;
   compania!: Compania;
   amistad!:Amistad;
+  amistadId!: number;
   amistadesBySeguidor!: Amistad[];
+  estaEnAmistad: boolean = false;
   usuarioSeguido!: Usuario;
   usuarioSeguidor!: Usuario;
 
@@ -69,10 +71,14 @@ export class PerfilComponent implements OnInit {
 
         this.amistad = {
           id:0,
-          idSeguidor: this.usuarioIdFromLocalStorage,
-          idSeguido: this.usuarioId
+          idSeguidor: 0,
+          idSeguido: 0
         };
         this.getAmistadesBySeguidorySeguido(this.usuarioIdFromLocalStorage);
+        
+        if(this.usuarioId == this.amistad.idSeguidor){
+          this.estaEnAmistad == true;
+        }
       }
     });
   }
@@ -299,6 +305,11 @@ async cerrarSesion() {
 
 seguirUsuario() {
   if (this.usuario) {
+    this.amistad = {
+      id:0,
+      idSeguidor: this.usuarioIdFromLocalStorage,
+      idSeguido: this.usuarioId
+    };
     this.amistadService.createAmistad(this.amistad).subscribe(
       id => {
         console.log("amistad creada correctamente con ID: " + id);
@@ -330,10 +341,14 @@ seguirUsuario() {
     window.location.reload();
   }
 
+
   getAmistadesBySeguidorySeguido(id: number){
     this.amistadService.findBySeguidor(id).subscribe(
       (amistades) =>{
         this.amistadesBySeguidor = amistades;
+        this.estaEnAmistad = this.amistadesBySeguidor.some(amistad => amistad.idSeguidor === this.usuarioIdFromLocalStorage);
+        this.estaEnAmistad = this.amistadesBySeguidor.some(amistad => amistad.idSeguido === this.usuarioId);
+        
         for (let i = 0; i < this.amistadesBySeguidor.length; i++) {
           this.usuarioService.getUsuarioById(this.amistadesBySeguidor[i].idSeguidor).subscribe(
             seguidor => {
@@ -345,6 +360,10 @@ seguirUsuario() {
               });
         }
       });
+  }
+
+  dejarDeSeguirUsuario(){
+
   }
 
 
