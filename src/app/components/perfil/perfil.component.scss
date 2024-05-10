@@ -163,7 +163,12 @@
                     display: flex;
                     justify-content: center; /* Centrar horizontalmente */
                     align-items: center; /* Centrar verticalmente */
+
+                    i{
+                        margin-left: 5%;
+                    }
                 }
+
             }
 
             .botones2 {

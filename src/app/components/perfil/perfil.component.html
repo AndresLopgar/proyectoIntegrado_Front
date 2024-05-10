@@ -112,13 +112,12 @@
             </div>
             <h1 *ngIf="usuario.tipoUsuario == 'estandar'" class="amistad">Amistades</h1>
             <div class="amistades">
-              <div *ngFor="let amistad of amistadesBySeguidor" class="usuario" (click)="goPerfil(usuarioSeguido.id)">
-                <img [src]="usuarioSeguido.fotoPerfil" alt="Foto de perfil">
-                <p>{{ usuarioSeguido.nombre.toUpperCase() }}</p>
-                <p>Edad: {{usuarioSeguido.edad}}</p>
-              </div>
+                <div *ngFor="let usuario of usuarioSeguido" class="usuario" (click)="goPerfil(usuario.id)">
+                  <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
+                  <p>{{ usuario.nombre.toUpperCase() }}</p>
+                  <p>Edad: {{usuario.edad}}</p>
+                </div>
             </div>
-            
           </div>
       </div>
     </ng-container>
@@ -134,13 +133,13 @@
           <h3>Profesión:  {{ usuario.profesion }}</h3>
           <div class="botones">
             <ng-container *ngIf="!estaEnAmistad; else dejarDeSeguir">
-              <button type="button" (click)="seguirUsuario()" class="botonSeguirPerfil">
+              <button type="button" (click)="seguirUsuario()" class="botonSeguirPerfil" pButton>
                 Seguir<i class="pi pi-user-plus" style="font-size: 1.2rem;"></i>
               </button>
             </ng-container>
             <ng-template #dejarDeSeguir>
-              <ng-container *ngIf="compania.idCreador !== usuarioIdFromLocalStorage">
-                <button type="button" (click)="dejarDeSeguirUsuario()" class="botonDejarDeSeguirPerfil">
+              <ng-container>
+                <button type="button" (click)="dejarDeSeguirUsuario(usuarioId)" class="botonDejarDeSeguirPerfil" pButton>
                   Dejar de seguir<i class="pi pi-user-minus" style="font-size: 1.2rem;"></i>
                 </button>
               </ng-container>
@@ -168,12 +167,10 @@
           </ng-template>
           <h1 *ngIf="usuario.tipoUsuario == 'estandar'" class="amistad">Amistades</h1>
           <div *ngIf="estaEnAmistad" class="amistades">
-            <div *ngFor="let amistad of amistadesBySeguidor" class="usuario" (click)="goPerfil(usuarioSeguidor.id)">
-              <ng-container *ngIf="usuarioId === amistad.idSeguidor || usuarioId === amistad.idSeguido">
-                <img [src]="usuarioSeguidor.fotoPerfil" alt="Foto de perfil">
-                <p>{{ usuarioSeguidor.nombre.toUpperCase() }}</p>
-                <p>Edad: {{usuarioSeguidor.edad}}</p>
-              </ng-container>
+            <div *ngFor="let usuario of usuarioSeguidor" class="usuario" (click)="goPerfil(usuario.id)">
+              <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
+              <p>{{ usuario.nombre.toUpperCase() }}</p>
+              <p>Edad: {{usuario.edad}}</p>
             </div>
           </div>
         </div>

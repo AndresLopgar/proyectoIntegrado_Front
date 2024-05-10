@@ -41,8 +41,9 @@ export class PerfilComponent implements OnInit {
   amistadId!: number;
   amistadesBySeguidor!: Amistad[];
   estaEnAmistad: boolean = false;
-  usuarioSeguido!: Usuario;
-  usuarioSeguidor!: Usuario;
+  usuarioSeguido!: Usuario[];
+  usuarioSeguidor!: Usuario[];
+  amistadElimnar!: number;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -75,10 +76,6 @@ export class PerfilComponent implements OnInit {
           idSeguido: 0
         };
         this.getAmistadesBySeguidorySeguido(this.usuarioIdFromLocalStorage);
-        
-        if(this.usuarioId == this.amistad.idSeguidor){
-          this.estaEnAmistad == true;
-        }
       }
     });
   }
@@ -342,29 +339,93 @@ seguirUsuario() {
   }
 
 
-  getAmistadesBySeguidorySeguido(id: number){
+  getAmistadesBySeguidorySeguido(id: number) {
     this.amistadService.findBySeguidor(id).subscribe(
-      (amistades) =>{
+      (amistades) => {
         this.amistadesBySeguidor = amistades;
-        this.estaEnAmistad = this.amistadesBySeguidor.some(amistad => amistad.idSeguidor === this.usuarioIdFromLocalStorage);
-        this.estaEnAmistad = this.amistadesBySeguidor.some(amistad => amistad.idSeguido === this.usuarioId);
+  
+        if (this.amistadesBySeguidor.some(amistad => 
+            amistad.idSeguido === this.usuarioId ||
+            amistad.idSeguidor === this.usuarioId)) {
+          this.estaEnAmistad = true;
+        } else {
+          this.estaEnAmistad = false;
+        }
         
+        console.log(this.amistadesBySeguidor);
+        console.log(this.estaEnAmistad);
+        
+        this.usuarioSeguido = [];
+        this.usuarioSeguidor = [];
+        let userIds = new Set<number>(); // Conjunto para almacenar los IDs de los usuarios ya agregados
+  
         for (let i = 0; i < this.amistadesBySeguidor.length; i++) {
-          this.usuarioService.getUsuarioById(this.amistadesBySeguidor[i].idSeguidor).subscribe(
-            seguidor => {
-              this.usuarioSeguidor = seguidor;
-            });
+          if (!userIds.has(this.amistadesBySeguidor[i].idSeguidor)) {
+            this.usuarioService.getUsuarioById(this.amistadesBySeguidor[i].idSeguidor).subscribe(
+              seguidor => {
+                this.usuarioSeguidor.push(seguidor);
+              }
+            );
+            userIds.add(this.amistadesBySeguidor[i].idSeguidor);
+          }
+          if (!userIds.has(this.amistadesBySeguidor[i].idSeguido)) {
             this.usuarioService.getUsuarioById(this.amistadesBySeguidor[i].idSeguido).subscribe(
               seguido => {
-                this.usuarioSeguido = seguido;
-              });
+                this.usuarioSeguido.push(seguido);
+              }
+            );
+            userIds.add(this.amistadesBySeguidor[i].idSeguido);
+          }
         }
-      });
+        console.log(this.usuarioSeguidor);
+      }
+    );
   }
+  
 
-  dejarDeSeguirUsuario(){
-
+  dejarDeSeguirUsuario(id: number) {
+    this.amistadService.getAllAmistades().subscribe(
+      amistades =>{
+        for (let i = 0; i < amistades.length; i++) {
+          if(amistades[i].idSeguido == id){
+            this.amistadElimnar = amistades[i].id;
+          }
+        }
+      }
+    )
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Quieres dejar de seguir a este usuario?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, dejar de seguir',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.amistadService.deleteAmistad(this.amistadElimnar).subscribe(
+          id => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Amistad eliminada',
+              text: '¡Amistad eliminada Correctamente!'
+            });
+            this.router.navigateByUrl('/home');
+            // Aquí puedes agregar lógica adicional después de eliminar la amistad
+          },
+          error => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: '¡No se pudo eliminar la amistad!'
+            });
+          }
+        );
+      }
+    });
   }
+  
 
 
 }
