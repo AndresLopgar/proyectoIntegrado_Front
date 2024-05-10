@@ -55,6 +55,7 @@ export class PerfilComponent implements OnInit {
 
         // Llamar a loadCompaniasByIdCreador después de obtener usuarioIdFromLocalStorage
         this.loadCompaniaByIdCreador(this.usuarioIdFromLocalStorage);
+        this.loadCompaniaById(this.usuarioIdFromLocalStorage);
       }
     });
   }
@@ -67,6 +68,18 @@ export class PerfilComponent implements OnInit {
       (error) => {
         // Manejar errores
         console.error('Este usuario no tiene compañia');
+      }
+    );
+  }
+
+  loadCompaniaById(id: number) {
+    this.companiaService.getCompaniaById(id).subscribe(
+      (compania) => {
+        this.compania = compania;
+      },
+      (error) => {
+        // Manejar errores
+        console.error('Error al cargar compañía por ID:', error);
       }
     );
   }
@@ -91,12 +104,18 @@ export class PerfilComponent implements OnInit {
     this.usuarioService.getUsuarioById(id).subscribe(
       (usuario: Usuario) => {
         this.usuario = usuario;
+        // Después de cargar el usuario, cargamos la compañía utilizando el atributo companiaSeguida
+        if (usuario.companiaSeguida) {
+          this.loadCompaniaById(usuario.companiaSeguida);
+        } else {
+          console.log('Este usuario no tiene compañía asociada');
+        }
       },
       error => {
         console.error('Error al cargar perfil del usuario:', error);
       }
     );
-  } 
+  }
 
 
   crearCompania() {

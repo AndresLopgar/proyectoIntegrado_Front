@@ -54,7 +54,7 @@
               <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
               <p>{{ usuario.nombre.toUpperCase() }}</p>
               <p>Edad: {{ usuario.edad }}</p>
-              <button *ngIf="usuario.id !== usuarioId" type="button" class="custom-button">Eliminar</button>
+              <button *ngIf="usuario.id !== usuarioId && usuarioId == compania.idCreador" type="button" class="custom-button">Eliminar</button>
               <i *ngIf="usuario.id == compania.idCreador" class="pi pi-crown" style="font-size: 1.5rem"></i>
             </div>
         </div>

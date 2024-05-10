@@ -63,11 +63,18 @@
         </div>
         <div class="col-md-3 order-2">
           <h1>Compañías</h1>
-          <div *ngIf="compania && compania.nombre" class="companias" (click)="goCompania(compania.id)">
+          <div *ngIf="usuario.id === compania.idCreador; else otraCondicion" class="companias" (click)="goCompania(compania.id)">
             <p>{{compania.nombre.toLocaleUpperCase()}}</p>
             <p>Descripción: {{compania.descripcion}}</p>
             <p>Miembros: {{compania.miembros}}</p>
           </div>
+          <ng-template #otraCondicion>
+            <div *ngIf="usuario.companiaSeguida == compania.id" class="companias" (click)="goCompania(compania.id)">
+                <p>{{compania.nombre.toLocaleUpperCase()}}</p>
+                <p>Descripción: {{compania.descripcion}}</p>
+                <p>Miembros: {{compania.miembros}}</p>
+            </div>
+        </ng-template>
           <div *ngIf="!compania || !compania.nombre" class="botones">
             <button type="button" (click)="mostrarFormularioEliminar()" pButton>Crear compañía</button>
           </div>
