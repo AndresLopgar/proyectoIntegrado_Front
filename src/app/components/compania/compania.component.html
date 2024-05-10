@@ -6,6 +6,7 @@
           <h4>Miembros:  {{ compania.miembros }}</h4>
           <h4>Fecha Creación: {{ compania.fechaCreacion | date:'dd/MM/yyyy' }}</h4>
           <div class="botones" *ngIf="compania.idCreador === usuarioId">
+            <button type="button" (click)="generaInforme()" pButton>Generar informe compañía</button>
             <button type="button" (click)="mostrarFormularioModificar()" pButton>Modificar compañía</button>
             <button type="button" (click)="eliminarCompania(companiaId)" pButton>Eliminar compañía</button>
         </div>

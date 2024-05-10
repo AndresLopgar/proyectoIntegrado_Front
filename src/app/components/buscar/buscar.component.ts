@@ -46,16 +46,21 @@ export class BuscarComponent implements OnInit{
     );
   }
 
-  getAllCompanias(){
+  getAllCompanias() {
     this.companiaService.getAllCompanias().subscribe(
-      companias=>{
-        this.companias = companias;
+      companias => {
+        if (this.usuarioLocalStorage && this.usuarioLocalStorage.companiaSeguida) {
+          this.companias = companias.filter(compania => compania.id !== this.usuarioLocalStorage!.companiaSeguida);
+        } else {
+          this.companias = companias;
+        }
       },
       error => {
-        console.log('Error al recuperar usuarios:', error);
+        console.log('Error al recuperar compañías:', error);
       }
     );
   }
+  
 
   usuarioEstandarChecked: boolean = false;
 

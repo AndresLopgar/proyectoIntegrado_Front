@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Usuario } from '../../model/usuario';
 import { UsuarioService } from '../../services/usuario.service';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-compania',
@@ -258,6 +260,51 @@ export class CompaniaComponent  implements OnInit{
     }
   }
   
+  async generaInforme() {
+    // Filtrar los usuarios cuyo atributo companiaSeguida sea igual al ID de la compañía
+    const usuariosFiltrados = this.usuarios.filter(usuario => usuario.companiaSeguida === this.companiaId);
+  
+    // Crear un nuevo arreglo solo con los datos necesarios
+    const data = usuariosFiltrados.map(usuario => ({
+      Nombre: usuario.nombre,
+      Edad: usuario.edad,
+      Profesion: usuario.profesion
+    }));
+  
+    // Crear un nuevo libro de Excel
+    const wb = XLSX.utils.book_new();
+    
+    // Crear una nueva hoja en el libro de Excel
+    const ws = XLSX.utils.json_to_sheet(data);
+  
+    // Asignar nombres a las columnas
+    ws['!cols'] = [
+      { wch: 20 }, // Tamaño de la columna para el nombre
+      { wch: 10 }, // Tamaño de la columna para la edad
+      { wch: 20 }, // Tamaño de la columna para la profesión
+    ];
+    ws['A1'] = { v: 'Nombre', t: 's' };
+    ws['B1'] = { v: 'Edad', t: 's' };
+    ws['C1'] = { v: 'Profesion', t: 's' };
+  
+    // Agregar la hoja al libro de Excel
+    XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
+  
+    // Convertir el libro de Excel a un archivo binario
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  
+    // Crear un Blob a partir del archivo binario
+    const blob = new Blob([wbout], { type: 'application/octet-stream' });
+  
+    // Crear una URL para el Blob
+    const blobUrl = URL.createObjectURL(blob);
+  
+    // Crear un enlace de descarga y hacer clic en él para descargar el archivo
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = 'informe_usuarios.xlsx';
+    a.click();
+  }
   
   
 }
