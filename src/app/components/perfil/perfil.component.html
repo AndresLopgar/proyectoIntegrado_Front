@@ -110,7 +110,7 @@
                 </div>
               </form>
             </div>
-            <h1 *ngIf="usuario.tipoUsuario == 'estandar'" class="amistad">Amistades</h1>
+            <h1 *ngIf="usuario.tipoUsuario == 'estandar'" class="amistad">Sigue a</h1>
             <div class="amistades">
                 <div *ngFor="let usuario of usuarioSeguido" class="usuario" (click)="goPerfil(usuario.id)">
                   <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
@@ -159,15 +159,14 @@
           </div>
           <ng-template #otraCondicion>
             <div *ngIf="usuario.companiaSeguida == compania.id  && compania.id !=0 && usuario.tipoUsuario == 'estandar'" class="companias" (click)="goCompania(compania.id)">
-              <p>{{usuario.companiaSeguida}}</p>
                 <p>{{compania.nombre.toLocaleUpperCase()}}</p>
                 <p>Descripción: {{compania.descripcion}}</p>
                 <p>Miembros: {{compania.miembros}}</p>
             </div>
           </ng-template>
-          <h1 *ngIf="usuario.tipoUsuario == 'estandar'" class="amistad">Amistades</h1>
+          <h1 *ngIf="usuario.tipoUsuario == 'estandar'" class="amistad">Sigue a</h1>
           <div *ngIf="estaEnAmistad" class="amistades">
-            <div *ngFor="let usuario of usuarioSeguidor" class="usuario" (click)="goPerfil(usuario.id)">
+            <div *ngFor="let usuario of usuarioSeguido" class="usuario" (click)="goPerfil(usuario.id)">
               <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
               <p>{{ usuario.nombre.toUpperCase() }}</p>
               <p>Edad: {{usuario.edad}}</p>

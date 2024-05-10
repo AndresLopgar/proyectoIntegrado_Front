@@ -345,41 +345,29 @@ seguirUsuario() {
         this.amistadesBySeguidor = amistades;
   
         if (this.amistadesBySeguidor.some(amistad => 
-            amistad.idSeguido === this.usuarioId ||
-            amistad.idSeguidor === this.usuarioId)) {
+            amistad.idSeguido === this.usuarioId)) {
           this.estaEnAmistad = true;
         } else {
           this.estaEnAmistad = false;
         }
         
-        console.log(this.amistadesBySeguidor);
-        console.log(this.estaEnAmistad);
-        
         this.usuarioSeguido = [];
-        this.usuarioSeguidor = [];
         let userIds = new Set<number>(); // Conjunto para almacenar los IDs de los usuarios ya agregados
   
-        for (let i = 0; i < this.amistadesBySeguidor.length; i++) {
-          if (!userIds.has(this.amistadesBySeguidor[i].idSeguidor)) {
-            this.usuarioService.getUsuarioById(this.amistadesBySeguidor[i].idSeguidor).subscribe(
-              seguidor => {
-                this.usuarioSeguidor.push(seguidor);
+        this.amistadService.getAllAmistades().subscribe(
+          amistades =>{
+            this.amistadesBySeguidor = amistades;
+            for (let i = 0; i <  this.amistadesBySeguidor.length; i++) {
+              if (!userIds.has(this.amistadesBySeguidor[i].idSeguido) && this.amistadesBySeguidor[i].idSeguido !== this.usuarioId && this.amistadesBySeguidor[i].idSeguidor == this.usuarioId) {
+                this.usuarioService.getUsuarioById(this.amistadesBySeguidor[i].idSeguido).subscribe(
+                    seguido => {
+                        this.usuarioSeguido.push(seguido);
+                    });
+                userIds.add(this.amistadesBySeguidor[i].idSeguido);
               }
-            );
-            userIds.add(this.amistadesBySeguidor[i].idSeguidor);
-          }
-          if (!userIds.has(this.amistadesBySeguidor[i].idSeguido)) {
-            this.usuarioService.getUsuarioById(this.amistadesBySeguidor[i].idSeguido).subscribe(
-              seguido => {
-                this.usuarioSeguido.push(seguido);
-              }
-            );
-            userIds.add(this.amistadesBySeguidor[i].idSeguido);
-          }
-        }
-        console.log(this.usuarioSeguidor);
-      }
-    );
+            }
+          })
+      });
   }
   
 
