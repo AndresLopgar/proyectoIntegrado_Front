@@ -91,10 +91,9 @@
                 align-items: center;
                 border-radius: 10px;
                 background-color: var(--color-primario);
-                display: flex;
                 flex-direction: column;
                 overflow-y: auto;
-                max-height: 80%;
+                max-height: 428px;
                 border: solid 2px var(--color-primario); // Borde con el color primario
 
                 &::-webkit-scrollbar {
