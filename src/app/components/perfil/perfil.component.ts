@@ -8,6 +8,8 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CompaniaService } from '../../services/compania.service';
 import { Compania } from '../../model/compania';
+import { AmistadService } from '../../services/amistad.service';
+import { Amistad } from '../../model/amistad';
 
 @Component({
   selector: 'app-perfil',
@@ -20,7 +22,11 @@ export class PerfilComponent implements OnInit {
   @ViewChild('updateForm') updateForm!: NgForm; // Referencia al formulario
   @ViewChild('createForm') CreacionCompaniaForm!: NgForm; // Referencia al formulario
 
-  constructor(private usuarioService: UsuarioService, private route: ActivatedRoute, private router: Router, private companiaService: CompaniaService) { }
+  constructor(private usuarioService: UsuarioService, 
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private companiaService: CompaniaService,
+    private amistadService: AmistadService) { }
   
   usuarioStorage!: Usuario;
   companias: Compania[] = [];
@@ -31,6 +37,10 @@ export class PerfilComponent implements OnInit {
   mostrandoFormularioEliminar: boolean = false;
   showPassword: boolean = false;
   compania!: Compania;
+  amistad!:Amistad;
+  amistadesBySeguidor!: Amistad[];
+  usuarioSeguido!: Usuario;
+  usuarioSeguidor!: Usuario;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -56,8 +66,19 @@ export class PerfilComponent implements OnInit {
         // Llamar a loadCompaniasByIdCreador después de obtener usuarioIdFromLocalStorage
         this.loadCompaniaByIdCreador(this.usuarioIdFromLocalStorage);
         this.loadCompaniaById(this.usuarioIdFromLocalStorage);
+
+        this.amistad = {
+          id:0,
+          idSeguidor: this.usuarioIdFromLocalStorage,
+          idSeguido: this.usuarioId
+        };
+        this.getAmistadesBySeguidorySeguido(this.usuarioIdFromLocalStorage);
       }
     });
+  }
+
+  goPerfil(usuarioId: number) {
+    this.router.navigate(['/perfil', usuarioId]);
   }
   
   loadCompaniaByIdCreador(id:number){
@@ -276,9 +297,30 @@ async cerrarSesion() {
     }
   }
 
-  seguirUsuario(event: Event) {
-    event.stopPropagation(); // Evitar la propagación del evento clic
+seguirUsuario() {
+  if (this.usuario) {
+    this.amistadService.createAmistad(this.amistad).subscribe(
+      id => {
+        console.log("amistad creada correctamente con ID: " + id);
+        Swal.fire({
+          icon: 'success',
+          title: 'Seguimiento exitoso',
+          text: '¡Ahora sigues a este usuario!'
+        });
+        this.router.navigateByUrl('/home');
+      },
+      error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '¡No se pudo seguir a este usuario!'
+        });
+        console.error("Error al seguir al usuario:", error);
+      }
+    );
   }
+}
+
 
   quitarLocalStorage(){
     localStorage.removeItem('usuario');
@@ -287,4 +329,23 @@ async cerrarSesion() {
     this.router.navigateByUrl('/login');
     window.location.reload();
   }
+
+  getAmistadesBySeguidorySeguido(id: number){
+    this.amistadService.findBySeguidor(id).subscribe(
+      (amistades) =>{
+        this.amistadesBySeguidor = amistades;
+        for (let i = 0; i < this.amistadesBySeguidor.length; i++) {
+          this.usuarioService.getUsuarioById(this.amistadesBySeguidor[i].idSeguidor).subscribe(
+            seguidor => {
+              this.usuarioSeguidor = seguidor;
+            });
+            this.usuarioService.getUsuarioById(this.amistadesBySeguidor[i].idSeguido).subscribe(
+              seguido => {
+                this.usuarioSeguido = seguido;
+              });
+        }
+      });
+  }
+
+
 }

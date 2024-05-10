@@ -92,8 +92,4 @@ export class BuscarComponent implements OnInit {
   goCompania(companiaID: number) {
     this.router.navigate(['/compania', companiaID]);
   }
-
-  seguirUsuario(event: Event) {
-    event.stopPropagation(); // Evitar la propagación del evento clic
-  }
 }
