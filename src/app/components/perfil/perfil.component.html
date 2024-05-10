@@ -63,13 +63,13 @@
         </div>
         <div class="col-md-3 order-2">
           <h1>Compañías</h1>
-          <div *ngIf="usuario.id === compania.idCreador; else otraCondicion" class="companias" (click)="goCompania(compania.id)">
+          <div *ngIf="usuario.id === compania.idCreador && usuario.companiaSeguida!= 0; else otraCondicion" class="companias" (click)="goCompania(compania.id)">
             <p>{{compania.nombre.toLocaleUpperCase()}}</p>
             <p>Descripción: {{compania.descripcion}}</p>
             <p>Miembros: {{compania.miembros}}</p>
           </div>
           <ng-template #otraCondicion>
-            <div *ngIf="usuario.companiaSeguida == compania.id" class="companias" (click)="goCompania(compania.id)">
+            <div *ngIf="usuario.companiaSeguida == compania.id  && compania.id !=0" class="companias" (click)="goCompania(compania.id)">
                 <p>{{compania.nombre.toLocaleUpperCase()}}</p>
                 <p>Descripción: {{compania.descripcion}}</p>
                 <p>Miembros: {{compania.miembros}}</p>
@@ -116,9 +116,26 @@
             <button type="button" (click)="seguirUsuario($event)">Seguir<i class="pi pi-user-plus" style="font-size: 1.2rem;" pButton></i> </button>
           </div>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-5">
           <h1>Publicaciones</h1>
-      </div>
+        </div>
+        <div class="col-md-3 order-2">
+          <h1>Compañías</h1>
+          <div *ngIf="usuario.id === compania.idCreador; else otraCondicion" class="companias" (click)="goCompania(compania.id)">
+            <p>{{compania.nombre.toLocaleUpperCase()}}</p>
+            <p>Descripción: {{compania.descripcion}}</p>
+            <p>Miembros: {{compania.miembros}}</p>
+          </div>
+          <ng-template #otraCondicion>
+            <div *ngIf="usuario.companiaSeguida == compania.id  && compania.id !=0" class="companias" (click)="goCompania(compania.id)">
+              <p>{{usuario.companiaSeguida}}</p>
+                <p>{{compania.nombre.toLocaleUpperCase()}}</p>
+                <p>Descripción: {{compania.descripcion}}</p>
+                <p>Miembros: {{compania.miembros}}</p>
+            </div>
+          </ng-template>
+          <h1 class="amistades">Amistades</h1>
+          </div>
       </div>
     </ng-container>
   </div>
