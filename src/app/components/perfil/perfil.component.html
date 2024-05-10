@@ -1,18 +1,22 @@
 <div class="container">
     <ng-container *ngIf="usuario && usuario.id === usuarioIdFromLocalStorage">
       <div class="row flex-sm-row flex-column custom-margin-bottom">
+        <!--Información del usuario que actual-->
         <div class="col-md-3 order-1 order-md-0">
           <h4>Usuario:  {{ usuario.nombre }}</h4>
           <h4>Correo:  {{ usuario.correoElectronico }}</h4>
           <h4>Edad:  {{ usuario.edad }}</h4>
           <h4>Profesión:  {{ usuario.profesion }}</h4>
           <h4>Fecha registro: {{ usuario.fechaRegistro | date:'dd/MM/yyyy' }}</h4>
+
+          <!--Acciones para el usuario Actual-->
           <div class="botones">
             <button type="button" (click)="mostrarFormularioModificar()" pButton>Modificar usuario</button>
             <button type="button" (click)="eliminarUsuario(usuarioId)" pButton>Eliminar usuario</button>
             <button type="button" (click)="cerrarSesion()" pButton>Cerrar Sesión</button>
           </div>
           
+          <!--Formulario para modificar al usuario Actual-->
           <div *ngIf="mostrandoFormularioModificar">
             <form (submit)="modificarUsuario()" #updateForm="ngForm">
               <div class="form-group">
@@ -60,20 +64,26 @@
         <div class="col-md-5 order-0 order-md-1">
             <h1>Publicaciones</h1>
         </div>
+
+        <!-- Información compañías del usuario Actual-->
         <div class="col-md-3 order-2">
           <h1>Compañías</h1>
-          <div *ngIf="usuario.id === compania.idCreador && usuario.companiaSeguida!= 0; else otraCondicion" class="companias" (click)="goCompania(compania.id)">
+          <div *ngIf="usuario.id === compania.idCreador && usuario.companiaSeguida!= 0 && usuario.tipoUsuario == 'estandar'; else otraCondicion" class="companias" (click)="goCompania(compania.id)">
             <p>{{compania.nombre.toLocaleUpperCase()}}</p>
             <p>Descripción: {{compania.descripcion}}</p>
             <p>Miembros: {{compania.miembros}}</p>
           </div>
           <ng-template #otraCondicion>
-            <div *ngIf="usuario.companiaSeguida == compania.id  && compania.id !=0" class="companias" (click)="goCompania(compania.id)">
+            <div *ngIf="usuario.companiaSeguida == compania.id  && compania.id !=0 && usuario.tipoUsuario == 'estandar'" class="companias" (click)="goCompania(compania.id)">
                 <p>{{compania.nombre.toLocaleUpperCase()}}</p>
                 <p>Descripción: {{compania.descripcion}}</p>
                 <p>Miembros: {{compania.miembros}}</p>
             </div>
         </ng-template>
+
+
+
+        <!-- Creación de Compañia-->
           <div *ngIf="!compania || !compania.nombre" class="botones">
             <button type="button" (click)="mostrarFormularioEliminar()" pButton>Crear compañía</button>
           </div>
@@ -100,10 +110,13 @@
                 </div>
               </form>
             </div>
-            <h1 class="amistades">Amistades</h1>
+            <h1 *ngIf="usuario.tipoUsuario == 'estandar'" class="amistades">Amistades</h1>
           </div>
       </div>
     </ng-container>
+
+
+    <!--Información del usuario que no es el actual-->
     <ng-container *ngIf="!(usuario && usuario.id === usuarioIdFromLocalStorage)">
       <div class="row flex-sm-row flex-column">
         <div class="col-md-3">
@@ -119,21 +132,22 @@
           <h1>Publicaciones</h1>
         </div>
         <div class="col-md-3 order-2">
+          <!-- Información compañías si el perfil no es del usuario actual-->
           <h1>Compañías</h1>
-          <div *ngIf="usuario.id === compania.idCreador; else otraCondicion" class="companias" (click)="goCompania(compania.id)">
+          <div *ngIf="usuario.id === compania.idCreador && usuario.tipoUsuario == 'estandar'; else otraCondicion" class="companias" (click)="goCompania(compania.id)">
             <p>{{compania.nombre.toLocaleUpperCase()}}</p>
             <p>Descripción: {{compania.descripcion}}</p>
             <p>Miembros: {{compania.miembros}}</p>
           </div>
           <ng-template #otraCondicion>
-            <div *ngIf="usuario.companiaSeguida == compania.id  && compania.id !=0" class="companias" (click)="goCompania(compania.id)">
+            <div *ngIf="usuario.companiaSeguida == compania.id  && compania.id !=0 && usuario.tipoUsuario == 'estandar'" class="companias" (click)="goCompania(compania.id)">
               <p>{{usuario.companiaSeguida}}</p>
                 <p>{{compania.nombre.toLocaleUpperCase()}}</p>
                 <p>Descripción: {{compania.descripcion}}</p>
                 <p>Miembros: {{compania.miembros}}</p>
             </div>
           </ng-template>
-          <h1 class="amistades">Amistades</h1>
+          <h1 *ngIf="usuario.tipoUsuario == 'estandar'" class="amistades">Amistades</h1>
           </div>
       </div>
     </ng-container>
