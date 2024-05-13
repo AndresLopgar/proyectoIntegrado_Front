@@ -14,6 +14,7 @@
             padding: 1%;
             border-radius: 10px;
             display: flex;
+            height: 70vh;
             text-align: center;
             background-color: var(--color-primario);
             max-height: 100%;
@@ -31,6 +32,7 @@
             border-radius: 10px;
             display: flex;
             text-align: center;
+            height: 70vh;
             background-color: var(--color-primario);
             max-height: 100%;
             flex-direction: column;
@@ -93,7 +95,7 @@
                 background-color: var(--color-primario);
                 flex-direction: column;
                 overflow-y: auto;
-                max-height: 428px;
+                max-height: 65vh;
                 border: solid 2px var(--color-primario); // Borde con el color primario
 
                 &::-webkit-scrollbar {
@@ -154,6 +156,15 @@
                     }
                 }
             }
+        }
+    }
+}
+
+@media (max-width: 991px) { /* Estilo aplicado cuando el ancho de la pantalla es menor o igual a 991px */
+    .container {       
+        .col-md-5, .col-md-3 { /* Estilos para las columnas de tamaño md */
+          height: auto !important; /* Cambia la altura a auto para ajustarse al contenido */
+          margin-bottom: 10px; /* Añade un margen inferior entre las columnas */   
         }
     }
 }

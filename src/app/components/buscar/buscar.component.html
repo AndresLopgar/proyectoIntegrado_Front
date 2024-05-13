@@ -1,39 +1,39 @@
 <div class="container">
     <div class="row flex-sm-row flex-column custom-margin-bottom">
         <div class="col-md-3 order-1 order-md-0">
-            <p>Filtros</p>
-                <div class="checkbox">
-                    <label for="tipoUsuario">Tipo de Usuario:</label><br>
-                    <input type="checkbox" id="usuarioEstandar" name="tipoUsuario" value="usuarioEstandar">
-                    <label for="usuarioEstandar">Usuario Estándar</label><br>
-                    <input type="checkbox" id="compania" name="tipoUsuario" value="compania">
-                    <label for="compania">Compañía</label><br>
-
-                    <label for="edad">Edad Mínima:</label>
-                    <input type="text" id="edad" name="edad" value="edad"><br>
-
-                    <label for="edad">Edad Máxima:</label>
-                    <input type="text" id="edad" name="edad" value="edad"><br>
-
-                    <label for="profesion">Profesión:</label><br>
-                    <input type="checkbox" id="actor" name="tipoUsuario" value="actor">
-                    <label for="actor">Actor/iz</label><br>
-
-                    <input type="checkbox" id="bailarin" name="tipoUsuario" value="bailarin">
-                    <label for="bailarin">Bailarín/a</label><br>
-
-                    <input type="checkbox" id="escenografo" name="tipoUsuario" value="escenografo">
-                    <label for="escenografo">Escenógrafo/a</label><br>
-
-                    <input type="checkbox" id="maquillador" name="tipoUsuario" value="maquillador">
-                    <label for="maquillador">Maquillador/a</label><br>
-
-                    <input type="checkbox" id="guionista" name="tipoUsuario" value="guionista">
-                    <label for="guionista">Guionista</label><br>
-
-                    <input type="checkbox" id="estilista" name="tipoUsuario" value="estilista">
-                    <label for="estilista">Estilista</label><br>
-                </div>
+            <h3>Filtros</h3>
+            <div class="form-group">
+                <label for="tipoUsuario">Tipo de Usuario:</label>
+                <select class="form-control" id="tipoUsuario" name="tipoUsuario" (change)="mostrarFiltros($event)">
+                    <option value="">Sin determinar</option>
+                    <option value="usuarios">Usuarios</option>
+                    <option value="companias">Compañías</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="filtrosUsuarios" *ngIf="filtroTipo === 'usuarios'">
+                <label for="edadMin">Edad Mínima:</label>
+                <input type="number" class="form-control" id="edadMin" name="edadMin" value="16">
+                <label for="edadMax">Edad Máxima:</label>
+                <input type="number" class="form-control" id="edadMax" name="edadMax" value="100">
+                <label for="profesion">Profesión:</label>
+                <select class="form-control" id="profesion" name="profesion">
+                    <option value="">Sin determinar</option>
+                    <option value="actor">Actor/iz</option>
+                    <option value="bailarin">Bailarín/a</option>
+                    <option value="escenografo">Escenógrafo/a</option>
+                    <option value="maquillador">Maquillador/a</option>
+                    <option value="guionista">Guionista</option>
+                    <option value="estilista">Estilista</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="filtrosCompanias" *ngIf="filtroTipo === 'companias'">
+                <label for="numMiembros">Número de Miembros:</label>
+                <input type="number" class="form-control" id="numMiembros" name="numMiembros" value="1">
+                <label for="fechaCreacion">Fecha de Creación:</label>
+                <input type="date" class="form-control" id="fechaCreacion" name="fechaCreacion">
+            </div>
         </div>
         <div class="col-md-5 order-0 order-md-1">
             <div class="busqueda">
@@ -53,6 +53,6 @@
             </div>
         </div>
         <div class="col-md-3 order-2 historial">
-            <p>Historial</p>
+            <h3>Historial</h3>
         </div>
 </div>

@@ -21,6 +21,7 @@ export class BuscarComponent implements OnInit {
   usuariosFiltrados: Usuario[] = [];
   companiasFiltradas: Compania[] = [];
   usuarioLocalStorage: Usuario | null = null;
+  filtroTipo: string = '';
 
   constructor(
     private usuarioService: UsuarioService,
@@ -92,4 +93,10 @@ export class BuscarComponent implements OnInit {
   goCompania(companiaID: number) {
     this.router.navigate(['/compania', companiaID]);
   }
+
+  mostrarFiltros(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    this.filtroTipo = target.value;
+  }
+  
 }

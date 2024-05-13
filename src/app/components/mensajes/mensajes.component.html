@@ -1,3 +1,19 @@
 <div class="container">
-    <p>Este es el componente Mensajes</p>
+    <div class="row flex-sm-row flex-column">
+        <div class="col-md-3 mb-3 mb-md-0">
+          <h1>Personas que sigues</h1>
+          <div *ngFor="let usuario of usuariosSeguidos" class="usuario">
+            <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
+            <p>{{ usuario.nombre.toUpperCase() }}</p>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="conversaciones">
+            <div class="enviar">
+                <input type="text" placeholder="Enviar Mensaje...">
+                <button>Enviar</button>
+            </div>
+          </div>
+        </div>
+    </div>
 </div>
