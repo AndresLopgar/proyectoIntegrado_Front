@@ -2,7 +2,6 @@ import { Routes} from '@angular/router';
 import { BuscarComponent } from './components/buscar/buscar.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { MensajesComponent } from './components/mensajes/mensajes.component';
 import { ModerarComponent } from './components/moderar/moderar.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
 import { RegistroComponent } from './components/registro/registro.component';
@@ -16,7 +15,6 @@ export const routes: Routes = [
     {path: 'registro', component: RegistroComponent},
     { path: 'perfil/:id', component: PerfilComponent },
     {path: 'buscar', component: BuscarComponent},
-    {path: 'mensajes', component: MensajesComponent},
     {path: 'moderar', component: ModerarComponent},
     {path: 'compania/:id', component: CompaniaComponent},
     { path: '**', redirectTo: '/home' }
