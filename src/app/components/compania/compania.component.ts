@@ -97,6 +97,67 @@ export class CompaniaComponent  implements OnInit{
     );
   } 
 
+  async eliminarUsuarioCompania(id: number) {
+    const result = await Swal.fire({
+      title: '¿Estás seguro de que deseas abandonar esta compañía?',
+      text: 'Esta acción eliminará tu membresía en la compañía.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, abandonar',
+      cancelButtonText: 'Cancelar'
+    });
+  
+    if (result.isConfirmed) {
+        try {
+          // Actualizar el atributo companiaSeguida del usuario a 0
+          await this.usuarioService.updateCompaniaSeguida(id, 0).toPromise();
+          console.log('companiaSeguida actualizado a 0 correctamente');
+          
+          // Obtener el valor actual del atributo miembros de la compañía
+          const compania = await this.companiaService.getCompaniaById(this.companiaId).toPromise();
+          if (compania) {
+            const nuevosMiembros = compania.miembros - 1;
+            // Actualizar el atributo miembros de la compañía
+            await this.companiaService.updateMiembrosCompania(this.companiaId, nuevosMiembros).toPromise();
+            console.log('Atributo miembros decrementado correctamente.');
+  
+            await Swal.fire({
+              icon: 'success',
+              title: 'Usuario eliminado de la compañía exitoso',
+              text: 'Has eliminado al usuario de la compañía correctamente.'
+            });
+            
+          } else {
+            console.error('No se pudo obtener la compañía.');
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se pudo obtener la compañía.'
+            });
+          }
+        } catch (error) {
+          console.error('Error al eliminar al usuario de la compañía:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '¡Error al eliminar al usuario la compañía!'
+          });
+        }
+      } else {
+        console.error('No se pudo obtener el usuario actual.');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo obtener el usuario actual.'
+        });
+      }
+  }
+  
+  
+  
+
   async eliminarCompania(id: number) {
     const result = await Swal.fire({
       title: '¿Estás seguro?',
@@ -220,46 +281,59 @@ export class CompaniaComponent  implements OnInit{
     }
   }
   
-  entrarCompania(idCompania: number) {
+  async entrarCompania(idCompania: number) {
     // Obtener el usuario actual
     const usuarioLocalStorage = localStorage.getItem('usuario');
     if (usuarioLocalStorage) {
       const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
       const userId = usuarioAlmacenado.id;
       
-      // Actualizar el atributo companiaSeguida del usuario
-      this.usuarioService.updateCompaniaSeguida(userId, idCompania).subscribe(
-        () => {
-          console.log('companiaSeguida actualizado correctamente');
-          
-          // Obtener el valor actual del atributo miembros de la compañía
-          this.companiaService.getCompaniaById(idCompania).subscribe(
-            (compania: Compania) => {
-              const nuevosMiembros = compania.miembros + 1;
-              // Actualizar el atributo miembros de la compañía
-              this.companiaService.updateMiembrosCompania(idCompania, nuevosMiembros).subscribe(
-                () => {
-                  console.log('Atributo miembros incrementado correctamente.');
-                  this.router.navigateByUrl('/home');
-                },
-                error => {
-                  console.error('Error al incrementar el atributo miembros:', error);
-                }
-              );
-            },
-            error => {
-              console.error('Error al obtener la compañía:', error);
-            }
-          );
-        },
-        error => {
-          console.error('Error al actualizar companiaSeguida:', error);
+      try {
+        // Actualizar el atributo companiaSeguida del usuario
+        await this.usuarioService.updateCompaniaSeguida(userId, idCompania).toPromise();
+        console.log('companiaSeguida actualizado correctamente');
+        
+        // Obtener el valor actual del atributo miembros de la compañía
+        const compania = await this.companiaService.getCompaniaById(idCompania).toPromise();
+        if (compania) {
+          const nuevosMiembros = compania.miembros + 1;
+          // Actualizar el atributo miembros de la compañía
+          await this.companiaService.updateMiembrosCompania(idCompania, nuevosMiembros).toPromise();
+          console.log('Atributo miembros incrementado correctamente.');
+  
+          // Mostrar Sweet Alert de éxito
+          await Swal.fire({
+            icon: 'success',
+            title: 'Entrada a compañía exitosa',
+            text: 'Has ingresado a la compañía correctamente.'
+          });
+  
+          // Redirigir a la página de inicio
+          this.router.navigateByUrl('/home');
+        } else {
+          console.error('No se pudo obtener la compañía.');
+          // Mostrar Sweet Alert de error
+          await Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo obtener la información de la compañía.'
+          });
         }
-      );
+      } catch (error) {
+        console.error('Error al entrar a la compañía:', error);
+        // Mostrar Sweet Alert de error
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '¡Error al ingresar a la compañía!'
+        });
+      }
     } else {
+      // Redirigir al usuario a la página de inicio si no se puede obtener el usuario actual
       this.router.navigateByUrl('/home');
     }
   }
+  
   
   async generaInforme() {
     // Filtrar los usuarios cuyo atributo companiaSeguida sea igual al ID de la compañía
