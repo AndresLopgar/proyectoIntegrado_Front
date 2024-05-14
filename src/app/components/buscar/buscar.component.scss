@@ -20,9 +20,20 @@
             max-height: 100%;
             flex-direction: column;
 
-            .checkbox{
-                label{
-                    font-size: medium;
+            .form-group{
+                button{
+                    margin-top: 5%;
+                    width: 40%;
+                    margin-left: 1%;
+                    padding: 1%;
+                    border-radius: 10px;
+                    background-color: white !important;
+                    color: black; /* Cambia el color de fondo de los botones pButton */
+                    border-color: black;
+
+                    &:hover{
+                       box-shadow: 0px 0px 20px 0px var(--color-enlaces-hover);
+                    }
                 }
             }
         }
@@ -75,22 +86,12 @@
                     padding: 2%;
                     border-color: var(--color-primario);
                 }
-    
-                button {
-                    font-size: large;
-                    border-radius: 10px;
-                    margin-left: 5px;
-                    background-color: white;
-                    color: black;
-                    border-color: var(--color-primario);
-                    height: 100%;
-                }
             }
 
             .resultados {
                 padding: 1%;
                 display: flex;
-                align-items: center;
+                align-items: stretch;
                 border-radius: 10px;
                 background-color: var(--color-primario);
                 flex-direction: column;
@@ -118,10 +119,8 @@
                     padding: 1%;
                     margin-bottom: 3%;
                     display: flex; 
-                    align-items: stretch; 
                     justify-content: space-around;
                     flex-direction: row;
-                    width: 100%;
                     border: solid 2px white;
                     border-radius: 10px;
 

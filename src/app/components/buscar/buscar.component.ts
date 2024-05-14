@@ -97,6 +97,71 @@ export class BuscarComponent implements OnInit {
   mostrarFiltros(event: Event) {
     const target = event.target as HTMLSelectElement;
     this.filtroTipo = target.value;
+
+    if (this.filtroTipo === 'usuarios') {
+      this.usuariosFiltrados = [...this.usuarios];
+    } else if (this.filtroTipo === 'companias') {
+      this.companiasFiltradas = [...this.companias];
+    } else {
+      this.usuariosFiltrados = [...this.usuarios];
+      this.companiasFiltradas = [...this.companias];
+    }
+  }
+
+  aplicarFiltrosUsuarios() {
+    const edadMin = parseInt((document.getElementById('edadMin') as HTMLInputElement).value, 10);
+    const edadMax = parseInt((document.getElementById('edadMax') as HTMLInputElement).value, 10);
+    const profesion = (document.getElementById('profesion') as HTMLSelectElement).value;
+
+    this.usuariosFiltrados = this.usuarios.filter(usuario => {
+        const cumpleEdad = usuario.edad >= edadMin && usuario.edad <= edadMax;
+        const cumpleProfesion = profesion ? usuario.profesion === profesion : true;
+        return cumpleEdad && cumpleProfesion;
+    });
+
+    console.log('Usuarios filtrados:', this.usuariosFiltrados);
+}
+
+
+  limpiarFiltrosUsuarios() {
+    (document.getElementById('edadMin') as HTMLInputElement).value = '16';
+    (document.getElementById('edadMax') as HTMLInputElement).value = '100';
+    (document.getElementById('profesion') as HTMLSelectElement).value = '';
+
+    // Implementar la lógica para limpiar los filtros de los usuarios
+    console.log('Limpiar filtros de usuarios');
+  }
+
+  aplicarFiltrosCompanias() {
+    const minMiembros = parseInt((document.getElementById('minMiembros') as HTMLInputElement).value, 10);
+    const maxMiembros = parseInt((document.getElementById('maxMiembros') as HTMLInputElement).value, 10);
+    const fechaCreacion = (document.getElementById('fechaCreacion') as HTMLInputElement).value;
+    console.log(fechaCreacion);
+    
+
+    this.companiasFiltradas = this.companias.filter(compania => {
+      const cumpleMiembros = compania.miembros >= minMiembros && compania.miembros <= maxMiembros;
+
+      let cumpleFechaCreacion = true;
+      if (fechaCreacion) {
+          const companiaFecha = new Date(compania.fechaCreacion).toISOString().split('T')[0];
+          cumpleFechaCreacion = companiaFecha === fechaCreacion;
+      }
+
+      return cumpleMiembros && cumpleFechaCreacion;
+  });
+
+    console.log('Compañías filtradas:', this.companiasFiltradas);
+}
+
+
+  limpiarFiltrosCompanias() {
+    (document.getElementById('minMiembros') as HTMLInputElement).value = '1';
+    (document.getElementById('maxMiembros') as HTMLInputElement).value = '1';
+    (document.getElementById('fechaCreacion') as HTMLInputElement).value = '';
+
+    // Implementar la lógica para limpiar los filtros de las compañías
+    console.log('Limpiar filtros de compañías');
   }
   
 }

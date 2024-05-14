@@ -26,29 +26,56 @@
                     <option value="guionista">Guionista</option>
                     <option value="estilista">Estilista</option>
                 </select>
+                <button (click)="aplicarFiltrosUsuarios()">Aceptar</button>
+                <button (click)="limpiarFiltrosUsuarios()">Limpiar</button>
             </div>
             
             <div class="form-group" id="filtrosCompanias" *ngIf="filtroTipo === 'companias'">
-                <label for="numMiembros">Número de Miembros:</label>
-                <input type="number" class="form-control" id="numMiembros" name="numMiembros" value="1">
+                <label for="minMiembros">Mínimo de Miembros:</label>
+                <input type="number" class="form-control" id="minMiembros" name="minMiembros" value="1">
+                <label for="maxMiembros">Máximo de Miembros:</label>
+                <input type="number" class="form-control" id="maxMiembros" name="maxMiembros" value="100">
                 <label for="fechaCreacion">Fecha de Creación:</label>
                 <input type="date" class="form-control" id="fechaCreacion" name="fechaCreacion">
-            </div>
+                <button (click)="aplicarFiltrosCompanias()">Aceptar</button>
+                <button (click)="limpiarFiltrosCompanias()">Limpiar</button>
+            </div>            
+            
         </div>
         <div class="col-md-8 order-0 order-md-1">
             <div class="busqueda">
                 <input type="text" placeholder="Buscar..." (keyup)="filtrarUsuariosYCompanias($event)">
             </div>
             <div class="resultados">
-                <div *ngFor="let usuario of usuariosFiltrados" class="usuario" (click)="goPerfil(usuario.id)">
+                <div *ngIf="filtroTipo === 'usuarios'">
+                  <div *ngFor="let usuario of usuariosFiltrados" class="usuario" (click)="goPerfil(usuario.id)">
                     <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
                     <p>{{ usuario.nombre.toUpperCase() }}</p>
+                    <p>Profesión: {{usuario.profesion}}</p>
                     <p>Edad: {{usuario.edad}}</p>
+                  </div>
                 </div>
-                <div *ngFor="let compania of companiasFiltradas" class="usuario" (click)="goCompania(compania.id)">
+                <div *ngIf="filtroTipo === 'companias'">
+                  <div *ngFor="let compania of companiasFiltradas" class="usuario" (click)="goCompania(compania.id)">
                     <img [src]="compania.fotoPerfil" alt="Foto de perfil">
                     <p>{{ compania.nombre.toUpperCase() }}</p>
                     <p>Miembros: {{ compania.miembros}}</p>
+                    <p>Fecha Creación: {{compania.fechaCreacion | date:'dd/MM/yyyy' }}</p>
+                  </div>
+                </div>
+                <div *ngIf="filtroTipo === ''">
+                    <div *ngFor="let usuario of usuariosFiltrados" class="usuario" (click)="goPerfil(usuario.id)">
+                        <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
+                        <p>{{ usuario.nombre.toUpperCase() }}</p>
+                        <p>Profesión: {{usuario.profesion}}</p>
+                        <p>Edad: {{usuario.edad}}</p>
+                    </div>
+                    <div *ngFor="let compania of companiasFiltradas" class="usuario" (click)="goCompania(compania.id)">
+                        <img [src]="compania.fotoPerfil" alt="Foto de perfil">
+                        <p>{{ compania.nombre.toUpperCase() }}</p>
+                        <p>Miembros: {{ compania.miembros}}</p>
+                        <p>Fecha Creación: {{compania.fechaCreacion | date:'dd/MM/yyyy' }}</p>
+                    </div>
                 </div>
             </div>
         </div>
