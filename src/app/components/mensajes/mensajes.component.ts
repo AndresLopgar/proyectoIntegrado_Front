@@ -20,6 +20,7 @@ export class MensajesComponent implements OnInit{
   usuarioId!: number;
   estaEnAmistad: boolean = false;
   usuarioIdFromLocalStorage!: number;
+  mostrarMensaje: boolean = false;
 
   constructor (private usuarioService: UsuarioService, private amistadService: AmistadService,private route: ActivatedRoute, ){}
 

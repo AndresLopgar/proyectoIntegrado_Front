@@ -6,6 +6,9 @@
             <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
             <p>{{ usuario.nombre.toUpperCase() }}</p>
           </div>
+          <div *ngIf="usuariosSeguidos.length === 0">
+            <h2>Para escribir a alguien debes seguirle</h2>
+          </div>
         </div>
         <div class="col-md-8">
           <div class="conversaciones">
