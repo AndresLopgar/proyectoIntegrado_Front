@@ -28,6 +28,7 @@ export class CompaniaComponent  implements OnInit{
   mostrandoFormularioModificar: boolean = false;
   usuarioLocalStorage: any;
   usuarioActual!: Usuario;
+  tieneCompania: number = 0;
 
   constructor(private companiaService: CompaniaService, private route: ActivatedRoute,private router: Router, private usuarioService: UsuarioService){}
 
