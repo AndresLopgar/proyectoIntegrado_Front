@@ -15,7 +15,7 @@
             display: flex;
             text-align: center;
             background-color: var(--color-primario);
-            height: 70vh;
+            height: 75vh;
             flex-direction: column;
 
             .conversaciones{
@@ -25,7 +25,7 @@
 
                 .enviar {
                 width: 100%;
-                margin-top: 45%;
+                margin-top: 50%;
 
                     input{
                         border-radius: 10px;
@@ -54,7 +54,7 @@
             padding: 1%;
             border-radius: 10px;
             display: flex;
-            height: 70vh;
+            height: 75vh;
             text-align: center;
             background-color: var(--color-primario);
             max-height: 100%;
