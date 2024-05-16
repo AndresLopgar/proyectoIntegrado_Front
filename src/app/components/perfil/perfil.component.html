@@ -76,7 +76,20 @@
           </div>
         </div>
         <div class="col-md-5 order-0 order-md-1">
-            <h1>Publicaciones</h1>
+          <h1>Publicaciones</h1>
+          <div *ngFor="let publicacion of publicaciones" class="publicaciones">
+            <div class="contenido">
+              <p>Contenido: {{ publicacion.contenido }}</p>
+            </div>
+            <p style="margin-bottom: 0;">Fecha de Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+            <div class="acciones botones">
+              <p ><i class="pi pi-heart" style="font-size: 1.5rem;"></i>{{ publicacion.numMeGustas}}</p>
+              <p ><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
+                <button type="button" pButton>Editar</button>
+                <button type="button" (click)="eliminarPublicacion(publicacion.id)" pButton>Eliminar</button>
+            </div>
+            
+          </div>
         </div>
 
         <!-- Información compañías del usuario Actual-->

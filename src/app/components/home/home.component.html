@@ -1,5 +1,22 @@
 <div class="container">
   <div *ngIf="usuarios">
+    <button (click)="mostrarCrearPublicacion()">CREAR PUBLICACIÓN</button>
+    @if (mostrarCrear) {
+      <div>
+          <form (ngSubmit)="crearPublicacionUsuario()" #publicacionForm="ngForm">
+              <div class="form-group">
+                  <label for="contenido">Contenido</label>
+                  <textarea id="contenido" name="contenido" class="form-control" [(ngModel)]="publicacion.contenido" required></textarea>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="button" class="btn btn-secondary" (click)="cerrarCrearPublicacion()">Cancelar</button>
+              </div>
+          </form>
+      </div>
+  }
+  
+    
     <h2>Listado de Usuarios</h2>
     <ul>
       <li *ngFor="let usuario of usuarios">
@@ -18,27 +35,6 @@
         <hr>
       </li>
     </ul>
-  </div>
-
-  <div *ngIf="companias">
-    <h2>Listado de compañías</h2>
-    <ul>
-      <li *ngFor="let compania of companias">
-        <div>
-          <p><strong>ID:</strong> {{ compania.id }}</p>
-          <p><strong>Nombre:</strong> {{ compania.nombre }}</p>
-          <p><strong>Descripción:</strong> {{ compania.descripcion }}</p>
-          <p><strong>Fecha de Creacion:</strong> {{ compania.fechaCreacion }}</p>
-          <p><strong>Foto de Perfil:</strong> {{ compania.fotoPerfil }}</p>
-          <p><strong>Nº Miembros:</strong> {{ compania.miembros }}</p>
-        </div>
-        <hr>
-      </li>
-    </ul>
-  </div>
-  
-  <div *ngIf="!usuarios">
-    <p>No se encontraron usuarios.</p>
   </div>
 </div>
 

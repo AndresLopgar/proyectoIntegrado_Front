@@ -1,24 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Usuario } from '../../model/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { CommonModule } from '@angular/common';
-import { CompaniaService } from '../../services/compania.service';
-import { Compania } from '../../model/compania';
+import { PublicacionService } from '../../services/publicacion.service';
+import { FormsModule, NgForm } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { Publicacion } from '../../model/publicacion';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, ButtonModule],
   providers:[UsuarioService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-
+  @ViewChild('publicacionForm') publicacionForm!: NgForm; // Referencia al formulario
   usuarios: Usuario[] = [];
-  companias: Compania[] = [];
+  usuarioIdFromLocalStorage!: number;
+  publicacion: Publicacion = {
+    id: 0,
+    contenido: "",
+    fechaPublicacion: "",
+    meGusta: false,
+    numMeGustas: 0,
+    idUsuario: 0,
+    idCompania: 0
+  };
 
-  constructor(private usuarioService: UsuarioService, private companiaService: CompaniaService) { }
+  mostrarCrear: boolean = false;
+
+  constructor(private usuarioService: UsuarioService, private publicacionService: PublicacionService) { 
+    const usuarioLocalStorage = localStorage.getItem('usuario');
+      if (usuarioLocalStorage) {
+        const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
+        this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
+      }
+  }
 
   ngOnInit(): void {
     this.usuarioService.getAllUsuarios().subscribe(
@@ -29,14 +49,49 @@ export class HomeComponent implements OnInit {
         console.log('Error al recuperar usuarios:', error);
       }
     );
+  }
 
-    this.companiaService.getAllCompanias().subscribe(
-      data => {
-        this.companias = data;
+  mostrarCrearPublicacion(){
+    this.mostrarCrear = true;
+  }
+
+  cerrarCrearPublicacion() {
+    // Mostrar un mensaje de advertencia al cancelar la creación de la publicación
+    Swal.fire({
+      icon: 'warning',
+      title: 'Advertencia',
+      text: 'Has cancelado la creación de la publicación.',
+      showConfirmButton: false,
+      timer: 1500 
+    });
+
+    this.mostrarCrear = false;
+  }
+  
+
+  crearPublicacionUsuario() {
+    this.publicacion.fechaPublicacion = new Date().toISOString();
+    this.publicacion.idUsuario = this.usuarioIdFromLocalStorage;
+  
+    this.publicacionService.createPublicacion(this.publicacion).subscribe(
+      id => {
+        Swal.fire(
+          'Publicación creada',
+          'La publicación se ha creado correctamente.',
+          'success'
+        );
+        this.publicacionForm.resetForm();
+        this.mostrarCrear = false;
       },
       error => {
-        console.log('Error al recuperar companias:', error);
+        Swal.fire(
+          'Error',
+          'Ha ocurrido un error al crear la publicación. Por favor, inténtalo de nuevo más tarde.',
+          'error'
+        );
       }
     );
   }
+  
+
 }

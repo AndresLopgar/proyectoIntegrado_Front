@@ -10,6 +10,8 @@ import { CompaniaService } from '../../services/compania.service';
 import { Compania } from '../../model/compania';
 import { AmistadService } from '../../services/amistad.service';
 import { Amistad } from '../../model/amistad';
+import { PublicacionService } from '../../services/publicacion.service';
+import { Publicacion } from '../../model/publicacion';
 
 @Component({
   selector: 'app-perfil',
@@ -26,7 +28,8 @@ export class PerfilComponent implements OnInit {
     private route: ActivatedRoute, 
     private router: Router, 
     private companiaService: CompaniaService,
-    private amistadService: AmistadService) { }
+    private amistadService: AmistadService,
+    private publicacionService: PublicacionService) { }
   
   usuarioStorage!: Usuario;
   companias: Compania[] = [];
@@ -63,6 +66,7 @@ export class PerfilComponent implements OnInit {
   '../../../assets/perfiles/usuarios/imagenMujer3.png',
 ];
   mostrarDialogo: boolean = false;
+  publicaciones: Publicacion[] = [];
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -88,6 +92,7 @@ export class PerfilComponent implements OnInit {
         // Llamar a loadCompaniasByIdCreador después de obtener usuarioIdFromLocalStorage
         this.loadCompaniaByIdCreador(this.usuarioIdFromLocalStorage);
         this.loadCompaniaById(this.usuarioIdFromLocalStorage);
+        this.getAllPublicacionesByUsario(this.usuarioIdFromLocalStorage)
 
         this.amistad = {
           id:0,
@@ -98,6 +103,56 @@ export class PerfilComponent implements OnInit {
       }
     });
   }
+
+  getAllPublicacionesByUsario(id: number){
+    this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
+      publicaciones => {
+        console.log(publicaciones);
+        
+        this.publicaciones = publicaciones;
+      }
+    )
+  }
+
+  eliminarPublicacion(id: number) {
+    // Mostrar SweetAlert para confirmar la eliminación
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'No podrás revertir esto.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Si el usuario confirma la eliminación
+        this.publicacionService.deletePublicacion(id).subscribe(
+          () => {
+            // Si la eliminación es exitosa, mostrar un mensaje de éxito
+            Swal.fire(
+              'Eliminado!',
+              'La publicación ha sido eliminada.',
+              'success'
+            );
+            this.router.navigate(['/home']);
+            // Aquí podrías realizar alguna acción adicional si es necesario
+          },
+          (error) => {
+            // Si ocurre un error durante la eliminación, mostrar un mensaje de error
+            console.error('Error al eliminar la publicación:', error);
+            Swal.fire(
+              'Error!',
+              'No se pudo eliminar la publicación.',
+              'error'
+            );
+          }
+        );
+      }
+    });
+  }
+  
 
   elegirFotoPerfilCompania(indice: number) {
     this.companiaTemporal.fotoPerfil = this.imagenesCompanias[indice];
