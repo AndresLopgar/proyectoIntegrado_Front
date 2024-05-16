@@ -3,7 +3,7 @@
     <div class="col-md-8 order-0 order-md-0">
       <h1>Publicaciones</h1>
       <div *ngFor="let publicacion of publicaciones" class="publicaciones">
-        <div class="contenido" [routerLink]="['/perfil', usuariosCargados[publicacion.idUsuario]?.id]" style="cursor: pointer;">
+        <div class="contenido" [routerLink]="['/perfil', usuariosCargados[publicacion.idUsuario]]" style="cursor: pointer;">
           <p>Contenido: {{ publicacion.contenido }}</p>
         </div>
         <div class="acciones">
