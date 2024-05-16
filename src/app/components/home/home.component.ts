@@ -7,11 +7,12 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { Publicacion } from '../../model/publicacion';
 import Swal from 'sweetalert2';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule],
+  imports: [CommonModule, FormsModule, ButtonModule, RouterLink],
   providers:[UsuarioService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -34,7 +35,9 @@ export class HomeComponent implements OnInit {
 
   mostrarCrear: boolean = false;
 
-  constructor(private usuarioService: UsuarioService, private publicacionService: PublicacionService) { 
+  constructor(private usuarioService: UsuarioService, 
+    private publicacionService: PublicacionService, 
+    private router: Router) { 
     const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
@@ -60,6 +63,10 @@ export class HomeComponent implements OnInit {
         });
       }
     )
+  }
+
+  irAlPerfil(idUsuario: number) {
+    this.router.navigate(['/perfil', idUsuario]);
   }
 
   loadUsuarioById(id: number) {
