@@ -19,7 +19,9 @@ import Swal from 'sweetalert2';
 export class HomeComponent implements OnInit {
   @ViewChild('publicacionForm') publicacionForm!: NgForm; // Referencia al formulario
   usuarios: Usuario[] = [];
+  publicaciones: Publicacion[] = [];
   usuarioIdFromLocalStorage!: number;
+  usuariosCargados: { [id: number]: Usuario } = {};
   publicacion: Publicacion = {
     id: 0,
     contenido: "",
@@ -47,6 +49,26 @@ export class HomeComponent implements OnInit {
       },
       error => {
         console.log('Error al recuperar usuarios:', error);
+      }
+    );
+
+    this.publicacionService.getAllPublicaciones().subscribe(
+      publicaciones => {
+        this.publicaciones = publicaciones;
+        this.publicaciones.forEach(publicacion => {
+          this.loadUsuarioById(publicacion.idUsuario);
+        });
+      }
+    )
+  }
+
+  loadUsuarioById(id: number) {
+    this.usuarioService.getUsuarioById(id).subscribe(
+      (usuario: Usuario) => {
+        this.usuariosCargados[id] = usuario;
+      },
+      error => {
+        console.error('Error al cargar perfil del usuario:', error);
       }
     );
   }

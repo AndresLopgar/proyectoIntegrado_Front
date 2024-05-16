@@ -2,4 +2,126 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: white;
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: nowrap;
+        color: white;
+        margin: 0;
+
+        .col-md-8 {
+            padding: 1%;
+            border-radius: 10px;
+            display: flex;
+            text-align: center;
+            background-color: var(--color-primario);
+            max-height: 100%;
+            flex-direction: column;
+            overflow: auto;
+            margin-bottom: 20px;
+            max-height: 72vh;
+    
+            &::-webkit-scrollbar {
+                width: 10px;
+            }
+        
+            &::-webkit-scrollbar-track {
+                background: var(--color-primario);
+            }
+        
+            &::-webkit-scrollbar-thumb {
+                background-color: var(--color-enlaces-hover);
+                border-radius: 10px;
+                border: solid 2px var(--color-primario);
+            }
+    
+            .publicaciones{
+                margin: 2%;
+                background-color: var(--color-enlaces-hover);
+                border: 2px solid white;
+                border-radius: 10px;
+    
+                .contenido{
+                    margin-top: 2%;
+                    padding-bottom: 2%;
+                    border-bottom: 1px solid white;
+                }
+    
+                .acciones{
+                    margin-top: 2%;
+                    padding-bottom: 2%;
+                    display: flex;
+                    justify-content: center;
+                    justify-content: space-evenly;
+                    align-items: center;
+    
+                    p{
+                        margin-bottom: 0;
+                    }
+    
+                    .perfilAvatar{
+                        width: 60px; 
+                        height: 60px;
+                        border-radius: 50%;
+                        border: 2px solid white;
+                        text-align: center;
+                    }
+    
+                    .perfilAvatarCompania{
+                        width: 60px; 
+                        height: 60px; 
+                        border-radius: 50%;
+                        border: 2px solid white; 
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    
+        .col-md-3 {
+            padding: 1%;
+            border-radius: 10px;
+            display: flex;
+            text-align: center;
+            background-color: var(--color-primario);
+            max-height: 100%;
+            flex-direction: column;
+            overflow: auto;
+            margin-bottom: 20px;
+            max-height: 72vh;
+
+            
+
+            .botones {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                
+                :hover {
+                    box-shadow: 0px 0px 20px 0px var(--color-enlaces-hover);
+                }
+
+                .p-button {
+                    width: 80%;
+                    margin: 10px 10px;
+                    border-radius: 10px;
+                    background-color: white !important;
+                    color: black;
+                    border-color: black;
+                    display: flex;
+                    justify-content: center; /* Centrar horizontalmente */
+                    align-items: center; /* Centrar verticalmente */
+
+                    i{
+                        margin-left: 5%;
+                    }
+                }
+
+            }
+        }
+    }
 }

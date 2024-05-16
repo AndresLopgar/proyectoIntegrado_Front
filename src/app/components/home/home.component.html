@@ -1,41 +1,39 @@
 <div class="container">
-  <div *ngIf="usuarios">
-    <button (click)="mostrarCrearPublicacion()">CREAR PUBLICACIÓN</button>
-    @if (mostrarCrear) {
-      <div>
-          <form (ngSubmit)="crearPublicacionUsuario()" #publicacionForm="ngForm">
-              <div class="form-group">
-                  <label for="contenido">Contenido</label>
-                  <textarea id="contenido" name="contenido" class="form-control" [(ngModel)]="publicacion.contenido" required></textarea>
-              </div>
-              <div class="form-group">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                  <button type="button" class="btn btn-secondary" (click)="cerrarCrearPublicacion()">Cancelar</button>
-              </div>
-          </form>
-      </div>
-  }
-  
-    
-    <h2>Listado de Usuarios</h2>
-    <ul>
-      <li *ngFor="let usuario of usuarios">
-        <div>
-          <p><strong>ID:</strong> {{ usuario.id }}</p>
-          <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
-          <p><strong>Edad:</strong> {{ usuario.edad }}</p>
-          <p><strong>Email:</strong> {{ usuario.correoElectronico }}</p>
-          <p><strong>Contraseña:</strong> {{ usuario.contrasena }}</p>
-          <p><strong>Profesión:</strong> {{ usuario.profesion }}</p>
-          <p><strong>Fecha de Registro:</strong> {{ usuario.fechaRegistro }}</p>
-          <p><strong>Foto de Perfil:</strong> {{ usuario.fotoPerfil }}</p>
-          <p><strong>Tipo de Usuario:</strong> {{ usuario.tipoUsuario }}</p>
-          <p><strong>Compañia seguida:</strong> {{ usuario.companiaSeguida }}</p>
+  <div class="row flex-sm-row flex-column custom-margin-bottom">
+    <div class="col-md-8 order-0 order-md-0">
+      <h1>Publicaciones</h1>
+      <div *ngFor="let publicacion of publicaciones" class="publicaciones">
+        <div class="contenido">
+          <p>Contenido: {{ publicacion.contenido }}</p>
         </div>
-        <hr>
-      </li>
-    </ul>
+        <div class="acciones">
+          <img *ngIf="usuariosCargados[publicacion.idUsuario]" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar">
+          <p *ngIf="usuariosCargados[publicacion.idUsuario]">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
+          <p style="margin-bottom: 0;">Fecha de Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+          <p><i class="pi pi-heart" style="font-size: 1.5rem;"></i>{{ publicacion.numMeGustas }}</p>
+          <p><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 order-1 order-md-1">
+      <div class="botones">
+        <button type="button" (click)="mostrarCrearPublicacion()" pButton>CREAR PUBLICACIÓN</button>
+      </div>
+      @if (mostrarCrear) {
+        <div>
+            <form (ngSubmit)="crearPublicacionUsuario()" #publicacionForm="ngForm">
+                <div class="form-group">
+                    <label for="contenido">Contenido:</label>
+                    <textarea id="contenido" name="contenido" class="form-control" [(ngModel)]="publicacion.contenido" required style="height: 100px; margin-bottom: 2%;"></textarea>
+                </div>
+                <div class="form-group">
+                  <div class="botones">
+                    <button type="submit" [disabled]="publicacionForm.invalid" pButton>Publicar</button>
+                    <button type="button" pButton (click)="cerrarCrearPublicacion()">Cancelar</button>
+                  </div>
+                </div>
+            </form>
+        </div>
+    }
+    </div>
   </div>
-</div>
-
-  
