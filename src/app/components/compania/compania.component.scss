@@ -30,6 +30,15 @@
             max-height: 100%;
             flex-direction: column;
 
+            .perfilAvatar{
+                margin-left: 40%;
+                width: 80px; // Ajusta el tamaño de la imagen según sea necesario
+                height: 80px; // Ajusta el tamaño de la imagen según sea necesario
+                border-radius: 50%;
+                border: 2px solid white; /* Borde blanco */
+                text-align: center;
+            }
+
             .miembros-name{
                 border-bottom: 2px solid var(--color-enlaces-hover);
             }
@@ -129,32 +138,66 @@
                 }
             }
 
-            form {
-                display: flex;
-                flex-direction: column;
-                margin-top: 12px;
-                padding-top: 12px;
-                border-top: 2px solid var(--color-enlaces-hover);
-
-                .form-group {
-                    margin: 2%;
+            .modificarCompania{
+                form {
                     display: flex;
-                    align-items: center;
-
-                    i {
-                        margin-left: 2%;
+                    flex-direction: column;
+                    margin-top: 12px;
+                    padding-top: 12px;
+                    border-top: 2px solid var(--color-enlaces-hover);
+    
+                    .form-group {
+                        margin: 2%;
+                        display: flex;
+                        align-items: center;
+    
+                        i {
+                            margin-left: 2%;
+                        }
+    
+                        label {
+                            flex: 0 0 30%;
+                            text-align: right;
+                            padding-right: 10px;
+                        }
+    
+                        input,
+                        select,
+                        textarea {
+                            width: 60%;
+                        }
                     }
+                }
 
-                    label {
-                        flex: 0 0 30%;
-                        text-align: right;
-                        padding-right: 10px;
+                .avatares{
+                    display: grid;
+                    grid-template-columns: auto auto;
+                    overflow: auto;
+                    max-height: 300px;
+    
+                    &::-webkit-scrollbar {
+                        width: 10px;
                     }
-
-                    input,
-                    select,
-                    textarea {
-                        width: 60%;
+                
+                    &::-webkit-scrollbar-track {
+                        background: var(--color-primario);
+                    }
+                
+                    &::-webkit-scrollbar-thumb {
+                        background-color: var(--color-enlaces-hover);
+                        border-radius: 10px;
+                        border: solid 2px var(--color-primario);
+                    }
+            
+                    .imagenes{
+                        margin-top: 5%;
+                        border: 1px solid var(--color-enlaces-hover);
+                
+                        img{
+                            padding: 2%;
+                            width: 50%;
+                            height: 50%;
+                        }
                     }
                 }
             }

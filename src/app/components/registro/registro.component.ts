@@ -19,13 +19,17 @@ export class RegistroComponent {
   @ViewChild('registroForm') loginForm!: NgForm; // Referencia al formulario
   showPassword: boolean = false;
   mostrarDialogo: boolean = false;
-  imagenes: string[] = []; // Rutas de las imágenes
+  imagenes: string[] = [   // Rutas de las imágenes
+    '../../../assets/perfiles/usuarios/imagenHombre1.png',
+    '../../../assets/perfiles/usuarios/imagenMujer1.png',
+    '../../../assets/perfiles/usuarios/imagenHombre2.png',
+    '../../../assets/perfiles/usuarios/imagenMujer2.png',
+    '../../../assets/perfiles/usuarios/imagenHombre3.png',
+    '../../../assets/perfiles/usuarios/imagenMujer3.png',
+  ];
+  fotoPerfilNula: boolean = true;
 
   constructor(private router: Router, private usuarioService: UsuarioService) { 
-    this.imagenes = [
-      '../../../assets/perfiles/usuarios/imagenHombre.png',
-      '../../../assets/perfiles/usuarios/imagenMujer.png'
-  ];
 }
   
 usuario: Usuario = {
@@ -74,6 +78,12 @@ usuario: Usuario = {
         });
       }
     );
+  }
+
+  elegirFotoPerfil(indice: number) {
+    this.usuario.fotoPerfil = this.imagenes[indice];
+    this.fotoPerfilNula = false;
+    this.cerrarDialogo();
   }
   
     mostrarIconos() {

@@ -11,7 +11,7 @@
                     <li class="nav-item"><a class="nav-link" href="buscar"><i class="pi pi-search" style="font-size: 1.5rem"></i></a></li>
                     <li class="nav-item"><a class="nav-link" href="mensajes"><i class="pi pi-send" style="font-size: 1.5rem"></i></a></li>
                     <li class="nav-item"><a class="nav-link" href="notificaciones"><i class="pi pi-bell" style="font-size: 1.5rem"></i></a></li>
-                    <li class="nav-item"><a class="nav-link img" (click)="goPerfil(idUsuario)"><img src="#"></a></li>
+                    <li class="nav-item"><a class="nav-link img" (click)="goPerfil(idUsuario)"><img [src]="fotoPerfilUsuario"></a></li>
                 </ul>
                 <ul *ngIf="tipoUsuario === 'noRegistrado'" class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="login"><i class="pi pi-search" style="font-size: 1.5rem"></i></a></li>

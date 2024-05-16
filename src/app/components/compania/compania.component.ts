@@ -29,6 +29,15 @@ export class CompaniaComponent  implements OnInit{
   usuarioLocalStorage: any;
   usuarioActual!: Usuario;
   tieneCompania: number = 0;
+  mostrarDialogo: boolean = false;
+  companiaTemporal!: Compania;
+  imagenesCompanias: string[] = [   // Rutas de las imágenes
+    '../../../assets/perfiles/companias/imagenCompania1.png',
+    '../../../assets/perfiles/companias/imagenCompania2.png',
+    '../../../assets/perfiles/companias/imagenCompania3.png',
+    '../../../assets/perfiles/companias/imagenCompania4.png',
+    '../../../assets/perfiles/companias/imagenCompania5.png',
+  ];
 
   constructor(private companiaService: CompaniaService, private route: ActivatedRoute,private router: Router, private usuarioService: UsuarioService){}
 
@@ -45,13 +54,29 @@ export class CompaniaComponent  implements OnInit{
       
       this.loadCompania();
       this.getAllUsuarios();
-    })
+    });
+    console.log(this.mostrarDialogo);
+    
   }
+
+  elegirFotoPerfilCompania(indice: number) {
+    this.companiaTemporal.fotoPerfil = this.imagenesCompanias[indice];
+    this.cerrarDialogo();
+  }
+
+  mostrarIconos() {
+    this.mostrarDialogo = true;
+    console.log(this.mostrarDialogo);
+}
+  cerrarDialogo() {
+    this.mostrarDialogo = false;
+}
 
   loadCompania(){
     this.companiaService.getCompaniaById(this.companiaId).subscribe(
       (compania) => {
         this.compania = compania;
+        this.companiaTemporal = compania;
         this.usuariosSeguidores = this.usuarios.filter(usuario => usuario.companiaSeguida === this.companiaId);
       },
       (error) => {
@@ -208,27 +233,41 @@ export class CompaniaComponent  implements OnInit{
   
 
   async modificarCompania() {
-    try {
-      await this.companiaService.updateCompania(this.compania.id, this.compania).toPromise();
-      console.log('Compañía modificada exitosamente.');
-      this.mostrandoFormularioModificar = false;
-      Swal.fire({
-        icon: 'success',
-        title: 'Modificación de compañía exitosa',
-        text: '¡Compañía modificada correctamente!'
-      });
-    } catch (error) {
-      console.error('Error al modificar la compañía:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: '¡Error al modificar la compañía!'
-      });
+    if (this.companiaTemporal) {
+      try {
+        this.compania = { ...this.companiaTemporal };
+  
+        await this.companiaService.updateCompania(this.compania.id, this.compania).toPromise();
+        console.log('Compañía modificada exitosamente.');
+  
+        // Éxito al modificar la compañía
+        Swal.fire({
+          icon: 'success',
+          title: 'Modificación de compañía exitosa',
+          text: '¡Compañía modificada correctamente!'
+        }).then(() => {
+          // Ocultar el formulario de modificación
+          this.mostrandoFormularioModificar = false;
+  
+          // Recargar la compañía después de la modificación
+          this.loadCompania();
+        });
+      } catch (error) {
+        // Error al modificar la compañía
+        console.error('Error al modificar la compañía:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '¡Error al modificar la compañía!'
+        });
+      }
     }
   }
+  
 
   mostrarFormularioModificar(): void {
     this.mostrandoFormularioModificar = true;
+    this.companiaTemporal = { ...this.compania };
   }
 
   cancelarModificacion(): void {

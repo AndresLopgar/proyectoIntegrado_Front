@@ -3,6 +3,7 @@
       <div class="row flex-sm-row flex-column custom-margin-bottom">
         <!--Información del usuario que actual-->
         <div class="col-md-3 order-1 order-md-0">
+          <img [src]="usuario.fotoPerfil" class="perfilAvatar">
           <h4>Usuario:  {{ usuario.nombre }}</h4>
           <h4>Correo:  {{ usuario.correoElectronico }}</h4>
           <h4>Edad:  {{ usuario.edad }}</h4>
@@ -21,26 +22,26 @@
             <form (submit)="modificarUsuario()" #updateForm="ngForm">
               <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" [(ngModel)]="usuario.nombre" pInputText pattern="[a-zA-Z]*">
+                <input type="text" id="nombre" name="nombre" [(ngModel)]="usuarioTemporal.nombre" pInputText pattern="[a-zA-Z]*">
                 <div *ngIf="updateForm.controls['nombre'].errors?.['pattern']">El nombre no puede contener números.</div>
               </div>
               <div class="form-group">
                 <label for="edad">Edad:</label>
-                <input type="number" id="edad" name="edad" [(ngModel)]="usuario.edad" pInputNumber min="16" max="100">
+                <input type="number" id="edad" name="edad" [(ngModel)]="usuarioTemporal.edad" pInputNumber min="16" max="100">
                 <div *ngIf="updateForm.controls['edad'].errors?.['min'] || updateForm.controls['edad'].errors?.['max']">La edad debe estar entre 16 y 100.</div>
               </div>
               <div class="form-group">
                 <label for="correo">Correo electrónico:</label>
-                <input type="email" id="correo" name="correo" [(ngModel)]="usuario.correoElectronico" pInputText>
+                <input type="email" id="correo" name="correo" [(ngModel)]="usuarioTemporal.correoElectronico" pInputText>
               </div>
               <div class="form-group">
                 <label for="contrasena">Contraseña:</label>
-                <input type="password" id="contrasena" name="contrasena" [(ngModel)]="usuario.contrasena" pInputText>
+                <input type="password" id="contrasena" name="contrasena" [(ngModel)]="usuarioTemporal.contrasena" pInputText>
                 <i class="pi" [ngClass]="{ 'pi-eye-slash': !showPassword, 'pi-eye': showPassword }" style="font-size: 1.5rem; cursor: pointer;" (click)="togglePasswordVisibility()"></i>
               </div>
               <div class="form-group">
                 <label for="profesion">Profesión:</label>
-                <select id="profesion" name="profesion" [(ngModel)]="usuario.profesion" pInputText>
+                <select id="profesion" name="profesion" [(ngModel)]="usuarioTemporal.profesion" pInputText>
                   <option value="">Sin determinar</option>
                   <option value="actor">Actor/iz</option>
                   <option value="bailarin">Bailarín/a</option>
@@ -52,12 +53,25 @@
               </div>
               <div class="form-group">
                 <label for="fotoPerfil">Foto de perfil:</label>
-                <input type="file" id="foto" name="foto" pFileUpload mode="basic" [(ngModel)]="usuario.fotoPerfil">
+                <div class="botones">
+                  <button type="button" class="btn btn-primary" (click)="mostrarIconos()" pButton style="margin-top: 0;width: 100%;">Ver Iconos</button>
+                </div>
               </div>
-              <div class="botones2">
-                <button type="submit" [disabled]="updateForm.invalid" pButton>Guardar</button>
-                <button type="button" (click)="cancelarModificacion()" pButton>Cancelar</button>
+              <div class="avatares" *ngIf="mostrarDialogo">
+                <div *ngFor="let imagen of imagenesUsuarios; let i = index" class="imagenes">
+                    <img [src]="imagen" alt="Imagen">
+                    <div class="botones">
+                        <button type="button" class="btn btn-primary" pButton (click)="elegirFotoPerfil(i)">Elegir</button>
+                    </div>
+                </div>
+                <div class="botones">
+                    <button type="button" class="btn btn-primary" (click)="cerrarDialogo()" pButton style="margin-top: 20%;"> Cerrar</button>
+                </div>
               </div>
+                <div class="botones2">
+                  <button type="submit" [disabled]="updateForm.invalid" pButton>Guardar</button>
+                  <button type="button" (click)="cancelarModificacion()" pButton>Cancelar</button>
+                </div>
             </form>
           </div>
         </div>
@@ -69,6 +83,7 @@
         <div class="col-md-3 order-2">
           <h1>Compañías</h1>
           <div *ngIf="usuario.id === compania.idCreador && usuario.companiaSeguida!= 0 && usuario.tipoUsuario == 'estandar'; else otraCondicion" class="companias" (click)="goCompania(compania.id)">
+            <img [src]="compania.fotoPerfil" class="perfilAvatarCompania">
             <p>{{compania.nombre.toLocaleUpperCase()}}</p>
             <p>Descripción: {{compania.descripcion}}</p>
             <p>Miembros: {{compania.miembros}}</p>
@@ -91,24 +106,41 @@
               <form (submit)="crearCompania()" #createForm="ngForm">
                 <div class="form-group">
                   <label for="nombre">Nombre:</label>
-                  <input type="text" id="nombre" name="nombre" [(ngModel)]="compania.nombre" pInputText pattern="[a-zA-Z]*" required>
+                  <input type="text" id="nombre" name="nombre" [(ngModel)]="companiaTemporal.nombre" pInputText pattern="[a-zA-Z]*" required>
                   <div *ngIf="createForm.controls['nombre'].errors?.['pattern']">El nombre no puede contener números.</div>
                   <div *ngIf="createForm.controls['nombre'].errors?.['required']">El nombre es requerido.</div>
                 </div>
                 <div class="form-group">
                   <label for="correo">Descripción:</label>
-                  <input type="text" id="descripcion" name="descripcion" [(ngModel)]="compania.descripcion" pInputText required>
+                  <input type="text" id="descripcion" name="descripcion" [(ngModel)]="companiaTemporal.descripcion" pInputText required>
                   <div *ngIf="createForm.controls['descripcion'].errors?.['required']">La descripción es requerida.</div>
                 </div>
                 <div class="form-group">
                   <label for="fotoPerfil">Foto de perfil:</label>
-                  <input type="file" id="foto" name="foto" pFileUpload mode="basic" [(ngModel)]="compania.fotoPerfil">
+                  <div class="botones">
+                    <button type="button" class="btn btn-primary" (click)="mostrarIconos()" pButton style="margin-top: 0;width: 100%;">Ver Iconos</button>
+                  </div>
                 </div>
-                <div class="botones2">
-                  <button type="submit" [disabled]="createForm.invalid" pButton>Guardar</button>
-                  <button type="button" (click)="cancelarCreacionCompania()" pButton>Cancelar</button>
-                </div>
-              </form>
+                  <div class="avatares">
+                    @if (mostrarDialogo) {
+                        <div *ngFor="let imagen of imagenesCompanias; let i = index" class="imagenes">
+                            <img [src]="imagen" alt="Imagen">
+                            <div class="botones">
+                                <button type="button" class="btn btn-primary" pButton (click)="elegirFotoPerfilCompania(i)">Elegir</button>
+                            </div>
+                        </div>
+                    } 
+                    @if (mostrarDialogo) {
+                    <div class="botones">
+                        <button type="button" class="btn btn-primary" (click)="cerrarDialogo()" pButton style="margin-top: 20%;"> Cerrar</button>
+                    </div>
+                    }
+                  </div>
+                  <div class="botones2">
+                    <button type="submit" [disabled]="createForm.invalid" pButton>Guardar</button>
+                    <button type="button" (click)="cancelarCreacionCompania()" pButton>Cancelar</button>
+                  </div>
+            </form>
             </div>
             <h1 *ngIf="usuario.tipoUsuario == 'estandar'" class="amistad">Sigue a</h1>
             <div class="amistades">
@@ -127,6 +159,7 @@
     <ng-container *ngIf="!(usuario && usuario.id === usuarioIdFromLocalStorage)">
       <div class="row flex-sm-row flex-column">
         <div class="col-md-3">
+          <img [src]="usuario.fotoPerfil" class="perfilAvatar">
           <h3>Usuario:  {{ usuario.nombre }}</h3>
           <h3>Correo:  {{ usuario.correoElectronico }}</h3>
           <h3>Edad:  {{ usuario.edad }}</h3>
@@ -153,6 +186,7 @@
           <!-- Información compañías si el perfil no es del usuario actual-->
           <h1>Compañías</h1>
           <div *ngIf="usuario.id === compania.idCreador && usuario.tipoUsuario == 'estandar'; else otraCondicion" class="companias" (click)="goCompania(compania.id)">
+            <img [src]="compania.fotoPerfil" class="perfilAvatarCompania">
             <p>{{compania.nombre.toLocaleUpperCase()}}</p>
             <p>Descripción: {{compania.descripcion}}</p>
             <p>Miembros: {{compania.miembros}}</p>

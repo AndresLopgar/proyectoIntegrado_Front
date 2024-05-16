@@ -27,9 +27,75 @@
             display: flex;
             text-align: center;
             background-color: var(--color-primario);
-            max-height: 100%;
             flex-direction: column;
+            max-height: 72vh;
+            overflow: auto;
             margin-bottom: 20px;
+
+            &::-webkit-scrollbar {
+                width: 10px;
+            }
+        
+            &::-webkit-scrollbar-track {
+                background: var(--color-primario);
+            }
+        
+            &::-webkit-scrollbar-thumb {
+                background-color: var(--color-enlaces-hover);
+                border-radius: 10px;
+                border: solid 2px var(--color-primario);
+            }
+
+            .avatares{
+                display: grid;
+                grid-template-columns: auto auto;
+                overflow: auto;
+                max-height: 300px;
+
+                &::-webkit-scrollbar {
+                    width: 10px;
+                }
+            
+                &::-webkit-scrollbar-track {
+                    background: var(--color-primario);
+                }
+            
+                &::-webkit-scrollbar-thumb {
+                    background-color: var(--color-enlaces-hover);
+                    border-radius: 10px;
+                    border: solid 2px var(--color-primario);
+                }
+        
+                .imagenes{
+                    margin-top: 5%;
+                    border: 1px solid var(--color-enlaces-hover);
+            
+                    img{
+                        padding: 2%;
+                        width: 50%;
+                        height: 50%;
+                    }
+                }
+            }
+
+            .perfilAvatar{
+                    margin-left: 40%;
+                    width: 80px; // Ajusta el tamaño de la imagen según sea necesario
+                    height: 80px; // Ajusta el tamaño de la imagen según sea necesario
+                    border-radius: 50%;
+                    border: 2px solid white; /* Borde blanco */
+                    text-align: center;
+            }
+
+            .perfilAvatarCompania{
+                margin-top: 2%;
+                width: 80px; // Ajusta el tamaño de la imagen según sea necesario
+                height: 80px; // Ajusta el tamaño de la imagen según sea necesario
+                border-radius: 50%;
+                border: 2px solid white; /* Borde blanco */
+                text-align: center;
+        }
+            
 
             .historial{
                 height: 428px;

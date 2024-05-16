@@ -7,7 +7,7 @@
                     <div class="form-group">
                         <label for="nombre"><b>Nombre:</b></label>
                         <div class="iconos">
-                            <input type="text" id="nombre" name="nombre" pInputText [(ngModel)]="usuario.nombre" required pattern="[a-zA-Z]*">
+                            <input type="text" id="nombre" name="nombre" class="form-control"  [(ngModel)]="usuario.nombre" required pattern="[a-zA-Z]*">
                             <i class="pi pi-lock" style="font-size: 1.5rem;"></i>
                         </div>
                         <div *ngIf="registroForm.controls['nombre'].errors?.['pattern']">El nombre solo puede contener letras</div>
@@ -24,7 +24,7 @@
                     <div class="form-group">
                         <label for="correo"><b>Correo:</b></label>
                         <div class="iconos">
-                            <input type="email" id="correo" name="correo" pInputText [(ngModel)]="usuario.correoElectronico" required>
+                            <input type="email" id="correo" name="correo"  class="form-control" [(ngModel)]="usuario.correoElectronico" required>
                             <i class="pi pi-envelope" style="font-size: 1.5rem;"></i>
                         </div>
                         <div *ngIf="registroForm.controls['correo'].errors?.['email']">El correo electrónico no tiene un formato válido.</div>
@@ -35,7 +35,7 @@
                     <div class="form-group">
                         <label for="edad"><b>Edad:</b></label>
                         <div class="iconos">
-                            <input type="number" id="edad" name="edad" pInputNumber [(ngModel)]="usuario.edad" required min="16" max="100">
+                            <input type="number" id="edad" name="edad" class="form-control" [(ngModel)]="usuario.edad" required min="16" max="100">
                             <i class="pi pi-calendar" style="font-size: 1.5rem;"></i> 
                         </div>
                         <div *ngIf="registroForm.controls['edad'].errors?.['min'] || registroForm.controls['edad'].errors?.['max']">La edad debe estar entre 16 y 100.</div>
@@ -65,10 +65,10 @@
                     </div> 
                     <div class="avatares">
                         @if (mostrarDialogo) {
-                            <div *ngFor="let imagen of imagenes" class="imagenes">
+                            <div *ngFor="let imagen of imagenes; let i = index" class="imagenes">
                                 <img [src]="imagen" alt="Imagen">
                                 <div class="botones">
-                                    <button type="button" class="btn btn-primary" pButton> Elegir</button>
+                                    <button type="button" class="btn btn-primary" pButton (click)="elegirFotoPerfil(i)">Elegir</button>
                                 </div>
                             </div>
                         } 
@@ -77,13 +77,13 @@
                     <div class="botones">
                         <button type="button" class="btn btn-primary" (click)="cerrarDialogo()" pButton style="margin-top: 20%;"> Cerrar</button>
                     </div>
-                }
+                    }
                                      
                 </div>
             </div>
             <div class="logearse" (click)="navegaLogin()"><u>Tengo cuenta</u></div>
             <div class="botones">
-                <button type="submit" [disabled]="registroForm.invalid" (click)="registro()" pButton>Aceptar</button>
+                <button type="submit" [disabled]="registroForm.invalid || fotoPerfilNula" (click)="registro()" pButton>Aceptar</button>
                 <button type="button" (click)="borrar()" pButton>Limpiar</button>
             </div>
         </form>

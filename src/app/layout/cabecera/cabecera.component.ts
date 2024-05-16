@@ -16,7 +16,7 @@ export class CabeceraComponent implements OnInit {
   tipoUsuario = "";
   titulo: string = "";
   idUsuario!:number;
-  FotoPerfilUsuario: File | null = null;
+  fotoPerfilUsuario!: string;
 
   constructor(private router: Router, private usuarioService: UsuarioService) {}
 
@@ -34,6 +34,9 @@ export class CabeceraComponent implements OnInit {
       const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
       this.tipoUsuario = usuarioAlmacenado.tipoUsuario;
       this.idUsuario = usuarioAlmacenado.id;
+      this.fotoPerfilUsuario = usuarioAlmacenado.fotoPerfil;
+      console.log(this.fotoPerfilUsuario);
+      
     }else{
       this.tipoUsuario= "noRegistrado";
     }

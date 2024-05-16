@@ -44,12 +44,31 @@ export class PerfilComponent implements OnInit {
   usuarioSeguido!: Usuario[];
   usuarioSeguidor!: Usuario[];
   amistadElimnar!: number;
+  usuarioTemporal!: Usuario;
+  companiaTemporal!: Compania;
+  indiceSeleccionado: number = -1;
+  imagenesCompanias: string[] = [   // Rutas de las imágenes
+    '../../../assets/perfiles/companias/imagenCompania1.png',
+    '../../../assets/perfiles/companias/imagenCompania2.png',
+    '../../../assets/perfiles/companias/imagenCompania3.png',
+    '../../../assets/perfiles/companias/imagenCompania4.png',
+    '../../../assets/perfiles/companias/imagenCompania5.png',
+  ];
+  imagenesUsuarios: string[] = [   // Rutas de las imágenes
+  '../../../assets/perfiles/usuarios/imagenHombre1.png',
+  '../../../assets/perfiles/usuarios/imagenMujer1.png',
+  '../../../assets/perfiles/usuarios/imagenHombre2.png',
+  '../../../assets/perfiles/usuarios/imagenMujer2.png',
+  '../../../assets/perfiles/usuarios/imagenHombre3.png',
+  '../../../assets/perfiles/usuarios/imagenMujer3.png',
+];
+  mostrarDialogo: boolean = false;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.usuarioId = +params['id'];
       // Cargar el perfil del usuario utilizando el ID
-      this.loadUsuarioById(this.usuarioId);
+      this.loadUsuarioById(this.usuarioId);     
       const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
@@ -80,6 +99,26 @@ export class PerfilComponent implements OnInit {
     });
   }
 
+  elegirFotoPerfilCompania(indice: number) {
+    this.companiaTemporal.fotoPerfil = this.imagenesCompanias[indice];
+    this.cerrarDialogo();
+  }
+
+elegirFotoPerfil(indice: number) {
+  this.indiceSeleccionado = indice;
+  this.usuarioTemporal.fotoPerfil = this.imagenesUsuarios[indice];
+  this.cerrarDialogo();
+}
+
+
+  mostrarIconos() {
+    this.mostrarDialogo = true;
+}
+
+cerrarDialogo() {
+    this.mostrarDialogo = false;
+}
+
   goPerfil(usuarioId: number) {
     this.router.navigate(['/perfil', usuarioId]);
   }
@@ -100,6 +139,7 @@ export class PerfilComponent implements OnInit {
     this.companiaService.getCompaniaById(id).subscribe(
       (compania) => {
         this.compania = compania;
+        this.companiaTemporal = compania;
       },
       (error) => {
         // Manejar errores
@@ -128,6 +168,7 @@ export class PerfilComponent implements OnInit {
     this.usuarioService.getUsuarioById(id).subscribe(
       (usuario: Usuario) => {
         this.usuario = usuario;
+        this.usuarioTemporal = usuario;
         // Después de cargar el usuario, cargamos la compañía utilizando el atributo companiaSeguida
         if (usuario.companiaSeguida) {
           this.loadCompaniaById(usuario.companiaSeguida);
@@ -143,19 +184,21 @@ export class PerfilComponent implements OnInit {
 
 
   crearCompania() {
-    this.compania.fechaCreacion = new Date().toISOString();
-    // Llamar al servicio para registrar la compañía
-    this.companiaService.createCompania(this.compania).subscribe(
+    // Actualiza la fecha de creación de la compañía
+    this.companiaTemporal.fechaCreacion = new Date().toISOString();
+    
+    // Llama al servicio para registrar la compañía
+    this.companiaService.createCompania(this.companiaTemporal).subscribe(
       id => {
         console.log("Compañía con id: " + id + " creada correctamente");
         
-        // Obtener el usuario actual
+        // Obtiene el usuario actual
         const usuarioLocalStorage = localStorage.getItem('usuario');
         if (usuarioLocalStorage) {
           const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
           const userId = usuarioAlmacenado.id;
           
-          // Actualizar el atributo companiaSeguida del usuario
+          // Actualiza el atributo companiaSeguida del usuario con el ID de la nueva compañía
           this.usuarioService.updateCompaniaSeguida(userId, id).subscribe(
             () => {
               console.log('companiaSeguida actualizado correctamente');
@@ -166,13 +209,17 @@ export class PerfilComponent implements OnInit {
           );
         }
         
+        // Navega a la página de inicio después de crear la compañía
         this.router.navigateByUrl('/home');
+        
+        // Muestra una notificación de éxito
         Swal.fire({
           icon: 'success',
           title: 'Registro de compañía exitoso',
         });
       },
       error => {
+        // Muestra una notificación de error en caso de fallo
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -180,8 +227,11 @@ export class PerfilComponent implements OnInit {
         });
       }
     );
-    this.mostrandoFormularioEliminar = false; // Ocultar el formulario después de crear la compañía
+  
+    // Oculta el formulario después de crear la compañía
+    this.mostrandoFormularioEliminar = false;
   }
+  
   
 
   async eliminarUsuario(id: number) {
@@ -219,29 +269,44 @@ export class PerfilComponent implements OnInit {
 
   mostrarFormularioModificar(): void {
     this.mostrandoFormularioModificar = true;
+    this.usuarioTemporal = { ...this.usuario };
   }
 
   mostrarFormularioEliminar(): void {
     this.mostrandoFormularioEliminar = true;
+    this.companiaTemporal = { ...this.compania };
   }
 
   modificarUsuario() {
-    if (this.usuario) {
+    // Lógica para modificar el usuario
+    if (this.usuarioTemporal) {
       try {
-        this.usuarioService.updateUsuario(this.usuario.id, this.usuario).toPromise();
-        this.mostrandoFormularioModificar = false; // Ocultar el formulario después de modificar el usuario
-        Swal.fire({
-          icon: 'success',
-          title: 'Modificación de usuario exitosa',
-          text: '¡Usuario modificado correctamente!'
-        });
+        // Actualizar el usuario original con los datos del usuario temporal
+        this.usuario = { ...this.usuarioTemporal };
+
+        // Llamar al servicio para guardar los cambios
+        this.usuarioService.updateUsuario(this.usuario.id, this.usuario).subscribe(
+          () => {
+            // Éxito al modificar el usuario
+            Swal.fire({
+              icon: 'success',
+              title: 'Modificación exitosa',
+              text: '¡El usuario ha sido modificado correctamente!'
+            });
+            this.mostrandoFormularioModificar = false;
+          },
+          error => {
+            // Error al modificar el usuario
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: '¡No se pudo modificar el usuario!'
+            });
+            console.error('Error al modificar el usuario:', error);
+          }
+        );
       } catch (error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: '¡Modificación de usuario cancelada!'
-        });
-        console.error("Error al modificar el usuario:", error);
+        console.error('Error al modificar el usuario:', error);
       }
     }
   }
