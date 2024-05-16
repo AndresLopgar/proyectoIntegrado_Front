@@ -6,7 +6,7 @@ export class Usuario{
     contrasena!: string;
     profesion!: string;
     fechaRegistro!: string;
-    fotoPerfil!: string;
+    fotoPerfil!: String;
     tipoUsuario!: string;
     companiaSeguida!: number;
 }

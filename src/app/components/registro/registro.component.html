@@ -1,7 +1,7 @@
 <div class="container">
     <div class="registro">
         <h2>Registro</h2>
-        <form #registroForm="ngForm">
+        <form #registroForm="ngForm" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -59,8 +59,26 @@
                     </div>
                     <div class="form-group">
                         <label for="foto"><b>Foto de Perfil:</b></label>
-                        <input type="file" id="foto" name="foto" pFileUpload mode="basic" [(ngModel)]="usuario.fotoPerfil">
+                        <div class="botones">
+                            <button type="button" class="btn btn-primary" (click)="mostrarIconos()" pButton style="margin-top: 0;">Ver Iconos</button>
+                        </div>
+                    </div> 
+                    <div class="avatares">
+                        @if (mostrarDialogo) {
+                            <div *ngFor="let imagen of imagenes" class="imagenes">
+                                <img [src]="imagen" alt="Imagen">
+                                <div class="botones">
+                                    <button type="button" class="btn btn-primary" pButton> Elegir</button>
+                                </div>
+                            </div>
+                        } 
                     </div>
+                    @if (mostrarDialogo) {
+                    <div class="botones">
+                        <button type="button" class="btn btn-primary" (click)="cerrarDialogo()" pButton style="margin-top: 20%;"> Cerrar</button>
+                    </div>
+                }
+                                     
                 </div>
             </div>
             <div class="logearse" (click)="navegaLogin()"><u>Tengo cuenta</u></div>
