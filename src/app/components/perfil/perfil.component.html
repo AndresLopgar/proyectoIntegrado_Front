@@ -2,7 +2,7 @@
     <ng-container *ngIf="usuario && usuario.id === usuarioIdFromLocalStorage">
       <div class="row flex-sm-row flex-column custom-margin-bottom">
         <!--Información del usuario que actual-->
-        <div class="col-md-3 order-1 order-md-0">
+        <div class="col-md-3 order-0 order-md-0">
           <img [src]="usuario.fotoPerfil" class="perfilAvatar">
           <h4>Usuario:  {{ usuario.nombre }}</h4>
           <h4>Correo:  {{ usuario.correoElectronico }}</h4>
@@ -75,7 +75,7 @@
             </form>
           </div>
         </div>
-        <div class="col-md-5 order-0 order-md-1">
+        <div class="col-md-5 order-1 order-md-1">
           <h1>Publicaciones</h1>
           <div *ngFor="let publicacion of publicacionesActual" class="publicaciones">
             <div class="contenido">
