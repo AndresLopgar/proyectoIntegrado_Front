@@ -3,12 +3,12 @@
     <div class="col-md-8 order-0 order-md-0">
       <h1>Publicaciones</h1>
       <div *ngFor="let publicacion of publicaciones" class="publicaciones">
-        <div class="contenido" [routerLink]="['/perfil', usuariosCargados[publicacion.idUsuario]]" style="cursor: pointer;">
+        <div class="contenido" (click)="irAlPerfil(usuariosCargados[publicacion.idUsuario])" style="cursor: pointer;">
           <p>Contenido: {{ publicacion.contenido }}</p>
         </div>
         <div class="acciones">
-            <img *ngIf="usuariosCargados[publicacion.idUsuario]" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar">
-            <p *ngIf="usuariosCargados[publicacion.idUsuario]">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
+            <img *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlPerfil(usuariosCargados[publicacion.idUsuario])" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+            <p *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlPerfil(usuariosCargados[publicacion.idUsuario])" style="cursor: pointer;">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
           <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
         </div>
         <div class="acciones">

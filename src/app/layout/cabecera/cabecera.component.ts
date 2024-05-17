@@ -35,8 +35,6 @@ export class CabeceraComponent implements OnInit {
       this.tipoUsuario = usuarioAlmacenado.tipoUsuario;
       this.idUsuario = usuarioAlmacenado.id;
       this.fotoPerfilUsuario = usuarioAlmacenado.fotoPerfil;
-      console.log(this.fotoPerfilUsuario);
-      
     }else{
       this.tipoUsuario= "noRegistrado";
     }

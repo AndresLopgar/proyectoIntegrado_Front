@@ -65,8 +65,10 @@ export class HomeComponent implements OnInit {
     )
   }
 
-  irAlPerfil(idUsuario: number) {
-    this.router.navigate(['/perfil', idUsuario]);
+  irAlPerfil(usuario: Usuario) {
+    console.log("llega al metodo de redireccion");
+    
+    this.router.navigate(['/perfil', usuario.id]);
   }
 
   loadUsuarioById(id: number) {

@@ -77,7 +77,7 @@
         </div>
         <div class="col-md-5 order-0 order-md-1">
           <h1>Publicaciones</h1>
-          <div *ngFor="let publicacion of publicaciones" class="publicaciones">
+          <div *ngFor="let publicacion of publicacionesActual" class="publicaciones">
             <div class="contenido">
               <p>Contenido: {{ publicacion.contenido }}</p>
             </div>
@@ -191,8 +191,18 @@
             </ng-template>
           </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-5 order-0 order-md-1">
           <h1>Publicaciones</h1>
+          <div *ngFor="let publicacion of publicacionesNoActual" class="publicaciones">
+            <div class="contenido">
+              <p>Contenido: {{ publicacion.contenido }}</p>
+            </div>
+            <p style="margin-bottom: 0;">Fecha de Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+            <div class="acciones botones">
+              <p ><i class="pi pi-heart" style="font-size: 1.5rem;"></i>{{ publicacion.numMeGustas}}</p>
+              <p ><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
+            </div>
+          </div>
         </div>
         <div class="col-md-3 order-2">
           <!-- Información compañías si el perfil no es del usuario actual-->

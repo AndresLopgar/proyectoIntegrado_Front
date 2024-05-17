@@ -66,7 +66,8 @@ export class PerfilComponent implements OnInit {
   '../../../assets/perfiles/usuarios/imagenMujer3.png',
 ];
   mostrarDialogo: boolean = false;
-  publicaciones: Publicacion[] = [];
+  publicacionesActual: Publicacion[] = [];
+  publicacionesNoActual: Publicacion[] = [];
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -92,7 +93,8 @@ export class PerfilComponent implements OnInit {
         // Llamar a loadCompaniasByIdCreador después de obtener usuarioIdFromLocalStorage
         this.loadCompaniaByIdCreador(this.usuarioIdFromLocalStorage);
         this.loadCompaniaById(this.usuarioIdFromLocalStorage);
-        this.getAllPublicacionesByUsario(this.usuarioIdFromLocalStorage)
+        this.getAllpublicacionesActualByUsario(this.usuarioIdFromLocalStorage)
+        this.getAllpublicacionesNoActualByUsario(this.usuarioId)
 
         this.amistad = {
           id:0,
@@ -104,12 +106,18 @@ export class PerfilComponent implements OnInit {
     });
   }
 
-  getAllPublicacionesByUsario(id: number){
+  getAllpublicacionesActualByUsario(id: number){
     this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
       publicaciones => {
-        console.log(publicaciones);
-        
-        this.publicaciones = publicaciones;
+        this.publicacionesActual = publicaciones;
+      }
+    )
+  }
+
+  getAllpublicacionesNoActualByUsario(id: number){
+    this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
+      publicaciones => {
+        this.publicacionesNoActual = publicaciones;
       }
     )
   }
