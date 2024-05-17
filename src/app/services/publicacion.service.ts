@@ -7,6 +7,10 @@ import { Publicacion } from '../model/publicacion';
   providedIn: 'root',
 })
 export class PublicacionService {
+  //heroku
+  //private baseUrl = 'https://artconnect-9bc127224463.herokuapp.com/api/publicaciones';
+
+  //localhost
   private baseUrl = 'http://localhost:8081/api/publicaciones';
 
   constructor(private http: HttpClient) {}

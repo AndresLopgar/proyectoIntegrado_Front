@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   usuarios: Usuario[] = [];
   publicaciones: Publicacion[] = [];
   usuarioIdFromLocalStorage!: number;
+  noHayUsuarioIniciado: boolean = false;
   usuariosCargados: { [id: number]: Usuario } = {};
   publicacion: Publicacion = {
     id: 0,
@@ -46,6 +47,7 @@ export class HomeComponent implements OnInit {
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
         this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
+        this.noHayUsuarioIniciado = true;
       }
   }
 
@@ -87,6 +89,10 @@ export class HomeComponent implements OnInit {
 
   irAlPerfilUsuario(usuario: Usuario) {
     this.router.navigate(['/perfil', usuario.id]);
+  }
+
+  irAlLogin(){
+    this.router.navigate(['/login']);
   }
 
   irAlPerfilCompania(compania: Compania) {
