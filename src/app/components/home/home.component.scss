@@ -22,7 +22,7 @@
             flex-direction: column;
             overflow: auto;
             margin-bottom: 20px;
-            max-height: 72vh;
+            max-height: 70vh;
     
             &::-webkit-scrollbar {
                 width: 10px;
@@ -43,11 +43,14 @@
                 background-color: var(--color-enlaces-hover);
                 border: 2px solid white;
                 border-radius: 10px;
-    
+
                 .contenido{
                     margin-top: 2%;
-                    padding-bottom: 2%;
                     border-bottom: 1px solid white;
+
+                    p{
+                        margin-bottom: 1%;
+                    }
                 }
     
                 .acciones{
@@ -91,7 +94,7 @@
             flex-direction: column;
             overflow: auto;
             margin-bottom: 20px;
-            max-height: 72vh;
+            max-height: 70vh;
 
             
 

@@ -89,6 +89,9 @@
                 <button type="button" (click)="eliminarPublicacion(publicacion.id)" pButton>Eliminar</button>
             </div>
           </div>
+          <div *ngIf="publicacionesNoActual.length == 0">
+            <p> ESTE USUARIO TODAVÍA NO HA PUBLICADO NADA</p>
+          </div>
         </div>
 
         <!-- Información compañías del usuario Actual-->
@@ -102,6 +105,7 @@
           </div>
           <ng-template #otraCondicion>
             <div *ngIf="usuario.companiaSeguida == compania.id  && compania.id !=0 && usuario.tipoUsuario == 'estandar'" class="companias" (click)="goCompania(compania.id)">
+                <img [src]="compania.fotoPerfil" class="perfilAvatarCompania">  
                 <p>{{compania.nombre.toLocaleUpperCase()}}</p>
                 <p>Descripción: {{compania.descripcion}}</p>
                 <p>Miembros: {{compania.miembros}}</p>
@@ -197,11 +201,14 @@
             <div class="contenido">
               <p>Contenido: {{ publicacion.contenido }}</p>
             </div>
-            <p style="margin-bottom: 0;">Fecha de Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+            <p style="margin-top: 2%;">Fecha de Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
             <div class="acciones botones">
-              <p ><i class="pi pi-heart" style="font-size: 1.5rem;"></i>{{ publicacion.numMeGustas}}</p>
+              <p ><i class="pi pi-heart" style="font-size: 1.5rem"></i>{{ publicacion.numMeGustas}}</p>
               <p ><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
             </div>
+          </div>
+          <div *ngIf="publicacionesNoActual.length == 0">
+            <p> ESTE USUARIO TODAVÍA NO HA PUBLICADO NADA</p>
           </div>
         </div>
         <div class="col-md-3 order-2">
@@ -215,6 +222,7 @@
           </div>
           <ng-template #otraCondicion>
             <div *ngIf="usuario.companiaSeguida == compania.id  && compania.id !=0 && usuario.tipoUsuario == 'estandar'" class="companias" (click)="goCompania(compania.id)">
+                <img [src]="compania.fotoPerfil" class="perfilAvatarCompania">  
                 <p>{{compania.nombre.toLocaleUpperCase()}}</p>
                 <p>Descripción: {{compania.descripcion}}</p>
                 <p>Miembros: {{compania.miembros}}</p>
