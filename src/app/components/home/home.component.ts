@@ -95,7 +95,6 @@ export class HomeComponent implements OnInit {
       showConfirmButton: false,
       timer: 1500 
     });
-
     this.mostrarCrear = false;
   }
   
@@ -113,6 +112,7 @@ export class HomeComponent implements OnInit {
         );
         this.publicacionForm.resetForm();
         this.mostrarCrear = false;
+        this.router.navigate(['/perfil',  this.usuarioIdFromLocalStorage]);
       },
       error => {
         Swal.fire(

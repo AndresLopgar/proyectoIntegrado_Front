@@ -41,6 +41,22 @@
                 border: 2px solid white;
                 border-radius: 10px;
 
+                textArea{
+                    &::-webkit-scrollbar {
+                        width: 10px;
+                    }
+                
+                    &::-webkit-scrollbar-track {
+                        background: var(--color-primario);
+                    }
+                
+                    &::-webkit-scrollbar-thumb {
+                        background-color: var(--color-enlaces-hover);
+                        border-radius: 10px;
+                        border: solid 2px var(--color-primario);
+                    }
+                }
+
                 .contenido{
                     margin-top: 2%;
                     border-bottom: 1px solid white;

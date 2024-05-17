@@ -18,11 +18,10 @@
             display: flex;
             text-align: center;
             background-color: var(--color-primario);
-            max-height: 100%;
             flex-direction: column;
             overflow: auto;
-            margin-bottom: 20px;
             max-height: 70vh;
+            margin-bottom: 20px;
     
             &::-webkit-scrollbar {
                 width: 10px;
@@ -90,11 +89,24 @@
             display: flex;
             text-align: center;
             background-color: var(--color-primario);
-            max-height: 100%;
             flex-direction: column;
-            overflow: auto;
-            margin-bottom: 20px;
             max-height: 70vh;
+
+            textArea{
+                &::-webkit-scrollbar {
+                    width: 10px;
+                }
+            
+                &::-webkit-scrollbar-track {
+                    background: var(--color-primario);
+                }
+            
+                &::-webkit-scrollbar-thumb {
+                    background-color: var(--color-enlaces-hover);
+                    border-radius: 10px;
+                    border: solid 2px var(--color-primario);
+                }
+            }
 
             
 

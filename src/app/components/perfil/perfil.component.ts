@@ -38,6 +38,7 @@ export class PerfilComponent implements OnInit {
   usuarioIdFromLocalStorage!: number;
   mostrandoFormularioModificar: boolean = false;
   mostrandoFormularioEliminar: boolean = false;
+  mostrandoFormularioModificarPublicacion: boolean = false;
   showPassword: boolean = false;
   compania!: Compania;
   amistad!:Amistad;
@@ -68,6 +69,9 @@ export class PerfilComponent implements OnInit {
   mostrarDialogo: boolean = false;
   publicacionesActual: Publicacion[] = [];
   publicacionesNoActual: Publicacion[] = [];
+  publicacionTemporal!: Publicacion;
+  publicacionEnEdicion: number | null = null;
+  contenidoTemporal: string = '';
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -121,6 +125,54 @@ export class PerfilComponent implements OnInit {
       }
     )
   }
+
+  mostrarFormularioUpdatePublicacion(id: number, contenido: string) {
+    this.publicacionEnEdicion = id;
+    this.contenidoTemporal = contenido;
+  }
+
+  cancelarPublicacion() {
+    this.publicacionEnEdicion = null;
+    Swal.fire({
+        icon: 'info',
+        title: 'Modificación cancelada',
+        text: 'Se ha cancelado la modificación de la publicación.',
+        showConfirmButton: false,
+        timer: 2000
+    });
+}
+
+guardarPublicacion(id: number) {
+    this.publicacionService.getPublicacionById(id).subscribe(
+      publicacion => {
+        this.publicacionTemporal = publicacion;
+        this.publicacionTemporal.contenido = this.contenidoTemporal;
+        this.publicacionService.updatePublicacion(id, this.publicacionTemporal).subscribe(
+          () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Modificación exitosa',
+              text: 'La publicación ha sido modificada correctamente.',
+              showConfirmButton: false,
+              timer: 2000
+            });
+            this.router.navigate(['/home']);
+          },
+          () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Hubo un error al modificar la publicación. Por favor, inténtalo de nuevo.',
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
+        )
+      }
+    )
+    this.publicacionEnEdicion = null;
+}
+
 
   eliminarPublicacion(id: number) {
     // Mostrar SweetAlert para confirmar la eliminación

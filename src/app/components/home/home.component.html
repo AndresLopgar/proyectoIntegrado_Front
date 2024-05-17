@@ -16,6 +16,9 @@
           <p><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
         </div>
       </div>
+      <div *ngIf="publicaciones.length == 0">
+        <p>No hay publicaciones</p>
+      </div>
     </div>
     <div class="col-md-3 order-1 order-md-1">
       <div class="botones">
