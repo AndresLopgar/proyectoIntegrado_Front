@@ -70,7 +70,7 @@
               </div>
 
         </div>
-        <div class="col-md-5 order-0 order-md-1">
+        <div class="col-md-5 order-1 order-md-0">
             <h1>Publicaciones</h1>
             <div *ngFor="let publicacion of publicacionesActual" class="publicaciones">
               <div class="contenido">
@@ -84,8 +84,10 @@
                   <button type="button" (click)="eliminarPublicacion(publicacion.id)" pButton>Eliminar</button>
               </div>
               <form *ngIf="publicacion.id === publicacionEnEdicion">
-                <label for="contenidoPublicacion">Contenido de la Publicación:</label>
-                <textarea id="contenidoPublicacion" name="contenidoPublicacion" rows="4" cols="40" [(ngModel)]="contenidoTemporal"></textarea>
+                <div class="form-group">
+                  <label for="contenidoPublicacion">Contenido de la Publicación:</label>
+                  <textarea id="contenidoPublicacion" name="contenidoPublicacion" rows="4" cols="40" [(ngModel)]="contenidoTemporal"></textarea>
+                </div>
                 <div class="botones">
                     <button type="button" (click)="guardarPublicacion(publicacion.id)" pButton>Guardar</button>
                     <button type="button" (click)="cancelarPublicacion()" pButton>Cancelar</button>
