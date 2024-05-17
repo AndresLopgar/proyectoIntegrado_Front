@@ -8,6 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { Publicacion } from '../../model/publicacion';
 import Swal from 'sweetalert2';
 import { Router, RouterLink } from '@angular/router';
+import { CompaniaService } from '../../services/compania.service';
+import { Compania } from '../../model/compania';
 
 @Component({
   selector: 'app-home',
@@ -34,9 +36,11 @@ export class HomeComponent implements OnInit {
   };
 
   mostrarCrear: boolean = false;
+  companiasCargadas: { [id: number]: Compania } = {};
 
   constructor(private usuarioService: UsuarioService, 
-    private publicacionService: PublicacionService, 
+    private publicacionService: PublicacionService,
+    private companiaService: CompaniaService, 
     private router: Router) { 
     const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
@@ -57,18 +61,36 @@ export class HomeComponent implements OnInit {
 
     this.publicacionService.getAllPublicaciones().subscribe(
       publicaciones => {
-        this.publicaciones = publicaciones;
-        this.publicaciones.forEach(publicacion => {
-          this.loadUsuarioById(publicacion.idUsuario);
-        });
+          this.publicaciones = publicaciones;
+          this.publicaciones.forEach(publicacion => {
+              if (publicacion.idCompania !== null) {
+                  this.loadCompaniaById(publicacion.idCompania);
+              }
+              // También puedes cargar el usuario asociado a la publicación si es necesario
+              this.loadUsuarioById(publicacion.idUsuario);
+          });
       }
-    )
+  );
+  
+  }
+  loadCompaniaById(idCompania: number) {
+    this.companiaService.getCompaniaById(idCompania).subscribe(
+      (compania: Compania) => {
+        this.companiasCargadas[idCompania] = compania;
+      },
+      (error) => {
+        // Manejar errores
+        console.error('Error al cargar compañía por ID:', error);
+      }
+    );
   }
 
-  irAlPerfil(usuario: Usuario) {
-    console.log("llega al metodo de redireccion");
-    
+  irAlPerfilUsuario(usuario: Usuario) {
     this.router.navigate(['/perfil', usuario.id]);
+  }
+
+  irAlPerfilCompania(compania: Compania) {
+    this.router.navigate(['/compania', compania.id]);
   }
 
   loadUsuarioById(id: number) {

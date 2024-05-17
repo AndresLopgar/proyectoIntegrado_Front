@@ -18,6 +18,67 @@
             flex-direction: column;
             margin-bottom: 20px;
             max-height: 70vh;
+
+            .publicaciones{
+                margin: 2%;
+                background-color: var(--color-enlaces-hover);
+                border: 2px solid white;
+                border-radius: 10px;
+
+                textArea{
+                    &::-webkit-scrollbar {
+                        width: 10px;
+                    }
+                
+                    &::-webkit-scrollbar-track {
+                        background: var(--color-primario);
+                    }
+                
+                    &::-webkit-scrollbar-thumb {
+                        background-color: var(--color-enlaces-hover);
+                        border-radius: 10px;
+                        border: solid 2px var(--color-primario);
+                    }
+                }
+
+                .contenido{
+                    margin-top: 2%;
+                    border-bottom: 1px solid white;
+
+                    p{
+                        margin-bottom: 1%;
+                    }
+                }
+
+                .botones{
+                        
+                    :hover {
+                        box-shadow: 0px 0px 20px 0px var(--color-enlaces-hover);
+                    }
+    
+                    .p-button {
+                        width: 20%;
+                        margin: 10px 10px;
+                        border-radius: 10px;
+                        background-color: white !important;
+                        color: black;
+                        border-color: black;
+                        justify-content: center; /* Centrar horizontalmente */
+                        align-items: center; /* Centrar verticalmente */
+                    }
+                }
+
+                .acciones{
+                    display: flex;
+                    justify-content: center;
+                    justify-content: space-evenly;
+                    align-items: center;
+
+                    p{
+                        margin-bottom: 1%;
+                    }
+                }
+            }
         }
 
         .col-md-3 {
@@ -30,6 +91,24 @@
             background-color: var(--color-primario);
             max-height: 70vh;
             flex-direction: column;
+
+            .crearCompania{
+                .botones2{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    align-items: center;
+                    .custom-button {
+                        width: 50%;
+                        margin: 10px 10px;
+                        padding: 2%;
+                        border-radius: 10px;
+                        background-color: white !important;
+                        color: black; /* Cambia el color de fondo de los botones pButton */
+                        border-color: black;
+                    }
+                }
+            }
 
             &::-webkit-scrollbar {
                 width: 10px;
@@ -117,7 +196,8 @@
 
                 .p-button {
                     width: 70%;
-                    margin: 10px 10px;
+                    margin-top: 2%;
+                    margin-bottom: 3%;
                     border-radius: 10px;
                     background-color: white !important;
                     color: black;
@@ -151,14 +231,13 @@
                 }
             }
 
-            .modificarCompania{
                 form {
                     display: flex;
                     flex-direction: column;
                     margin-top: 12px;
                     padding-top: 12px;
                     border-top: 2px solid var(--color-enlaces-hover);
-    
+
                     .form-group {
                         margin: 2%;
                         display: flex;
@@ -177,7 +256,30 @@
                         input,
                         select,
                         textarea {
-                            width: 60%;
+                            width: 90%;
+                        }
+
+                        .botones {
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: center;
+                            align-items: center;
+                            
+                            :hover {
+                                box-shadow: 0px 0px 20px 0px var(--color-enlaces-hover);
+                            }
+            
+                            .p-button {
+                                width: 50%;
+                                margin: 10px 10px;
+                                border-radius: 10px;
+                                background-color: white !important;
+                                color: black;
+                                border-color: black;
+                                display: flex;
+                                justify-content: center; /* Centrar horizontalmente */
+                                align-items: center; /* Centrar verticalmente */
+                            }
                         }
                     }
                 }
@@ -213,7 +315,6 @@
                         }
                     }
                 }
-            }
         }
     }
 }

@@ -3,14 +3,35 @@
     <div class="col-md-8 order-0 order-md-0">
       <h1>Publicaciones</h1>
       <div *ngFor="let publicacion of publicaciones" class="publicaciones">
-        <div class="contenido" (click)="irAlPerfil(usuariosCargados[publicacion.idUsuario])" style="cursor: pointer;">
-          <p>Contenido: {{ publicacion.contenido }}</p>
-        </div>
-        <div class="acciones">
-            <img *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlPerfil(usuariosCargados[publicacion.idUsuario])" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
-            <p *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlPerfil(usuariosCargados[publicacion.idUsuario])" style="cursor: pointer;">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
-          <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
-        </div>
+        <ng-container *ngIf="publicacion.idCompania === null; else companiaContent">
+          <!-- Si idCompania es null -->
+          <div class="contenido" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" style="cursor: pointer;">
+              <p>Contenido: {{ publicacion.contenido }}</p>
+          </div>
+      </ng-container>
+      <!-- Si idCompania no es null -->
+      <ng-template #companiaContent>
+          <div class="contenido" (click)="irAlPerfilCompania(companiasCargadas[publicacion.idCompania])" style="cursor: pointer;">
+              <p>Contenido: {{ publicacion.contenido }}</p>
+          </div>
+      </ng-template>
+        <ng-container *ngIf="publicacion.idCompania === null; else companiaInfo">
+          <!-- Si idCompania es null -->
+          <div class="acciones">
+              <img *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+              <p *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" style="cursor: pointer;">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
+              <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+          </div>
+      </ng-container>
+      <!-- Si idCompania no es null -->
+      <ng-template #companiaInfo>
+          <div class="acciones">
+              <!-- Utilizar companiasCargadas en lugar de usuariosCargados -->
+              <img *ngIf="companiasCargadas[publicacion.idCompania]" (click)="irAlPerfilCompania(companiasCargadas[publicacion.idCompania])" [src]="companiasCargadas[publicacion.idCompania].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+              <p *ngIf="companiasCargadas[publicacion.idCompania]" (click)="irAlPerfilCompania(companiasCargadas[publicacion.idCompania])" style="cursor: pointer;">Publicado por: {{ companiasCargadas[publicacion.idCompania].nombre }}</p>
+              <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+          </div>
+      </ng-template>
         <div class="acciones">
           <p><i class="pi pi-heart" style="font-size: 1.5rem;"></i>{{ publicacion.numMeGustas }}</p>
           <p><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>

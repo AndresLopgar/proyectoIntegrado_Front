@@ -110,21 +110,24 @@ export class PerfilComponent implements OnInit {
     });
   }
 
-  getAllpublicacionesActualByUsario(id: number){
+  getAllpublicacionesActualByUsario(id: number) {
     this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
-      publicaciones => {
-        this.publicacionesActual = publicaciones;
-      }
+        publicaciones => {
+            // Filtrar las publicaciones cuyo idCompania no sea null
+            this.publicacionesActual = publicaciones.filter(publicacion => publicacion.idCompania == null);
+        }
     )
-  }
+}
 
-  getAllpublicacionesNoActualByUsario(id: number){
+getAllpublicacionesNoActualByUsario(id: number) {
     this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
-      publicaciones => {
-        this.publicacionesNoActual = publicaciones;
-      }
+        publicaciones => {
+            // Filtrar las publicaciones cuyo idCompania no sea null
+            this.publicacionesNoActual = publicaciones.filter(publicacion => publicacion.idCompania == null);
+        }
     )
-  }
+}
+
 
   mostrarFormularioUpdatePublicacion(id: number, contenido: string) {
     this.publicacionEnEdicion = id;
@@ -138,7 +141,7 @@ export class PerfilComponent implements OnInit {
         title: 'Modificación cancelada',
         text: 'Se ha cancelado la modificación de la publicación.',
         showConfirmButton: false,
-        timer: 2000
+        timer: 1500
     });
 }
 
@@ -154,7 +157,7 @@ guardarPublicacion(id: number) {
               title: 'Modificación exitosa',
               text: 'La publicación ha sido modificada correctamente.',
               showConfirmButton: false,
-              timer: 2000
+              timer: 1500
             });
             this.router.navigate(['/home']);
           },
@@ -164,7 +167,7 @@ guardarPublicacion(id: number) {
               title: 'Error',
               text: 'Hubo un error al modificar la publicación. Por favor, inténtalo de nuevo.',
               showConfirmButton: false,
-              timer: 2000
+              timer: 1500
             });
           }
         )

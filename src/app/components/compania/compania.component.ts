@@ -9,6 +9,8 @@ import Swal from 'sweetalert2';
 import { Usuario } from '../../model/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import * as XLSX from 'xlsx';
+import { Publicacion } from '../../model/publicacion';
+import { PublicacionService } from '../../services/publicacion.service';
 
 
 @Component({
@@ -26,6 +28,7 @@ export class CompaniaComponent  implements OnInit{
   usuarios: Usuario[] = [];
   usuariosSeguidores: Usuario[] =[];
   mostrandoFormularioModificar: boolean = false;
+  mostrandoFormularioCrearPublicacion: boolean = false;
   usuarioLocalStorage: any;
   usuarioActual!: Usuario;
   tieneCompania: number = 0;
@@ -38,25 +41,45 @@ export class CompaniaComponent  implements OnInit{
     '../../../assets/perfiles/companias/imagenCompania4.png',
     '../../../assets/perfiles/companias/imagenCompania5.png',
   ];
+  publicacion!: Publicacion;
+  publicacionesActual: Publicacion[] = [];
+  publicacionesNoActual: Publicacion[] = [];
+  mostrandoFormularioModificarPublicacion: boolean = false;
+  publicacionTemporal!: Publicacion;
+  contenidoTemporal: string = '';
+  publicacionEnEdicion: number | null = null;
 
-  constructor(private companiaService: CompaniaService, private route: ActivatedRoute,private router: Router, private usuarioService: UsuarioService){}
+  constructor(private companiaService: CompaniaService, 
+    private route: ActivatedRoute,
+    private router: Router,
+    private usuarioService: UsuarioService,
+    private publicacionService: PublicacionService){}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.companiaId = +params['id'];
+      
       
       const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
         this.usuarioId = usuarioAlmacenado.id;
         this.loadUsuarioById(this.usuarioId);
+        this.publicacion = {
+          id: 0,
+          contenido: "",
+          fechaPublicacion: "",
+          meGusta: false,
+          numMeGustas: 0,
+          idUsuario: this.usuarioId,
+          idCompania: this.companiaId
+        };
       }
+      this.getAllPublicacionesByCompaniaId(this.companiaId);
       
       this.loadCompania();
       this.getAllUsuarios();
     });
-    console.log(this.mostrarDialogo);
-    
   }
 
   elegirFotoPerfilCompania(indice: number) {
@@ -114,7 +137,6 @@ export class CompaniaComponent  implements OnInit{
     this.usuarioService.getUsuarioById(id).subscribe(
       (usuario: Usuario) => {
         this.usuarioActual = usuario;
-        console.log(this.usuarioActual);
       },
       error => {
         console.error('Error al cargar perfil del usuario:', error);
@@ -263,7 +285,145 @@ export class CompaniaComponent  implements OnInit{
       }
     }
   }
-  
+
+crearPublicacionCompania() {
+    this.publicacion.fechaPublicacion = new Date().toISOString();
+    this.publicacion.idCompania = this.companiaId;
+    
+    this.publicacionService.createPublicacion(this.publicacion).subscribe(
+        () => {
+            // Alerta de éxito si la publicación se crea correctamente
+            Swal.fire({
+                icon: 'success',
+                title: 'Publicación creada correctamente',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            this.router.navigateByUrl('/');
+        },
+        (error) => {
+            // Alerta de error si la publicación no se crea correctamente
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al crear la publicación',
+                text: 'Por favor, inténtalo de nuevo más tarde.',
+                showConfirmButton: true
+            });
+            console.error('Error al crear la publicación:', error);
+        }
+    );
+}
+
+  getAllPublicacionesByCompaniaId(idCompania: number){
+    this.publicacionService.getAllPublicacionesByCompania(this.companiaId).subscribe(
+      publicaciones => {
+        console.log(publicaciones);
+        console.log(this.usuarioId);
+        this.companiaService.getCompaniaById(idCompania).subscribe(
+          compania => {
+            if(this.usuarioId == this.compania.idCreador){
+              this.publicacionesActual = publicaciones;
+              console.log(this.publicacionesActual);
+            }else{
+              this.publicacionesNoActual = publicaciones;
+            }
+          }
+        )
+      });
+    }
+
+  mostrarCrearPublicacion(){
+    this.mostrandoFormularioCrearPublicacion = true;
+  }
+
+  cerrarCrearPublicacion(){
+    this.mostrandoFormularioCrearPublicacion = false;
+  }
+  mostrarFormularioUpdatePublicacion(id: number, contenido: string) {
+    this.publicacionEnEdicion = id;
+    this.contenidoTemporal = contenido;
+  }
+
+  cancelarPublicacion() {
+    this.publicacionEnEdicion = null;
+    Swal.fire({
+        icon: 'info',
+        title: 'Modificación cancelada',
+        text: 'Se ha cancelado la modificación de la publicación.',
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
+guardarPublicacion(id: number) {
+    this.publicacionService.getPublicacionById(id).subscribe(
+      publicacion => {
+        this.publicacionTemporal = publicacion;
+        this.publicacionTemporal.contenido = this.contenidoTemporal;
+        this.publicacionService.updatePublicacion(id, this.publicacionTemporal).subscribe(
+          () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Modificación exitosa',
+              text: 'La publicación ha sido modificada correctamente.',
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.router.navigate(['/home']);
+          },
+          () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Hubo un error al modificar la publicación. Por favor, inténtalo de nuevo.',
+              showConfirmButton: false,
+              timer: 1500
+            });
+          }
+        )
+      }
+    )
+    this.publicacionEnEdicion = null;
+}
+
+eliminarPublicacion(id: number) {
+  // Mostrar SweetAlert para confirmar la eliminación
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'No podrás revertir esto.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Si el usuario confirma la eliminación
+      this.publicacionService.deletePublicacion(id).subscribe(
+        () => {
+          // Si la eliminación es exitosa, mostrar un mensaje de éxito
+          Swal.fire(
+            'Eliminado!',
+            'La publicación ha sido eliminada.',
+            'success'
+          );
+          this.router.navigate(['/home']);
+          // Aquí podrías realizar alguna acción adicional si es necesario
+        },
+        (error) => {
+          // Si ocurre un error durante la eliminación, mostrar un mensaje de error
+          console.error('Error al eliminar la publicación:', error);
+          Swal.fire(
+            'Error!',
+            'No se pudo eliminar la publicación.',
+            'error'
+          );
+        }
+      );
+    }
+  });
+}
 
   mostrarFormularioModificar(): void {
     this.mostrandoFormularioModificar = true;

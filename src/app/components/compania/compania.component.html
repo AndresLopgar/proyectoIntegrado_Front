@@ -7,6 +7,7 @@
           <h4>Miembros:  {{ compania.miembros }}</h4>
           <h4>Fecha Creación: {{ compania.fechaCreacion | date:'dd/MM/yyyy' }}</h4>
           <div class="botones" *ngIf="compania.idCreador === usuarioId">
+            <button type="button" (click)="mostrarCrearPublicacion()" pButton>Crear Publicación</button>
             <button type="button" (click)="generaInforme()" pButton>Generar informe compañía</button>
             <button type="button" (click)="mostrarFormularioModificar()" pButton>Modificar compañía</button>
             <button type="button" (click)="eliminarCompania(companiaId)" pButton>Eliminar compañía</button>
@@ -18,7 +19,7 @@
             <button *ngIf="usuarioActual.companiaSeguida === companiaId && usuarioActual.id !== compania.idCreador" type="button" (click)="abandonarCompania(companiaId)" pButton>Abandonar compañía</button>
           </div>
         
-          
+          <!--Formulario para modificar compañías-->
           <div *ngIf="mostrandoFormularioModificar" class="modificarCompania">
             <form (submit)="modificarCompania()" #updateForm="ngForm">
               <div class="form-group">
@@ -53,9 +54,57 @@
               </div>
             </form>
           </div>
+
+          <!--Formulario para crear publicaciones en compañías-->
+              <div *ngIf="mostrandoFormularioCrearPublicacion" class="crearCompania">
+                <form (ngSubmit)="crearPublicacionCompania()" #publicacionForm="ngForm">
+                  <div class="form-group">
+                    <label for="contenido">Contenido:</label>
+                    <textarea id="contenido" name="contenido" class="form-control" [(ngModel)]="publicacion.contenido" required style="height: 100px; margin-bottom: 2%;"></textarea>
+                  </div>
+                  <div class="botones2">
+                    <button type="submit" class="custom-button" [disabled]="publicacionForm.invalid" pButton>Publicar</button>
+                    <button type="button" class="custom-button"(click)="cerrarCrearPublicacion()" pButton>Cancelar</button>
+                  </div>
+                </form>
+              </div>
+
         </div>
         <div class="col-md-5 order-0 order-md-1">
             <h1>Publicaciones</h1>
+            <div *ngFor="let publicacion of publicacionesActual" class="publicaciones">
+              <div class="contenido">
+                <p>Contenido: {{ publicacion.contenido }}</p>
+              </div>
+              <p style="margin-bottom: 0;">Fecha de Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+              <div class="acciones botones">
+                <p ><i class="pi pi-heart" style="font-size: 1.5rem;"></i>{{ publicacion.numMeGustas}}</p>
+                <p ><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
+                  <button type="button" (click)="mostrarFormularioUpdatePublicacion(publicacion.id, publicacion.contenido)" pButton>Editar</button>
+                  <button type="button" (click)="eliminarPublicacion(publicacion.id)" pButton>Eliminar</button>
+              </div>
+              <form *ngIf="publicacion.id === publicacionEnEdicion">
+                <label for="contenidoPublicacion">Contenido de la Publicación:</label>
+                <textarea id="contenidoPublicacion" name="contenidoPublicacion" rows="4" cols="40" [(ngModel)]="contenidoTemporal"></textarea>
+                <div class="botones">
+                    <button type="button" (click)="guardarPublicacion(publicacion.id)" pButton>Guardar</button>
+                    <button type="button" (click)="cancelarPublicacion()" pButton>Cancelar</button>
+                </div>
+              </form>
+            </div>
+            <div *ngFor="let publicacion of publicacionesNoActual" class="publicaciones">
+              <div class="contenido">
+                <p>Contenido: {{ publicacion.contenido }}</p>
+              </div>
+              <p style="margin-top: 1%; margin-bottom: 1%;">Fecha de Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+              <div class="acciones botones">
+                <p ><i class="pi pi-heart" style="font-size: 1.5rem;"></i>{{ publicacion.numMeGustas}}</p>
+                <p ><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
+              </div>
+            </div>
+            <div *ngIf="publicacionesNoActual.length == 0 && publicacionesActual.length==0">
+              <p> ESTA COMPAÑÍA TODAVÍA NO HA PUBLICADO NADA</p>
+            </div>
         </div>
         <div class="col-md-3 order-2">
             <h1 class="miembros-name">Miembros</h1>
