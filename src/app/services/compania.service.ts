@@ -9,10 +9,10 @@ import { Compania } from '../model/compania';
 })
 export class CompaniaService {
   //heroku
-  //private baseUrl = 'https://artconnect-9bc127224463.herokuapp.com/api/companias';
+  private baseUrl = 'https://artconnect-9bc127224463.herokuapp.com/api/companias';
 
   //localhost
-  private baseUrl = 'http://localhost:8081/api/companias';
+  //private baseUrl = 'http://localhost:8081/api/companias';
 
   usuarioEncontrado: any;
 

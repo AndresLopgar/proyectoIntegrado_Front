@@ -8,10 +8,10 @@ import { Usuario } from '../model/usuario';
 })
 export class UsuarioService {
   //heroku
-  //private baseUrl = 'https://artconnect-9bc127224463.herokuapp.com/api/usuarios';
+  private baseUrl = 'https://artconnect-9bc127224463.herokuapp.com/api/usuarios';
 
   //localhost
-  private baseUrl = 'http://localhost:8081/api/usuarios';
+  //private baseUrl = 'http://localhost:8081/api/usuarios';
 
   usuarioEncontrado: any;
 
