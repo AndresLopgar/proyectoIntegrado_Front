@@ -367,10 +367,10 @@ cerrarDialogo() {
  
     // Verificar la opción seleccionada por el usuario
     if (result.isConfirmed) {
-      localStorage.removeItem('usuario');
-        localStorage.setItem('tipoUsuario', 'noRegistrado');
       // Llamar al servicio para eliminar la publicación
       this.usuarioService.deleteUsuario(id).subscribe( () => {
+        localStorage.removeItem('usuario');
+        localStorage.setItem('tipoUsuario', 'noRegistrado');
           },
           error => {
             console.error('Error al eliminar el usuario:', error);
