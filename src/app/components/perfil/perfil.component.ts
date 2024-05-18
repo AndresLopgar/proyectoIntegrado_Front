@@ -353,8 +353,8 @@ cerrarDialogo() {
   
 
   async eliminarUsuario(id: number) {
-     // Mostrar un cuadro de diálogo de confirmación con SweetAlert
-     const result = await Swal.fire({
+    // Mostrar un cuadro de diálogo de confirmación con SweetAlert
+    const result = await Swal.fire({
       title: '¿Estás seguro?',
       text: "Esta acción eliminará el usuario y no se podrá deshacer más tarde.",
       icon: 'warning',
@@ -364,21 +364,38 @@ cerrarDialogo() {
       confirmButtonText: 'Eliminar',
       cancelButtonText: 'Cancelar'
     });
- 
+
     // Verificar la opción seleccionada por el usuario
     if (result.isConfirmed) {
-      // Llamar al servicio para eliminar la publicación
-      this.usuarioService.deleteUsuario(id).subscribe( () => {
-        localStorage.removeItem('usuario');
-        localStorage.setItem('tipoUsuario', 'noRegistrado');
-          },
-          error => {
-            console.error('Error al eliminar el usuario:', error);
-          }
-        );
-        await this.router.navigateByUrl('/login');
-        window.location.reload();
-
+      // Llamar al servicio para eliminar el usuario
+      this.usuarioService.deleteUsuario(id).subscribe(
+        () => {
+          // SweetAlert para eliminar correctamente
+          Swal.fire({
+            title: '¡Usuario eliminado!',
+            text: 'El usuario ha sido eliminado correctamente.',
+            icon: 'success',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            // Navegar a la página de inicio de sesión
+            this.router.navigateByUrl('/login');
+            // Recargar la página
+            window.location.reload();
+          });
+        },
+        error => {
+          // SweetAlert para error al eliminar
+          Swal.fire({
+            title: 'Error',
+            text: 'Ha ocurrido un error al eliminar el usuario. Por favor, inténtalo de nuevo más tarde.',
+            icon: 'error',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+          });
+          console.error('Error al eliminar el usuario:', error);
+        }
+      );
     } else {
       // El usuario ha cancelado la acción
       console.log('La acción ha sido cancelada');
