@@ -352,7 +352,7 @@ cerrarDialogo() {
   
   
 
-  async eliminarUsuario(id: number) {
+  async eliminarUsuario() {
     // Mostrar un cuadro de diálogo de confirmación con SweetAlert
     const result = await Swal.fire({
       title: '¿Estás seguro?',
@@ -367,8 +367,10 @@ cerrarDialogo() {
 
     // Verificar la opción seleccionada por el usuario
     if (result.isConfirmed) {
+      localStorage.removeItem('usuario');
+      localStorage.setItem('tipoUsuario', 'noRegistrado');
       // Llamar al servicio para eliminar el usuario
-      this.usuarioService.deleteUsuario(id).subscribe(
+      this.usuarioService.deleteUsuario(this.usuarioIdFromLocalStorage).subscribe(
         () => {
           // SweetAlert para eliminar correctamente
           Swal.fire({
