@@ -368,7 +368,7 @@ cerrarDialogo() {
     // Verificar la opción seleccionada por el usuario
     if (result.isConfirmed) {
       // Llamar al servicio para eliminar el usuario
-      this.usuarioService.deleteUsuario(this.usuarioIdFromLocalStorage).subscribe(
+      this.usuarioService.deleteUsuario(this.usuarioId).subscribe(
         () => {
           localStorage.removeItem('usuario');
           localStorage.setItem('tipoUsuario', 'noRegistrado');
