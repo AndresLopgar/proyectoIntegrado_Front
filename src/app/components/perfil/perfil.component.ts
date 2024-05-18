@@ -368,8 +368,9 @@ cerrarDialogo() {
     // Verificar la opción seleccionada por el usuario
     if (result.isConfirmed) {
       // Llamar al servicio para eliminar el usuario
-      this.usuarioService.deleteUsuario(this.usuarioId).subscribe(
+      this.usuarioService.deleteUsuario(this.usuarioIdFromLocalStorage).subscribe(
         () => {
+          console.log("Ha ido bien, este es el id: " +this.usuarioIdFromLocalStorage);
           localStorage.removeItem('usuario');
           localStorage.setItem('tipoUsuario', 'noRegistrado');
           // SweetAlert para eliminar correctamente
@@ -385,6 +386,7 @@ cerrarDialogo() {
           });
         },
         error => {
+          console.log("Ha ido mal, este es el id: " +this.usuarioIdFromLocalStorage);
           // SweetAlert para error al eliminar
           Swal.fire({
             title: 'Error',
