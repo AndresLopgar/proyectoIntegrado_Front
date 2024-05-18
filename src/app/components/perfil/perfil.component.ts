@@ -352,27 +352,11 @@ cerrarDialogo() {
   
   
 
-  async eliminarUsuario() {
-    // Mostrar un cuadro de diálogo de confirmación con SweetAlert
-    const result = await Swal.fire({
-      title: '¿Estás seguro?',
-      text: "Esta acción eliminará el usuario y no se podrá deshacer más tarde.",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar'
-    });
-
-    // Verificar la opción seleccionada por el usuario
-    if (result.isConfirmed) {
-      // Llamar al servicio para eliminar el usuario
-      this.usuarioService.deleteUsuario(this.usuarioIdFromLocalStorage).subscribe(
+  eliminarUsuario() {
+    // Llamar al servicio para eliminar el usuario
+    this.usuarioService.deleteUsuario(this.usuarioIdFromLocalStorage)
+      .subscribe(
         () => {
-          console.log("Ha ido bien, este es el id: " +this.usuarioIdFromLocalStorage);
-          localStorage.removeItem('usuario');
-          localStorage.setItem('tipoUsuario', 'noRegistrado');
           // SweetAlert para eliminar correctamente
           Swal.fire({
             title: '¡Usuario eliminado!',
@@ -381,12 +365,14 @@ cerrarDialogo() {
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK'
           }).then(() => {
+            // Eliminar datos del usuario del LocalStorage
+            localStorage.removeItem('usuario');
+            localStorage.setItem('tipoUsuario', 'noRegistrado');
             // Navegar a la página de inicio de sesión
             this.router.navigateByUrl('/login');
           });
         },
         error => {
-          console.log("Ha ido mal, este es el id: " +this.usuarioIdFromLocalStorage);
           // SweetAlert para error al eliminar
           Swal.fire({
             title: 'Error',
@@ -398,11 +384,8 @@ cerrarDialogo() {
           console.error('Error al eliminar el usuario:', error);
         }
       );
-    } else {
-      // El usuario ha cancelado la acción
-      console.log('La acción ha sido cancelada');
-    }
   }
+  
 
   mostrarFormularioModificar(): void {
     this.mostrandoFormularioModificar = true;
