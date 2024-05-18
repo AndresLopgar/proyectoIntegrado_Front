@@ -97,8 +97,8 @@ export class PerfilComponent implements OnInit {
         // Llamar a loadCompaniasByIdCreador después de obtener usuarioIdFromLocalStorage
         this.loadCompaniaByIdCreador(this.usuarioIdFromLocalStorage);
         this.loadCompaniaById(this.usuarioIdFromLocalStorage);
-        this.getAllpublicacionesActualByUsario(this.usuarioIdFromLocalStorage)
-        this.getAllpublicacionesNoActualByUsario(this.usuarioId)
+        this.getAllpublicacionesActualByUsario(this.usuarioIdFromLocalStorage);
+        this.getAllpublicacionesNoActualByUsario(this.usuarioId);
 
         this.amistad = {
           id:0,
@@ -367,11 +367,11 @@ cerrarDialogo() {
 
     // Verificar la opción seleccionada por el usuario
     if (result.isConfirmed) {
-      localStorage.removeItem('usuario');
-      localStorage.setItem('tipoUsuario', 'noRegistrado');
       // Llamar al servicio para eliminar el usuario
       this.usuarioService.deleteUsuario(this.usuarioIdFromLocalStorage).subscribe(
         () => {
+          localStorage.removeItem('usuario');
+          localStorage.setItem('tipoUsuario', 'noRegistrado');
           // SweetAlert para eliminar correctamente
           Swal.fire({
             title: '¡Usuario eliminado!',
@@ -382,8 +382,6 @@ cerrarDialogo() {
           }).then(() => {
             // Navegar a la página de inicio de sesión
             this.router.navigateByUrl('/login');
-            // Recargar la página
-            window.location.reload();
           });
         },
         error => {
