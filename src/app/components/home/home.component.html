@@ -35,7 +35,7 @@
             </div>
         </ng-template>
           <div class="acciones">
-            <p><i class="pi pi-heart" style="font-size: 1.5rem;"></i>{{ publicacion.numMeGustas }}</p>
+            <p><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>{{ publicacion.numMeGustas }}</p>
             <p><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
           </div>
         </div>
@@ -74,7 +74,7 @@
               </div>
           </ng-template>
             <div class="acciones">
-              <p><i class="pi pi-heart" style="font-size: 1.5rem;"></i>{{ publicacion.numMeGustas }}</p>
+              <p><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>{{ publicacion.numMeGustas }}</p>
               <p><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
             </div>
           </div>
