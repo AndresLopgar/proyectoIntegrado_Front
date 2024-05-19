@@ -72,6 +72,8 @@ export class PerfilComponent implements OnInit {
   publicacionTemporal!: Publicacion;
   publicacionEnEdicion: number | null = null;
   contenidoTemporal: string = '';
+  isDadoMeGusta: boolean = false;
+  publicacionesLiked: Set<number> = new Set();
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -82,6 +84,7 @@ export class PerfilComponent implements OnInit {
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
         this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
+        console.log(localStorage.getItem('usuario'));
   
         // Actualizar el idCreador después de obtenerlo del localStorage
         this.compania = {
@@ -109,6 +112,27 @@ export class PerfilComponent implements OnInit {
       }
     });
   }
+
+  darMeGusta(publicacion: Publicacion) {
+    // Verifica si el usuario ha dado "Me Gusta" a esta publicación
+    const haDadoMeGusta = this.publicacionesLiked.has(publicacion.id);
+  
+    // Actualiza el contador de "Me Gusta" en la interfaz y la lista de "Me Gusta" del usuario
+    if (haDadoMeGusta) {
+      publicacion.numMeGustas--;
+      this.publicacionesLiked.delete(publicacion.id);
+    } else {
+      publicacion.numMeGustas++;
+      this.publicacionesLiked.add(publicacion.id);
+    }
+  
+    // Llama al servicio para actualizar la publicación en la base de datos
+    this.publicacionService.updatePublicacion(publicacion.id, publicacion).subscribe(() => {
+    });
+  }
+  
+  
+  
 
   getAllpublicacionesActualByUsario(id: number) {
     this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
@@ -352,11 +376,26 @@ cerrarDialogo() {
   
   
 
-  eliminarUsuario() {
-    // Llamar al servicio para eliminar el usuario
-    this.usuarioService.deleteUsuario(this.usuarioIdFromLocalStorage)
-      .subscribe(
+  async eliminarUsuario() {
+    // Mostrar un cuadro de diálogo de confirmación con SweetAlert
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Esta acción eliminará el usuario y no se podrá deshacer más tarde.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    // Verificar la opción seleccionada por el usuario
+    if (result.isConfirmed) {
+      // Llamar al servicio para eliminar el usuario
+      this.usuarioService.deleteUsuario(this.usuarioIdFromLocalStorage).subscribe(
         () => {
+          localStorage.removeItem('usuario');
+          localStorage.setItem('tipoUsuario', 'noRegistrado');
           // SweetAlert para eliminar correctamente
           Swal.fire({
             title: '¡Usuario eliminado!',
@@ -365,11 +404,7 @@ cerrarDialogo() {
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK'
           }).then(() => {
-            // Eliminar datos del usuario del LocalStorage
-            localStorage.removeItem('usuario');
-            localStorage.setItem('tipoUsuario', 'noRegistrado');
-            // Navegar a la página de inicio de sesión
-            this.router.navigateByUrl('/login');
+            window.location.href = '/login';
           });
         },
         error => {
@@ -384,6 +419,10 @@ cerrarDialogo() {
           console.error('Error al eliminar el usuario:', error);
         }
       );
+    } else {
+      // El usuario ha cancelado la acción
+      console.log('La acción ha sido cancelada');
+    }
   }
   
 

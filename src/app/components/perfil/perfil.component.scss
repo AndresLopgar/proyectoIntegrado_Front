@@ -41,21 +41,38 @@
                 border: 2px solid white;
                 border-radius: 10px;
 
-                textArea{
-                    &::-webkit-scrollbar {
+                .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 1rem;
+                  
+                    label {
+                      margin-bottom: 0.5rem;
+                      color: white;
+                    }
+                  
+                    textarea {
+                      resize: vertical;
+                      border-radius: 4px;
+                      padding: 0.5rem;
+                      border: 1px solid #ccc;
+                      font-size: 1rem;
+                  
+                      &::-webkit-scrollbar {
                         width: 10px;
-                    }
-                
-                    &::-webkit-scrollbar-track {
+                      }
+                  
+                      &::-webkit-scrollbar-track {
                         background: var(--color-primario);
-                    }
-                
-                    &::-webkit-scrollbar-thumb {
+                      }
+                  
+                      &::-webkit-scrollbar-thumb {
                         background-color: var(--color-enlaces-hover);
                         border-radius: 10px;
                         border: solid 2px var(--color-primario);
+                      }
                     }
-                }
+                  }
 
                 .contenido{
                     margin-top: 2%;
@@ -92,6 +109,7 @@
 
                     p{
                         margin-bottom: 1%;
+                        cursor: pointer;
                     }
                     
 

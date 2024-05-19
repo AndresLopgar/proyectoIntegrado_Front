@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [ButtonModule, FormsModule, CommonModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   @ViewChild('loginForm') loginForm!: NgForm; // Referencia al formulario

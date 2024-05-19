@@ -83,17 +83,19 @@
             </div>
             <p style="margin-bottom: 0;">Fecha de Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
             <div class="acciones botones">
-              <p ><i class="pi pi-heart" style="font-size: 1.5rem;"></i>{{ publicacion.numMeGustas}}</p>
+              <p ><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>{{ publicacion.numMeGustas}}</p>
               <p ><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
-                <button type="button" (click)="mostrarFormularioUpdatePublicacion(publicacion.id, publicacion.contenido)" pButton>Editar</button>
-                <button type="button" (click)="eliminarPublicacion(publicacion.id)" pButton>Eliminar</button>
+              <button type="button" (click)="mostrarFormularioUpdatePublicacion(publicacion.id, publicacion.contenido)" pButton>Editar</button>
+              <button type="button" (click)="eliminarPublicacion(publicacion.id)" pButton>Eliminar</button>
             </div>
             <form *ngIf="publicacion.id === publicacionEnEdicion">
-              <label for="contenidoPublicacion">Contenido de la Publicación:</label>
-              <textarea id="contenidoPublicacion" name="contenidoPublicacion" rows="4" cols="40" [(ngModel)]="contenidoTemporal"></textarea>
+              <div class="form-group">
+                <label for="contenidoPublicacion">Contenido de la Publicación:</label>
+                <textarea id="contenidoPublicacion" name="contenidoPublicacion" rows="4" cols="20" [(ngModel)]="contenidoTemporal"></textarea>
+              </div>  
               <div class="botones">
-                  <button type="button" (click)="guardarPublicacion(publicacion.id)" pButton>Guardar</button>
-                  <button type="button" (click)="cancelarPublicacion()" pButton>Cancelar</button>
+                <button type="button" (click)="guardarPublicacion(publicacion.id)" pButton>Guardar</button>
+                <button type="button" (click)="cancelarPublicacion()" pButton>Cancelar</button>
               </div>
             </form>
           </div>

@@ -38,6 +38,7 @@ export class HomeComponent implements OnInit {
 
   mostrarCrear: boolean = false;
   companiasCargadas: { [id: number]: Compania } = {};
+  publicacionesLiked: Set<number> = new Set();
 
   constructor(private usuarioService: UsuarioService, 
     private publicacionService: PublicacionService,
@@ -150,6 +151,19 @@ export class HomeComponent implements OnInit {
         );
       }
     );
+  }
+
+  darMeGusta(publicacion: Publicacion) {
+    if (this.publicacionesLiked.has(publicacion.id)) {
+      publicacion.numMeGustas--;
+      this.publicacionesLiked.delete(publicacion.id); // Quitar la publicación de las que tienen "Me Gusta"
+    } else {
+      publicacion.numMeGustas++;
+      this.publicacionesLiked.add(publicacion.id); // Agregar la publicación a las que tienen "Me Gusta"
+    }
+    // Actualizar la publicación en el servicio
+    this.publicacionService.updatePublicacion(publicacion.id, publicacion).subscribe(() => {
+    });
   }
   
 
