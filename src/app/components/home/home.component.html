@@ -3,43 +3,48 @@
     <div class="col-md-8 order-0 order-md-0">
       <h1>Publicaciones</h1>
       <!--Si el usuario si ha iniciado sesión-->
-      <div *ngIf="noHayUsuarioIniciado === true">
+      <!-- Verifica si hay usuarios cargados -->
+      <div *ngIf="noHayUsuarioIniciado">
         <div *ngFor="let publicacion of publicaciones" class="publicaciones">
-          <ng-container *ngIf="publicacion.idCompania === null; else companiaContent">
+          <!-- Verifica si hay un usuario asociado a la publicación -->
+          <ng-container *ngIf="publicacion.idUsuario && publicacion.idCompania === 0">
             <!-- Si idCompania es null -->
             <div class="contenido" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" style="cursor: pointer;">
-                <p>Contenido: {{ publicacion.contenido }}</p>
+              <p>Contenido: {{ publicacion.contenido }}</p>
             </div>
-        </ng-container>
-        <!-- Si idCompania no es null -->
-        <ng-template #companiaContent>
+            <div class="acciones">
+              <!-- Verifica si el usuario asociado a la publicación tiene una foto de perfil -->
+              <img *ngIf="usuariosCargados[publicacion.idUsuario].fotoPerfil" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+              <!-- Muestra el nombre del usuario asociado a la publicación -->
+              <p *ngIf="usuariosCargados[publicacion.idUsuario].nombre" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])">{{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
+              <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+            </div>
+          </ng-container>
+          <!-- Si no hay usuario asociado a la publicación -->
+          <ng-container *ngIf="publicacion.idUsuario && publicacion.idCompania !== 0">
+            <!-- Si idCompania no es null -->
             <div class="contenido" (click)="irAlPerfilCompania(companiasCargadas[publicacion.idCompania])" style="cursor: pointer;">
-                <p>Contenido: {{ publicacion.contenido }}</p>
+              <p>Contenido: {{ publicacion.contenido }}</p>
             </div>
-        </ng-template>
-          <ng-container *ngIf="publicacion.idCompania === null; else companiaInfo">
-            <!-- Si idCompania es null -->
             <div class="acciones">
-                <img *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
-                <p *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" style="cursor: pointer;">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
-                <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+              <!-- Verifica si la compañía asociada a la publicación tiene una foto de perfil -->
+              <img *ngIf="companiasCargadas[publicacion.idCompania].fotoPerfil" (click)="irAlPerfilCompania(companiasCargadas[publicacion.idCompania])" [src]="companiasCargadas[publicacion.idCompania].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+              <!-- Muestra el nombre de la compañía asociada a la publicación -->
+              <p *ngIf="companiasCargadas[publicacion.idCompania].nombre" (click)="irAlPerfilCompania(companiasCargadas[publicacion.idCompania])">{{ companiasCargadas[publicacion.idCompania].nombre }}</p>
+              <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
             </div>
-        </ng-container>
-        <!-- Si idCompania no es null -->
-        <ng-template #companiaInfo>
-            <div class="acciones">
-                <!-- Utilizar companiasCargadas en lugar de usuariosCargados -->
-                <img *ngIf="companiasCargadas[publicacion.idCompania]" (click)="irAlPerfilCompania(companiasCargadas[publicacion.idCompania])" [src]="companiasCargadas[publicacion.idCompania].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
-                <p *ngIf="companiasCargadas[publicacion.idCompania]" (click)="irAlPerfilCompania(companiasCargadas[publicacion.idCompania])" style="cursor: pointer;">Publicado por: {{ companiasCargadas[publicacion.idCompania].nombre }}</p>
-                <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
-            </div>
-        </ng-template>
+          </ng-container>
           <div class="acciones">
             <p><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>{{ publicacion.numMeGustas }}</p>
             <p><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
           </div>
         </div>
+        <div *ngIf="publicaciones.length == 0">
+          <p>No hay publicaciones</p>
+        </div>
       </div>
+      
+
 
       <!--Si el usuario no ha iniciado sesión-->
       <div *ngIf="noHayUsuarioIniciado === false">

@@ -197,7 +197,7 @@ export class PerfilComponent implements OnInit {
     this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
         publicaciones => {
             // Filtrar las publicaciones cuyo idCompania no sea null
-            this.publicacionesActual = publicaciones.filter(publicacion => publicacion.idCompania == null);
+            this.publicacionesActual = publicaciones.filter(publicacion => publicacion.idCompania == 0);
   })
 }
 
@@ -206,7 +206,7 @@ getAllpublicacionesNoActualByUsario(id: number) {
     this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
         publicaciones => {
             // Filtrar las publicaciones cuyo idCompania no sea null
-            this.publicacionesNoActual = publicaciones.filter(publicacion => publicacion.idCompania == null);
+            this.publicacionesNoActual = publicaciones.filter(publicacion => publicacion.idCompania == 0);
         }
     )
 }

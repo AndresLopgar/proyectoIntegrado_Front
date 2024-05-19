@@ -72,7 +72,8 @@ export class CompaniaComponent  implements OnInit{
           meGusta: false,
           numMeGustas: 0,
           idUsuario: this.usuarioId,
-          idCompania: this.companiaId
+          idCompania: this.companiaId,
+          comentarios: []
         };
       }
       this.getAllPublicacionesByCompaniaId(this.companiaId);

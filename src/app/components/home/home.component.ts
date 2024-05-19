@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { Router, RouterLink } from '@angular/router';
 import { CompaniaService } from '../../services/compania.service';
 import { Compania } from '../../model/compania';
+import { ComentarioService } from '../../services/comentario.service';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +34,8 @@ export class HomeComponent implements OnInit {
     meGusta: false,
     numMeGustas: 0,
     idUsuario: 0,
-    idCompania: 0
+    idCompania: 0,
+    comentarios: []
   };
 
   mostrarCrear: boolean = false;
@@ -42,13 +44,16 @@ export class HomeComponent implements OnInit {
 
   constructor(private usuarioService: UsuarioService, 
     private publicacionService: PublicacionService,
-    private companiaService: CompaniaService, 
+    private companiaService: CompaniaService,
+    private comentarioService: ComentarioService, 
     private router: Router) { 
     const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
         this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
         this.noHayUsuarioIniciado = true;
+      }else{
+        this.noHayUsuarioIniciado = false;
       }
   }
 
@@ -71,6 +76,7 @@ export class HomeComponent implements OnInit {
               }
               // También puedes cargar el usuario asociado a la publicación si es necesario
               this.loadUsuarioById(publicacion.idUsuario);
+              this.loadComentariosByPublicacionId(publicacion.id);
           });
       }
   );
@@ -84,6 +90,22 @@ export class HomeComponent implements OnInit {
       (error) => {
         // Manejar errores
         console.error('Error al cargar compañía por ID:', error);
+      }
+    );
+  }
+
+  loadComentariosByPublicacionId(idPublicacion: number) {
+    this.comentarioService.getComentariosByPublicacionId(idPublicacion).subscribe(
+      comentarios => {
+        // Encuentra la publicación correspondiente
+        const publicacion = this.publicaciones.find(pub => pub.id === idPublicacion);
+        // Asigna los comentarios a la propiedad de comentarios de la publicación
+        if (publicacion) {
+          publicacion.comentarios = comentarios;
+        }
+      },
+      error => {
+        console.error('Error al cargar comentarios de la publicación:', error);
       }
     );
   }
@@ -134,6 +156,8 @@ export class HomeComponent implements OnInit {
   
     this.publicacionService.createPublicacion(this.publicacion).subscribe(
       id => {
+        // Asignar el ID devuelto por el servicio a la publicación
+        this.publicacion.id = id;
         Swal.fire(
           'Publicación creada',
           'La publicación se ha creado correctamente.',
@@ -152,6 +176,7 @@ export class HomeComponent implements OnInit {
       }
     );
   }
+  
 
   darMeGusta(publicacion: Publicacion) {
     if (this.publicacionesLiked.has(publicacion.id)) {

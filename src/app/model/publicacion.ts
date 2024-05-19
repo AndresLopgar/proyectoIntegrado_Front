@@ -1,3 +1,5 @@
+import { Comentario } from "./comentario";
+
 export class Publicacion{
     id!: number;
     contenido!: string;
@@ -6,4 +8,5 @@ export class Publicacion{
     numMeGustas!:number;
     idUsuario!: number;
     idCompania!: number;
+    comentarios!: Comentario[];
 }
