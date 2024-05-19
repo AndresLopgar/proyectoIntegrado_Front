@@ -36,7 +36,24 @@
           </ng-container>
           <div class="acciones">
             <p><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>{{ publicacion.numMeGustas }}</p>
-            <p><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
+            <p><i class="pi pi-comment" style="font-size: 1.5rem" (click)="mostrarCrearComentario(publicacion.id)"></i></p>
+          </div>
+          <!-- Formulario de comentario -->
+          <form *ngIf="publicacion.id === publicacionComentar">
+            <div class="form-group">
+              <label for="contenidoComentario">Contenido del Comentario:</label>
+              <textarea id="contenidoComentario" name="contenidoComentario" rows="4" cols="40" [(ngModel)]="comentario.contenido"></textarea>
+            </div>  
+            <div class="botones">
+              <button type="button" (click)="crearComentario(publicacion, comentario.contenido)" pButton>{{ textoBotonComentario }}</button>
+              <button type="button" (click)="cancelarComentario()" pButton>Cancelar</button>
+            </div>
+          </form>
+          <div class="comentarios">
+            <div *ngFor="let comentario of publicacion.comentarios" class="comentario">
+              <p>{{ comentario.contenido }}</p>
+              <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
+            </div>
           </div>
         </div>
         <div *ngIf="publicaciones.length == 0">
@@ -79,8 +96,8 @@
               </div>
           </ng-template>
             <div class="acciones">
-              <p><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>{{ publicacion.numMeGustas }}</p>
-              <p><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
+              <p><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="irAlLogin()"></i>{{ publicacion.numMeGustas }}</p>
+              <p><i class="pi pi-comment" style="font-size: 1.5rem" (click)="irAlLogin()"></i></p>
             </div>
           </div>
           <div *ngIf="publicaciones.length == 0">

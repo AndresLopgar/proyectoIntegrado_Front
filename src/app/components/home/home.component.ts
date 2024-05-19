@@ -11,6 +11,7 @@ import { Router, RouterLink } from '@angular/router';
 import { CompaniaService } from '../../services/compania.service';
 import { Compania } from '../../model/compania';
 import { ComentarioService } from '../../services/comentario.service';
+import { Comentario } from '../../model/comentario';
 
 @Component({
   selector: 'app-home',
@@ -41,6 +42,15 @@ export class HomeComponent implements OnInit {
   mostrarCrear: boolean = false;
   companiasCargadas: { [id: number]: Compania } = {};
   publicacionesLiked: Set<number> = new Set();
+  publicacionComentar: number | null = null; // ID de la publicación para la cual se está creando un comentario
+  comentario: Comentario = {
+    id: 0,
+    contenido: "",
+    fechaComentario: "",
+    idUsuario: 0,
+    idPublicacion: 0
+  };
+  textoBotonComentario: string = "Comentar"; // Texto dinámico para el botón de comentario
 
   constructor(private usuarioService: UsuarioService, 
     private publicacionService: PublicacionService,
@@ -52,7 +62,7 @@ export class HomeComponent implements OnInit {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
         this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
         this.noHayUsuarioIniciado = true;
-      }else{
+      } else {
         this.noHayUsuarioIniciado = false;
       }
   }
@@ -69,17 +79,19 @@ export class HomeComponent implements OnInit {
 
     this.publicacionService.getAllPublicaciones().subscribe(
       publicaciones => {
-          this.publicaciones = publicaciones;
-          this.publicaciones.forEach(publicacion => {
-              if (publicacion.idCompania !== null) {
-                  this.loadCompaniaById(publicacion.idCompania);
-              }
-              // También puedes cargar el usuario asociado a la publicación si es necesario
-              this.loadUsuarioById(publicacion.idUsuario);
-              this.loadComentariosByPublicacionId(publicacion.id);
-          });
+        this.publicaciones = publicaciones;
+        this.publicaciones.forEach(publicacion => {
+          if (publicacion.idCompania !== null) {
+            this.loadCompaniaById(publicacion.idCompania);
+          }
+          this.loadUsuarioById(publicacion.idUsuario);
+          this.loadComentariosForPublicacion(publicacion); // Cargar comentarios para esta publicación
+        });
+      },
+      error => {
+        console.error('Error al cargar las publicaciones:', error);
       }
-  );
+    );
   
   }
   loadCompaniaById(idCompania: number) {
@@ -88,27 +100,27 @@ export class HomeComponent implements OnInit {
         this.companiasCargadas[idCompania] = compania;
       },
       (error) => {
-        // Manejar errores
         console.error('Error al cargar compañía por ID:', error);
       }
     );
   }
 
-  loadComentariosByPublicacionId(idPublicacion: number) {
+  loadComentariosForPublicacion(publicacion: Publicacion) {
+    // Obtener el ID de la publicación
+    const idPublicacion = publicacion.id;
+    // Hacer la llamada al servicio de comentarios para cargar los comentarios de esta publicación
     this.comentarioService.getComentariosByPublicacionId(idPublicacion).subscribe(
       comentarios => {
-        // Encuentra la publicación correspondiente
-        const publicacion = this.publicaciones.find(pub => pub.id === idPublicacion);
-        // Asigna los comentarios a la propiedad de comentarios de la publicación
-        if (publicacion) {
-          publicacion.comentarios = comentarios;
-        }
+        // Asignar los comentarios a la publicación
+        publicacion.comentarios = comentarios;
       },
       error => {
-        console.error('Error al cargar comentarios de la publicación:', error);
+        console.error(`Error al cargar comentarios para la publicación ${idPublicacion}:`, error);
       }
     );
   }
+  
+  
 
   irAlPerfilUsuario(usuario: Usuario) {
     this.router.navigate(['/perfil', usuario.id]);
@@ -138,7 +150,6 @@ export class HomeComponent implements OnInit {
   }
 
   cerrarCrearPublicacion() {
-    // Mostrar un mensaje de advertencia al cancelar la creación de la publicación
     Swal.fire({
       icon: 'warning',
       title: 'Advertencia',
@@ -156,7 +167,6 @@ export class HomeComponent implements OnInit {
   
     this.publicacionService.createPublicacion(this.publicacion).subscribe(
       id => {
-        // Asignar el ID devuelto por el servicio a la publicación
         this.publicacion.id = id;
         Swal.fire(
           'Publicación creada',
@@ -181,15 +191,58 @@ export class HomeComponent implements OnInit {
   darMeGusta(publicacion: Publicacion) {
     if (this.publicacionesLiked.has(publicacion.id)) {
       publicacion.numMeGustas--;
-      this.publicacionesLiked.delete(publicacion.id); // Quitar la publicación de las que tienen "Me Gusta"
+      this.publicacionesLiked.delete(publicacion.id); 
     } else {
       publicacion.numMeGustas++;
-      this.publicacionesLiked.add(publicacion.id); // Agregar la publicación a las que tienen "Me Gusta"
+      this.publicacionesLiked.add(publicacion.id); 
     }
-    // Actualizar la publicación en el servicio
     this.publicacionService.updatePublicacion(publicacion.id, publicacion).subscribe(() => {
     });
   }
   
+  crearComentario(publicacion: Publicacion, contenido: string) {
+    const nuevoComentario: Comentario = {
+      id: 0,
+      contenido: contenido,
+      fechaComentario: new Date().toISOString(),
+      idUsuario: this.usuarioIdFromLocalStorage,
+      idPublicacion: publicacion.id
+    };
+  
+    this.comentarioService.createComentario(nuevoComentario).subscribe(
+      id => {
+        // Asignar el ID devuelto por el servicio al comentario
+        nuevoComentario.id = id;
+        // Agregar el nuevo comentario a la lista de comentarios de la publicación
+        publicacion.comentarios.push(nuevoComentario);
+        // Mostrar mensaje de éxito
+        Swal.fire({
+          icon: 'success',
+          title: 'Comentario creado',
+          text: 'El comentario ha sido creado correctamente.'
+        });
+        this.publicacionComentar = null;
+      },
+      error => {
+        // Mostrar mensaje de error
+        console.error('Error al crear el comentario:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ha ocurrido un error al crear el comentario. Por favor, inténtalo de nuevo.'
+        });
+      }
+    );
+  }
+  
 
+  mostrarCrearComentario(idPublicacion: number) {
+    this.publicacionComentar = idPublicacion;
+    this.textoBotonComentario = "Comentar"; // Restaurar texto del botón a su estado original
+  }
+
+  cancelarComentario() {
+    this.publicacionComentar = null;
+    this.comentario.contenido = "";
+  }
 }

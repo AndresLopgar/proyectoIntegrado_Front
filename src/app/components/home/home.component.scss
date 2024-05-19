@@ -43,6 +43,71 @@
                 border: 2px solid white;
                 border-radius: 10px;
 
+                .comentarios{
+                    margin-top: 1%;
+                    display: flex;
+                    flex-direction: row;
+                    border-top: 2px solid white;
+                }
+
+                .form-group {
+                    border-top: 2px solid white;
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 1rem;
+                  
+                    label {
+                      margin-bottom: 0.5rem;
+                      color: white;
+                    }
+                  
+                    textarea {
+                      resize: vertical;
+                      border-radius: 4px;
+                      padding: 0.5rem;
+                      border: 1px solid #ccc;
+                      font-size: 1rem;
+                  
+                      &::-webkit-scrollbar {
+                        width: 10px;
+                      }
+                  
+                      &::-webkit-scrollbar-track {
+                        background: var(--color-primario);
+                      }
+                  
+                      &::-webkit-scrollbar-thumb {
+                        background-color: var(--color-enlaces-hover);
+                        border-radius: 10px;
+                        border: solid 2px var(--color-primario);
+                      }
+                    }
+                  }
+
+                .botones {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    
+                    :hover {
+                        box-shadow: 0px 0px 20px 0px var(--color-enlaces-hover);
+                    }
+    
+                    .p-button {
+                        width: 40%;
+                        margin: 10px 10px;
+                        border-radius: 10px;
+                        background-color: white !important;
+                        color: black;
+                        border-color: black;
+                        display: flex;
+                        justify-content: center; /* Centrar horizontalmente */
+                        align-items: center; /* Centrar verticalmente */
+                    }
+    
+                }
+
                 .contenido{
                     margin-top: 2%;
                     border-bottom: 1px solid white;
@@ -131,10 +196,6 @@
                     display: flex;
                     justify-content: center; /* Centrar horizontalmente */
                     align-items: center; /* Centrar verticalmente */
-
-                    i{
-                        margin-left: 5%;
-                    }
                 }
 
             }
