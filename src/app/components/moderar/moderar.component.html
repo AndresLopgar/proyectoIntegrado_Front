@@ -1,3 +1,14 @@
 <div class="container">
-    <p>Este es el componente Moderar</p>
+    <div *ngFor="let comentario of comentariosCargados" class="comentarios">
+            <!-- Mostrar el nombre del usuario -->
+            <p>{{ comentario.idUsuario }}</p>
+    
+            <!-- Mostrar el contenido del comentario -->
+            <p>{{ comentario.contenido }}</p>
+    
+            <!-- Mostrar la fecha del comentario -->
+            <p>{{ comentario.fechaComentario | date }}</p>
+
+            <button (click)="eliminarComentario(comentario.id)">Eliminar Comentario</button>
+    </div>
 </div>

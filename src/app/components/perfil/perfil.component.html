@@ -84,10 +84,23 @@
             <p style="margin-bottom: 0;">Fecha de Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
             <div class="acciones botones">
               <p ><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>{{ publicacion.numMeGustas}}</p>
-              <p ><i class="pi pi-comment" style="font-size: 1.5rem"></i></p>
+              <p><i class="pi pi-comment" style="font-size: 1.5rem" (click)="mostrarCrearComentario(publicacion.id)"></i></p>
               <button type="button" (click)="mostrarFormularioUpdatePublicacion(publicacion.id, publicacion.contenido)" pButton>Editar</button>
               <button type="button" (click)="eliminarPublicacion(publicacion.id)" pButton>Eliminar</button>
             </div>
+            <!-- Formulario de comentario -->
+            <form *ngIf="publicacion.id === publicacionComentar">
+              <div class="form-group">
+                <label for="contenidoComentario">Contenido del Comentario:</label>
+                <textarea id="contenidoComentario" name="contenidoComentario" rows="4" cols="20" [(ngModel)]="comentario.contenido"></textarea>
+              </div>  
+              <div class="botones">
+                <button type="button" (click)="crearComentario(publicacion.id)" pButton>{{ textoBotonComentario }}</button>
+                <button type="button" (click)="cancelarComentario()" pButton>Cancelar</button>
+              </div>
+            </form>
+
+            <!--form para modificar la publicación-->
             <form *ngIf="publicacion.id === publicacionEnEdicion">
               <div class="form-group">
                 <label for="contenidoPublicacion">Contenido de la Publicación:</label>

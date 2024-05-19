@@ -12,6 +12,8 @@ import { AmistadService } from '../../services/amistad.service';
 import { Amistad } from '../../model/amistad';
 import { PublicacionService } from '../../services/publicacion.service';
 import { Publicacion } from '../../model/publicacion';
+import { Comentario } from '../../model/comentario';
+import { ComentarioService } from '../../services/comentario.service';
 
 @Component({
   selector: 'app-perfil',
@@ -29,7 +31,8 @@ export class PerfilComponent implements OnInit {
     private router: Router, 
     private companiaService: CompaniaService,
     private amistadService: AmistadService,
-    private publicacionService: PublicacionService) { }
+    private publicacionService: PublicacionService,
+    private comentarioService: ComentarioService) { }
   
   usuarioStorage!: Usuario;
   companias: Compania[] = [];
@@ -71,9 +74,13 @@ export class PerfilComponent implements OnInit {
   publicacionesNoActual: Publicacion[] = [];
   publicacionTemporal!: Publicacion;
   publicacionEnEdicion: number | null = null;
+  publicacionComentar: number | null = null;
   contenidoTemporal: string = '';
   isDadoMeGusta: boolean = false;
   publicacionesLiked: Set<number> = new Set();
+  comentario!: Comentario;
+  mostrarFormularioComentario: boolean = false;
+  textoBotonComentario: string = 'Comentar';
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -84,7 +91,6 @@ export class PerfilComponent implements OnInit {
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
         this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
-        console.log(localStorage.getItem('usuario'));
   
         // Actualizar el idCreador después de obtenerlo del localStorage
         this.compania = {
@@ -108,6 +114,14 @@ export class PerfilComponent implements OnInit {
           idSeguidor: 0,
           idSeguido: 0
         };
+
+        this.comentario = {
+          id:0,
+          contenido:"",
+          fechaComentario:"",
+          idPublicacion:0,
+          idUsuario:this.usuarioIdFromLocalStorage
+        }
         this.getAmistadesBySeguidorySeguido(this.usuarioIdFromLocalStorage);
       }
     });
@@ -131,17 +145,62 @@ export class PerfilComponent implements OnInit {
     });
   }
   
+  crearComentario(idPublicacion: number) {
+    this.comentario.fechaComentario = new Date().toISOString();
+    this.comentario.idPublicacion = idPublicacion;
+  
+    // Llamar al servicio para crear el comentario
+    this.comentarioService.createComentario(this.comentario).subscribe(
+      (id) => {
+        console.log("Comentario creado correctamente con ID: " + id);
+        // Cerrar el formulario de comentario y mostrar una alerta de éxito
+        this.mostrarFormularioComentario = false;
+        Swal.fire({
+          icon: 'success',
+          title: 'Comentario creado',
+          text: 'El comentario ha sido creado correctamente.'
+        });
+      },
+      (error) => {
+        console.error("Error al crear el comentario:", error);
+        // Mostrar una alerta de error si ocurre un problema al crear el comentario
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ha ocurrido un error al crear el comentario. Por favor, inténtalo de nuevo.'
+        });
+      }
+    );
+  }
+
+  mostrarCrearComentario(id: number){
+    this.publicacionComentar = id;
+    this.mostrarFormularioComentario = true;
+  }
+  
+  cancelarComentario() {
+    this.publicacionComentar = null;
+  
+    // Mostrar una alerta de cancelación
+    Swal.fire({
+        icon: 'info',
+        title: 'Creación cancelada',
+        text: 'Se ha cancelado la creación del comentario.'
+    });
+}
+
   
   
 
   getAllpublicacionesActualByUsario(id: number) {
+    // Obtener todas las publicaciones del usuario
     this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
         publicaciones => {
             // Filtrar las publicaciones cuyo idCompania no sea null
             this.publicacionesActual = publicaciones.filter(publicacion => publicacion.idCompania == null);
-        }
-    )
+  })
 }
+
 
 getAllpublicacionesNoActualByUsario(id: number) {
     this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
