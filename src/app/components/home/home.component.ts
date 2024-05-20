@@ -162,9 +162,6 @@ export class HomeComponent implements OnInit {
   
 
   irAlPerfilUsuario(usuario: Usuario) {
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
     this.router.navigate(['/perfil', usuario.id]);
   }
 
@@ -173,9 +170,6 @@ export class HomeComponent implements OnInit {
   }
 
   irAlPerfilCompania(compania: Compania) {
-   setTimeout(() => {
-    window.location.reload();
-  }, 2000);
   this.router.navigate(['/compania', compania.id]);
   }
 

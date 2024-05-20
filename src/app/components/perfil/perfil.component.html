@@ -121,7 +121,7 @@
                 <p>{{ comentario.contenido }}</p>
                 <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
                 <div class="botones2">
-                  <button type="button" (click)="eliminarComentario(comentario.id)" pButton>Eliminar</button>
+                  <button type="button" *ngIf="comentario.idUsuario === usuarioIdFromLocalStorage" (click)="eliminarComentario(comentario.id)" pButton>Eliminar</button>
                 </div>
               </div>
             </div>
