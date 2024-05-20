@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   publicaciones: Publicacion[] = [];
   usuarioIdFromLocalStorage!: number;
   noHayUsuarioIniciado: boolean = false;
-  usuariosCargados: { [id: number]: Usuario } = {};
+  usuariosCargados: { [id: number]: Usuario } = [];
   publicacion: Publicacion = {
     id: 0,
     contenido: "",
@@ -71,6 +71,7 @@ export class HomeComponent implements OnInit {
     this.usuarioService.getAllUsuarios().subscribe(
       data => {
         this.usuarios = data;
+        this.cargarInformacionUsuarios();
       },
       error => {
         console.log('Error al recuperar usuarios:', error);
@@ -86,6 +87,8 @@ export class HomeComponent implements OnInit {
           }
           this.loadUsuarioById(publicacion.idUsuario);
           this.loadComentariosForPublicacion(publicacion); // Cargar comentarios para esta publicación
+          console.log(this.usuariosCargados);
+          
         });
       },
       error => {
@@ -94,7 +97,6 @@ export class HomeComponent implements OnInit {
     );
   
   }
-
 
   loadCompaniaById(idCompania: number) {
     this.companiaService.getCompaniaById(idCompania).subscribe(
@@ -188,6 +190,13 @@ export class HomeComponent implements OnInit {
       }
     );
   }
+
+  cargarInformacionUsuarios() {
+    this.usuarios.forEach(usuario => {
+      this.loadUsuarioById(usuario.id);
+    });
+  }
+  
   
 
   darMeGusta(publicacion: Publicacion) {
@@ -213,11 +222,8 @@ export class HomeComponent implements OnInit {
   
     this.comentarioService.createComentario(nuevoComentario).subscribe(
       id => {
-        // Asignar el ID devuelto por el servicio al comentario
         nuevoComentario.id = id;
-        // Agregar el nuevo comentario a la lista de comentarios de la publicación
         publicacion.comentarios.push(nuevoComentario);
-        // Mostrar mensaje de éxito
         Swal.fire({
           icon: 'success',
           title: 'Comentario creado',
@@ -226,7 +232,6 @@ export class HomeComponent implements OnInit {
         this.publicacionComentar = null;
       },
       error => {
-        // Mostrar mensaje de error
         console.error('Error al crear el comentario:', error);
         Swal.fire({
           icon: 'error',

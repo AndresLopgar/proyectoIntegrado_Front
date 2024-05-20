@@ -52,9 +52,9 @@
           <div class="comentarios">
             <div *ngFor="let comentario of publicacion.comentarios" class="comentario">
               <ng-container *ngIf="usuariosCargados[comentario.idUsuario]">
-                <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
                 <!-- Muestra el nombre del usuario -->
-                <p>{{ usuariosCargados[comentario.idUsuario].nombre }}</p>
+                <p (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" style="cursor: pointer;">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
               </ng-container>
               <p>{{ comentario.contenido }}</p>
               <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
@@ -107,9 +107,9 @@
           <div class="comentarios">
             <div *ngFor="let comentario of publicacion.comentarios" class="comentario">
               <ng-container *ngIf="usuariosCargados[comentario.idUsuario]">
-                <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" (click)="irAlLogin()" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
                 <!-- Muestra el nombre del usuario -->
-                <p>comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
+                <p (click)="irAlLogin()" style="cursor: pointer;">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
               </ng-container>
               <p>{{ comentario.contenido }}</p>
               <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
