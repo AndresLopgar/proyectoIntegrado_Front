@@ -9,28 +9,28 @@
           <!-- Verifica si hay un usuario asociado a la publicación -->
           <ng-container *ngIf="publicacion.idUsuario && publicacion.idCompania === 0">
             <!-- Si idCompania es null -->
-            <div class="contenido" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" style="cursor: pointer;">
+            <div class="contenido" (click)="irAlPerfilUsuario(publicacion.idUsuario)" style="cursor: pointer;">
               <p>Contenido: {{ publicacion.contenido }}</p>
             </div>
             <div class="acciones">
               <!-- Verifica si el usuario asociado a la publicación tiene una foto de perfil -->
-              <img *ngIf="usuariosCargados[publicacion.idUsuario].fotoPerfil" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+              <img *ngIf="usuariosCargados[publicacion.idUsuario].fotoPerfil" (click)="irAlPerfilUsuario(publicacion.idUsuario)" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
               <!-- Muestra el nombre del usuario asociado a la publicación -->
-              <p *ngIf="usuariosCargados[publicacion.idUsuario].nombre" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
+              <p *ngIf="usuariosCargados[publicacion.idUsuario].nombre" (click)="irAlPerfilUsuario(publicacion.idUsuario)">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
               <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
             </div>
           </ng-container>
           <!-- Si no hay usuario asociado a la publicación -->
           <ng-container *ngIf="publicacion.idUsuario && publicacion.idCompania !== 0">
             <!-- Si idCompania no es null -->
-            <div class="contenido" (click)="irAlPerfilCompania(companiasCargadas[publicacion.idCompania])" style="cursor: pointer;">
+            <div class="contenido" (click)="irAlPerfilCompania(publicacion.idCompania)" style="cursor: pointer;">
               <p>Contenido: {{ publicacion.contenido }}</p>
             </div>
             <div class="acciones">
               <!-- Verifica si la compañía asociada a la publicación tiene una foto de perfil -->
-              <img *ngIf="companiasCargadas[publicacion.idCompania].fotoPerfil" (click)="irAlPerfilCompania(companiasCargadas[publicacion.idCompania])" [src]="companiasCargadas[publicacion.idCompania].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+              <img *ngIf="companiasCargadas[publicacion.idCompania].fotoPerfil" (click)="irAlPerfilCompania(publicacion.idCompania)" [src]="companiasCargadas[publicacion.idCompania].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
               <!-- Muestra el nombre de la compañía asociada a la publicación -->
-              <p *ngIf="companiasCargadas[publicacion.idCompania].nombre" (click)="irAlPerfilCompania(companiasCargadas[publicacion.idCompania])">{{ companiasCargadas[publicacion.idCompania].nombre }}</p>
+              <p *ngIf="companiasCargadas[publicacion.idCompania].nombre" (click)="irAlPerfilCompania(publicacion.idCompania)">{{ companiasCargadas[publicacion.idCompania].nombre }}</p>
               <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
             </div>
           </ng-container>
@@ -52,14 +52,14 @@
           <div class="comentarios">
             <div *ngFor="let comentario of publicacion.comentarios" class="comentario">
               <ng-container *ngIf="usuariosCargados[comentario.idUsuario]">
-                <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" (click)="irAlPerfilUsuario(comentario.idUsuario)" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
                 <!-- Muestra el nombre del usuario -->
-                <p (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" style="cursor: pointer;">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
+                <p (click)="irAlPerfilUsuario(comentario.idUsuario)" style="cursor: pointer;">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
               </ng-container>
               <p>{{ comentario.contenido }}</p>
               <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
-              <div class="botones">
-                <button *ngIf="comentario.idUsuario === usuarioIdFromLocalStorage" type="button" (click)="eliminarComentario(publicacion, comentario, comentario.idUsuario)">Eliminar</button>
+              <div class="botones2">
+                <button *ngIf="comentario.idUsuario === usuarioIdFromLocalStorage" type="button" (click)="eliminarComentario(publicacion, comentario, comentario.idUsuario)" pButton>Eliminar</button>
               </div>
             </div>
           </div>

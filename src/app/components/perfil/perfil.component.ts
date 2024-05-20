@@ -86,7 +86,6 @@ export class PerfilComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.usuarioId = +params['id'];
-      // Cargar el perfil del usuario utilizando el ID
       this.loadUsuarioById(this.usuarioId);     
       const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
@@ -105,8 +104,8 @@ export class PerfilComponent implements OnInit {
         };
 
         // Llamar a loadCompaniasByIdCreador después de obtener usuarioIdFromLocalStorage
-        this.loadCompaniaByIdCreador(this.usuarioIdFromLocalStorage);
-        this.loadCompaniaById(this.usuarioIdFromLocalStorage);
+        this.loadCompaniaByIdCreador(this.usuarioId);
+        this.loadCompaniaById(this.usuarioId);
         this.getAllpublicacionesActualByUsario(this.usuarioIdFromLocalStorage);
         this.getAllpublicacionesNoActualByUsario(this.usuarioId);
 
@@ -123,7 +122,7 @@ export class PerfilComponent implements OnInit {
           idPublicacion:0,
           idUsuario:this.usuarioIdFromLocalStorage
         }
-        this.getAmistadesBySeguidorySeguido(this.usuarioIdFromLocalStorage);
+        this.getAmistadesBySeguidorySeguido(this.usuarioId);
       }
     });
   }
@@ -218,8 +217,16 @@ loadComentariosForPublicacion(publicacion: Publicacion) {
   this.comentarioService.getComentariosByPublicacionId(idPublicacion).subscribe(
     comentarios => {
       publicacion.comentarios = comentarios;
-      comentarios.forEach(comentario => {
-        this.loadUsuarioById(comentario.idUsuario);
+      publicacion.comentarios.forEach(comentario => {
+        // Verificar si el usuario asociado al comentario ya está cargado
+        if (!this.usuariosCargados[comentario.idUsuario]) {
+          // Si no está cargado, cargarlo y agregarlo a usuariosCargados
+          this.usuarioService.getUsuarioById(comentario.idUsuario).subscribe(
+            usuario=> {
+              this.usuariosCargados[comentario.idUsuario] = usuario;
+            }
+          )
+        }
       });
     },
     error => {
@@ -428,7 +435,6 @@ cerrarDialogo() {
         this.usuario = usuario;
         this.usuarioTemporal = usuario;
         this.usuariosCargados[id] = usuario;
-        // Después de cargar el usuario, cargamos la compañía utilizando el atributo companiaSeguida
         if (usuario.companiaSeguida) {
           this.loadCompaniaById(usuario.companiaSeguida);
         } else {
@@ -440,6 +446,7 @@ cerrarDialogo() {
       }
     );
   }
+  
 
 
   crearCompania() {

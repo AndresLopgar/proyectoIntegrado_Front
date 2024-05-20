@@ -71,7 +71,6 @@ export class HomeComponent implements OnInit {
     this.usuarioService.getAllUsuarios().subscribe(
       data => {
         this.usuarios = data;
-        this.cargarInformacionUsuarios();
       },
       error => {
         console.log('Error al recuperar usuarios:', error);
@@ -87,8 +86,6 @@ export class HomeComponent implements OnInit {
           }
           this.loadUsuarioById(publicacion.idUsuario);
           this.loadComentariosForPublicacion(publicacion); // Cargar comentarios para esta publicación
-          console.log(this.usuariosCargados);
-          
         });
       },
       error => {
@@ -145,13 +142,21 @@ export class HomeComponent implements OnInit {
   }
 
   loadComentariosForPublicacion(publicacion: Publicacion) {
-    // Obtener el ID de la publicación
     const idPublicacion = publicacion.id;
-    // Hacer la llamada al servicio de comentarios para cargar los comentarios de esta publicación
     this.comentarioService.getComentariosByPublicacionId(idPublicacion).subscribe(
       comentarios => {
-        // Asignar los comentarios a la publicación
         publicacion.comentarios = comentarios;
+        publicacion.comentarios.forEach(comentario => {
+          // Verificar si el usuario asociado al comentario ya está cargado
+          if (!this.usuariosCargados[comentario.idUsuario]) {
+            // Si no está cargado, cargarlo y agregarlo a usuariosCargados
+            this.usuarioService.getUsuarioById(comentario.idUsuario).subscribe(
+              usuario=> {
+                this.usuariosCargados[comentario.idUsuario] = usuario;
+              }
+            )
+          }
+        });
       },
       error => {
         console.error(`Error al cargar comentarios para la publicación ${idPublicacion}:`, error);
@@ -161,27 +166,33 @@ export class HomeComponent implements OnInit {
   
   
 
-  irAlPerfilUsuario(usuario: Usuario) {
-    this.router.navigate(['/perfil', usuario.id]);
+  irAlPerfilUsuario(idUsuario: number) {
+    // Navegar al perfil del usuario
+    this.router.navigate(['/perfil', idUsuario]);
   }
+  
 
   irAlLogin(){
     this.router.navigate(['/login']);
   }
 
-  irAlPerfilCompania(compania: Compania) {
-  this.router.navigate(['/compania', compania.id]);
+  irAlPerfilCompania(idCompania: number) {
+  this.router.navigate(['/compania', idCompania]);
   }
 
   loadUsuarioById(id: number) {
-    this.usuarioService.getUsuarioById(id).subscribe(
-      (usuario: Usuario) => {
-        this.usuariosCargados[id] = usuario;
-      },
-      error => {
-        console.error('Error al cargar perfil del usuario:', error);
-      }
-    );
+    // Verificar si el usuario ya está cargado
+    if (!this.usuariosCargados[id]) {
+      // Si no está cargado, cargarlo y agregarlo a usuariosCargados
+      this.usuarioService.getUsuarioById(id).subscribe(
+        (usuario: Usuario) => {
+          this.usuariosCargados[id] = usuario;
+        },
+        error => {
+          console.error('Error al cargar perfil del usuario:', error);
+        }
+      );
+    }
   }
 
   mostrarCrearPublicacion(){
@@ -224,15 +235,7 @@ export class HomeComponent implements OnInit {
         );
       }
     );
-  }
-
-  cargarInformacionUsuarios() {
-    this.usuarios.forEach(usuario => {
-      this.loadUsuarioById(usuario.id);
-    });
-  }
-  
-  
+  } 
 
   darMeGusta(publicacion: Publicacion) {
     if (this.publicacionesLiked.has(publicacion.id)) {
