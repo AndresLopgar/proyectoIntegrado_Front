@@ -94,6 +94,8 @@ export class HomeComponent implements OnInit {
     );
   
   }
+
+
   loadCompaniaById(idCompania: number) {
     this.companiaService.getCompaniaById(idCompania).subscribe(
       (compania: Compania) => {

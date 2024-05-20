@@ -16,7 +16,7 @@
               <!-- Verifica si el usuario asociado a la publicación tiene una foto de perfil -->
               <img *ngIf="usuariosCargados[publicacion.idUsuario].fotoPerfil" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
               <!-- Muestra el nombre del usuario asociado a la publicación -->
-              <p *ngIf="usuariosCargados[publicacion.idUsuario].nombre" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])">{{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
+              <p *ngIf="usuariosCargados[publicacion.idUsuario].nombre" (click)="irAlPerfilUsuario(usuariosCargados[publicacion.idUsuario])">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
               <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
             </div>
           </ng-container>
@@ -51,6 +51,11 @@
           </form>
           <div class="comentarios">
             <div *ngFor="let comentario of publicacion.comentarios" class="comentario">
+              <ng-container *ngIf="usuariosCargados[comentario.idUsuario]">
+                <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                <!-- Muestra el nombre del usuario -->
+                <p>{{ usuariosCargados[comentario.idUsuario].nombre }}</p>
+              </ng-container>
               <p>{{ comentario.contenido }}</p>
               <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
             </div>
@@ -66,7 +71,7 @@
       <!--Si el usuario no ha iniciado sesión-->
       <div *ngIf="noHayUsuarioIniciado === false">
         <div *ngFor="let publicacion of publicaciones" class="publicaciones">
-          <ng-container *ngIf="publicacion.idCompania === null; else companiaContent">
+          <ng-container *ngIf="publicacion.idCompania === 0; else companiaContent">
             <!-- Si idCompania es null -->
             <div class="contenido" (click)="irAlLogin()" style="cursor: pointer;">
                 <p>Contenido: {{ publicacion.contenido }}</p>
@@ -78,13 +83,13 @@
                   <p>Contenido: {{ publicacion.contenido }}</p>
               </div>
           </ng-template>
-            <ng-container *ngIf="publicacion.idCompania === null; else companiaInfo">
+            <ng-container *ngIf="publicacion.idCompania === 0; else companiaInfo">
               <!-- Si idCompania es null -->
               <div class="acciones">
                   <img *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlLogin()" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
                   <p *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlLogin()" style="cursor: pointer;">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
                   <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
-              </div>
+                </div>
           </ng-container>
           <!-- Si idCompania no es null -->
           <ng-template #companiaInfo>
@@ -93,12 +98,23 @@
                   <img *ngIf="companiasCargadas[publicacion.idCompania]" (click)="irAlLogin()" [src]="companiasCargadas[publicacion.idCompania].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
                   <p *ngIf="companiasCargadas[publicacion.idCompania]" (click)="irAlLogin()" style="cursor: pointer;">Publicado por: {{ companiasCargadas[publicacion.idCompania].nombre }}</p>
                   <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+                </div>
+              <div class="acciones">
+                <p><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="irAlLogin()"></i>{{ publicacion.numMeGustas }}</p>
+                <p><i class="pi pi-comment" style="font-size: 1.5rem" (click)="irAlLogin()"></i></p>
               </div>
           </ng-template>
-            <div class="acciones">
-              <p><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="irAlLogin()"></i>{{ publicacion.numMeGustas }}</p>
-              <p><i class="pi pi-comment" style="font-size: 1.5rem" (click)="irAlLogin()"></i></p>
+          <div class="comentarios">
+            <div *ngFor="let comentario of publicacion.comentarios" class="comentario">
+              <ng-container *ngIf="usuariosCargados[comentario.idUsuario]">
+                <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                <!-- Muestra el nombre del usuario -->
+                <p>comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
+              </ng-container>
+              <p>{{ comentario.contenido }}</p>
+              <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
             </div>
+          </div>
           </div>
           <div *ngIf="publicaciones.length == 0">
             <p>No hay publicaciones</p>
