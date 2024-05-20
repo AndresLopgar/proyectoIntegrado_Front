@@ -41,6 +41,9 @@ export class BuscarComponent implements OnInit {
   getAllUsuarios() {
     this.usuarioService.getAllUsuarios().subscribe(
       usuarios => {
+        // Filtrar usuarios que no sean admins
+        usuarios = usuarios.filter(usuario => usuario.tipoUsuario !== 'admin');
+
         if (this.usuarioLocalStorage) {
           this.usuarios = usuarios.filter(
             usuario => usuario.id !== this.usuarioLocalStorage?.id

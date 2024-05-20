@@ -98,6 +98,41 @@ export class HomeComponent implements OnInit {
   
   }
 
+  eliminarComentario(publicacion: Publicacion, comentario: Comentario, comentarioIdUsuario: number) {
+    // Verificar si el usuario que inició sesión es el mismo que hizo el comentario
+    if (this.usuarioIdFromLocalStorage === comentarioIdUsuario) {
+      // Lógica para eliminar el comentario
+      this.comentarioService.deleteComentario(comentario.id).subscribe(
+        () => {
+          // Eliminar el comentario del arreglo de comentarios de la publicación
+          publicacion.comentarios = publicacion.comentarios.filter(c => c.id !== comentario.id);
+          // Mostrar un mensaje de éxito
+          Swal.fire({
+            icon: 'success',
+            title: 'Comentario eliminado',
+            text: 'El comentario ha sido eliminado correctamente.'
+          });
+        },
+        error => {
+          console.error('Error al eliminar el comentario:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ha ocurrido un error al eliminar el comentario. Por favor, inténtalo de nuevo.'
+          });
+        }
+      );
+    } else {
+      // Si el usuario no coincide, mostrar un mensaje de error
+      Swal.fire({
+        icon: 'error',
+        title: 'Acceso denegado',
+        text: 'No tienes permiso para eliminar este comentario.'
+      });
+    }
+  }
+  
+
   loadCompaniaById(idCompania: number) {
     this.companiaService.getCompaniaById(idCompania).subscribe(
       (compania: Compania) => {
@@ -127,6 +162,9 @@ export class HomeComponent implements OnInit {
   
 
   irAlPerfilUsuario(usuario: Usuario) {
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
     this.router.navigate(['/perfil', usuario.id]);
   }
 
@@ -135,7 +173,10 @@ export class HomeComponent implements OnInit {
   }
 
   irAlPerfilCompania(compania: Compania) {
-    this.router.navigate(['/compania', compania.id]);
+   setTimeout(() => {
+    window.location.reload();
+  }, 2000);
+  this.router.navigate(['/compania', compania.id]);
   }
 
   loadUsuarioById(id: number) {
@@ -230,6 +271,7 @@ export class HomeComponent implements OnInit {
           text: 'El comentario ha sido creado correctamente.'
         });
         this.publicacionComentar = null;
+        this.router.navigate(['/perfil' + this.usuarioIdFromLocalStorage]);
       },
       error => {
         console.error('Error al crear el comentario:', error);

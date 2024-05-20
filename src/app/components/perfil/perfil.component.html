@@ -111,6 +111,20 @@
                 <button type="button" (click)="cancelarPublicacion()" pButton>Cancelar</button>
               </div>
             </form>
+            <div class="comentarios">
+              <div *ngFor="let comentario of publicacion.comentarios" class="comentario">
+                <ng-container *ngIf="usuariosCargados[comentario.idUsuario]">
+                  <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                  <!-- Muestra el nombre del usuario -->
+                  <p style="cursor: pointer;">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
+                </ng-container>
+                <p>{{ comentario.contenido }}</p>
+                <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
+                <div class="botones2">
+                  <button type="button" (click)="eliminarComentario(comentario.id)" pButton>Eliminar</button>
+                </div>
+              </div>
+            </div>
           </div>
           <div *ngIf="publicacionesNoActual.length == 0">
             <p> ESTE USUARIO TODAVÍA NO HA PUBLICADO NADA</p>

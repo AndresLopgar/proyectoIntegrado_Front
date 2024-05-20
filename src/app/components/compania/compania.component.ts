@@ -11,6 +11,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import * as XLSX from 'xlsx';
 import { Publicacion } from '../../model/publicacion';
 import { PublicacionService } from '../../services/publicacion.service';
+import { ComentarioService } from '../../services/comentario.service';
 
 
 @Component({

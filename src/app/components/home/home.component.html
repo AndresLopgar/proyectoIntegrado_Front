@@ -58,6 +58,9 @@
               </ng-container>
               <p>{{ comentario.contenido }}</p>
               <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
+              <div class="botones">
+                <button *ngIf="comentario.idUsuario === usuarioIdFromLocalStorage" type="button" (click)="eliminarComentario(publicacion, comentario, comentario.idUsuario)">Eliminar</button>
+              </div>
             </div>
           </div>
         </div>
@@ -113,6 +116,9 @@
               </ng-container>
               <p>{{ comentario.contenido }}</p>
               <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
+              <div class="botones">
+                <button *ngIf="comentario.idUsuario === usuarioIdFromLocalStorage" type="button" (click)="eliminarComentario(publicacion, comentario, comentario.idUsuario)">Eliminar</button>
+              </div>
             </div>
           </div>
           </div>

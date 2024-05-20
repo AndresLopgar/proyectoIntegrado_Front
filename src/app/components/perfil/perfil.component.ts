@@ -81,6 +81,7 @@ export class PerfilComponent implements OnInit {
   comentario!: Comentario;
   mostrarFormularioComentario: boolean = false;
   textoBotonComentario: string = 'Comentar';
+  usuariosCargados: { [id: number]: Usuario } = {};
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -160,6 +161,7 @@ export class PerfilComponent implements OnInit {
           title: 'Comentario creado',
           text: 'El comentario ha sido creado correctamente.'
         });
+        this.router.navigate(['/home']);
       },
       (error) => {
         console.error("Error al crear el comentario:", error);
@@ -189,26 +191,41 @@ export class PerfilComponent implements OnInit {
     });
 }
 
-  
-  
-
-  getAllpublicacionesActualByUsario(id: number) {
-    // Obtener todas las publicaciones del usuario
-    this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
-        publicaciones => {
-            // Filtrar las publicaciones cuyo idCompania no sea null
-            this.publicacionesActual = publicaciones.filter(publicacion => publicacion.idCompania == 0);
-  })
+getAllpublicacionesActualByUsario(id: number) {
+  this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
+    publicaciones => {
+      this.publicacionesActual = publicaciones.filter(publicacion => publicacion.idCompania == 0);
+      this.publicacionesActual.forEach(publicacion => {
+        this.loadComentariosForPublicacion(publicacion);
+      });
+    }
+  );
 }
 
-
 getAllpublicacionesNoActualByUsario(id: number) {
-    this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
-        publicaciones => {
-            // Filtrar las publicaciones cuyo idCompania no sea null
-            this.publicacionesNoActual = publicaciones.filter(publicacion => publicacion.idCompania == 0);
-        }
-    )
+  this.publicacionService.getAllPublicacionesByUsuario(id).subscribe(
+    publicaciones => {
+      this.publicacionesNoActual = publicaciones.filter(publicacion => publicacion.idCompania == 0);
+      this.publicacionesNoActual.forEach(publicacion => {
+        this.loadComentariosForPublicacion(publicacion);
+      });
+    }
+  );
+}
+
+loadComentariosForPublicacion(publicacion: Publicacion) {
+  const idPublicacion = publicacion.id;
+  this.comentarioService.getComentariosByPublicacionId(idPublicacion).subscribe(
+    comentarios => {
+      publicacion.comentarios = comentarios;
+      comentarios.forEach(comentario => {
+        this.loadUsuarioById(comentario.idUsuario);
+      });
+    },
+    error => {
+      console.error(`Error al cargar comentarios para la publicación ${idPublicacion}:`, error);
+    }
+  );
 }
 
 
@@ -260,44 +277,84 @@ guardarPublicacion(id: number) {
 }
 
 
-  eliminarPublicacion(id: number) {
-    // Mostrar SweetAlert para confirmar la eliminación
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: 'No podrás revertir esto.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Si el usuario confirma la eliminación
-        this.publicacionService.deletePublicacion(id).subscribe(
-          () => {
-            // Si la eliminación es exitosa, mostrar un mensaje de éxito
-            Swal.fire(
-              'Eliminado!',
-              'La publicación ha sido eliminada.',
-              'success'
-            );
-            this.router.navigate(['/home']);
-            // Aquí podrías realizar alguna acción adicional si es necesario
-          },
-          (error) => {
-            // Si ocurre un error durante la eliminación, mostrar un mensaje de error
-            console.error('Error al eliminar la publicación:', error);
-            Swal.fire(
-              'Error!',
-              'No se pudo eliminar la publicación.',
-              'error'
-            );
-          }
-        );
-      }
-    });
-  }
+
+eliminarPublicacion(id: number) {
+  /*
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'No podrás revertir esto.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Si el usuario confirma la eliminación
+      this.publicacionService.deletePublicacion(id).subscribe(
+        () => {
+          // Eliminar comentarios referenciados
+          this.comentarioService.deleteComentariosByPublicacionId(id).subscribe(
+            () => {
+              // Si la eliminación es exitosa, mostrar un mensaje de éxito
+              Swal.fire(
+                'Eliminado!',
+                'La publicación y sus comentarios han sido eliminados.',
+                'success'
+              );
+              this.router.navigate(['/home']);
+              // Aquí podrías realizar alguna acción adicional si es necesario
+            },
+            (error) => {
+              // Si ocurre un error durante la eliminación de comentarios, mostrar un mensaje de error
+              console.error('Error al eliminar los comentarios:', error);
+              Swal.fire(
+                'Error!',
+                'No se pudieron eliminar los comentarios de la publicación.',
+                'error'
+              );
+            }
+          );
+        },
+        (error) => {
+          // Si ocurre un error durante la eliminación, mostrar un mensaje de error
+          console.error('Error al eliminar la publicación:', error);
+          Swal.fire(
+            'Error!',
+            'No se pudo eliminar la publicación.',
+            'error'
+          );
+        }
+      );
+    }
+  });
+  */
+}
+
+eliminarComentario(id: number) {
+  this.comentarioService.deleteComentario(id).subscribe(
+    () => {
+      // Mostrar mensaje de éxito
+      Swal.fire({
+        icon: 'success',
+        title: 'Comentario eliminado',
+        text: 'El comentario ha sido eliminado correctamente.'
+      });
+      this.router.navigate(['/home']);
+    },
+    error => {
+      // Mostrar mensaje de error
+      console.error('Error al eliminar el comentario:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ha ocurrido un error al eliminar el comentario. Por favor, inténtalo de nuevo.'
+      });
+    }
+  );
+}
+
   
 
   elegirFotoPerfilCompania(indice: number) {
@@ -370,6 +427,7 @@ cerrarDialogo() {
       (usuario: Usuario) => {
         this.usuario = usuario;
         this.usuarioTemporal = usuario;
+        this.usuariosCargados[id] = usuario;
         // Después de cargar el usuario, cargamos la compañía utilizando el atributo companiaSeguida
         if (usuario.companiaSeguida) {
           this.loadCompaniaById(usuario.companiaSeguida);
