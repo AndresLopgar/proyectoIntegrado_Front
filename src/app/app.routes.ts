@@ -7,6 +7,7 @@ import { PerfilComponent } from './components/perfil/perfil.component';
 import { RegistroComponent } from './components/registro/registro.component';
 import { CompaniaComponent } from './components/compania/compania.component';
 import { NotificacionesComponent } from './components/notificaciones/notificaciones.component';
+import { MensajesComponent } from './components/mensaje/mensaje.component';
 
 
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     {path: 'registro', component: RegistroComponent},
     { path: 'perfil/:id', component: PerfilComponent },
+    {path: 'mensajes', component: MensajesComponent},
     {path: 'buscar', component: BuscarComponent},
     {path: 'notificaciones', component: NotificacionesComponent},
     {path: 'moderar', component: ModerarComponent},

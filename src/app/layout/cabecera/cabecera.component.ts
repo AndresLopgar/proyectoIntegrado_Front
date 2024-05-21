@@ -59,6 +59,9 @@ export class CabeceraComponent implements OnInit {
       case currentRoute === '/notificaciones':
         this.titulo = 'Notificaciones';
         break;
+        case currentRoute === '/mensajes':
+        this.titulo = 'mensajes';
+        break;
       case currentRoute === '/moderar':
         this.titulo = 'Moderación';
         break;

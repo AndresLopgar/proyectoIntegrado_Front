@@ -20,7 +20,7 @@
             background-color: var(--color-primario);
             flex-direction: column;
             overflow: auto;
-            max-height: 74vh;
+            max-height: 70vh;
             margin-bottom: 20px;
     
             &::-webkit-scrollbar {
@@ -214,7 +214,7 @@
             text-align: center;
             background-color: var(--color-primario);
             flex-direction: column;
-            max-height: 74vh;
+            max-height: 70vh;
 
             textArea{
                 &::-webkit-scrollbar {
