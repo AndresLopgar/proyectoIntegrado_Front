@@ -5,10 +5,11 @@ import { Usuario } from '../../model/usuario';
 import { AmistadService } from '../../services/amistad.service';
 import { Amistad } from '../../model/amistad';
 import { ActivatedRoute } from '@angular/router';
+import { LoaderComponent } from '../../layout/loader/loader.component';
 @Component({
   selector: 'app-mensajes',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoaderComponent],
   templateUrl: './mensaje.component.html',
   styleUrl: './mensaje.component.scss'
 })
@@ -19,6 +20,7 @@ export class MensajesComponent implements OnInit{
   estaEnAmistad: boolean = false;
   usuarioIdFromLocalStorage!: number;
   mostrarMensaje: boolean = false;
+  loader: boolean = false;
 
   constructor (private usuarioService: UsuarioService, private amistadService: AmistadService,private route: ActivatedRoute, ){}
 
@@ -30,6 +32,10 @@ export class MensajesComponent implements OnInit{
         this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
         this.loadUsuarioSeguidos(this.usuarioIdFromLocalStorage);
       }
+
+      setTimeout(() => {
+        this.loader = true;
+    }, 1500);
   }
   loadUsuarioSeguidos(id: number){
     this.amistadService.findBySeguidor(id).subscribe(

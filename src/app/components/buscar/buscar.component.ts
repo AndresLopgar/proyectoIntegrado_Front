@@ -7,11 +7,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CompaniaService } from '../../services/compania.service';
 import { Compania } from '../../model/compania';
+import { LoaderComponent } from '../../layout/loader/loader.component';
 
 @Component({
   selector: 'app-buscar',
   standalone: true,
-  imports: [ButtonModule, CommonModule, HttpClientModule],
+  imports: [ButtonModule, CommonModule, HttpClientModule, LoaderComponent],
   templateUrl: './buscar.component.html',
   styleUrls: ['./buscar.component.scss']
 })
@@ -22,6 +23,7 @@ export class BuscarComponent implements OnInit {
   companiasFiltradas: Compania[] = [];
   usuarioLocalStorage: Usuario | null = null;
   filtroTipo: string = '';
+  loader: boolean = false;
 
   constructor(
     private usuarioService: UsuarioService,
@@ -36,6 +38,9 @@ export class BuscarComponent implements OnInit {
     if (usuarioString !== null) {
       this.usuarioLocalStorage = JSON.parse(usuarioString);
     }
+    setTimeout(() => {
+      this.loader = true;
+  }, 1500);
   }
 
   getAllUsuarios() {

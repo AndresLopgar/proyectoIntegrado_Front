@@ -12,11 +12,12 @@ import { CompaniaService } from '../../services/compania.service';
 import { Compania } from '../../model/compania';
 import { ComentarioService } from '../../services/comentario.service';
 import { Comentario } from '../../model/comentario';
+import { LoaderComponent } from '../../layout/loader/loader.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, RouterLink],
+  imports: [CommonModule, FormsModule, ButtonModule, RouterLink, LoaderComponent],
   providers:[UsuarioService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -38,7 +39,7 @@ export class HomeComponent implements OnInit {
     idCompania: 0,
     comentarios: []
   };
-
+  loader: boolean = false;
   mostrarCrear: boolean = false;
   companiasCargadas: { [id: number]: Compania } = {};
   publicacionesLiked: Set<number> = new Set();
@@ -92,6 +93,10 @@ export class HomeComponent implements OnInit {
         console.error('Error al cargar las publicaciones:', error);
       }
     );
+    
+    setTimeout(() => {
+      this.loader = true;
+  }, 1500);
   
   }
 

@@ -13,12 +13,13 @@ import { Publicacion } from '../../model/publicacion';
 import { PublicacionService } from '../../services/publicacion.service';
 import { ComentarioService } from '../../services/comentario.service';
 import { Comentario } from '../../model/comentario';
+import { LoaderComponent } from '../../layout/loader/loader.component';
 
 
 @Component({
   selector: 'app-compania',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule],
+  imports: [CommonModule, FormsModule, ButtonModule, LoaderComponent],
   templateUrl: './compania.component.html',
   styleUrl: './compania.component.scss'
 })
@@ -56,6 +57,7 @@ export class CompaniaComponent  implements OnInit{
   publicacionComentar: number | null = null;
   usuariosCargados: { [id: number]: Usuario } = {};
   publicacionesLiked: Set<number> = new Set();
+  loader: boolean = false;
 
   constructor(private companiaService: CompaniaService, 
     private route: ActivatedRoute,
@@ -97,9 +99,11 @@ export class CompaniaComponent  implements OnInit{
         this.getAllPublicacionesActuales(this.companiaId);
         this.getAllPublicacionesNoActuales(this.companiaId);
       }
-      
-      
     });
+
+    setTimeout(() => {
+      this.loader = true;
+  }, 1500);
   }
 
   elegirFotoPerfilCompania(indice: number) {

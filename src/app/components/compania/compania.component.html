@@ -1,4 +1,5 @@
-<div class="container">
+<app-loader *ngIf="!loader"></app-loader>
+<div class="container" *ngIf="loader">
       <div class="row flex-sm-row flex-column custom-margin-bottom">
         <div class="col-md-3 order-1 order-md-0">
           <img [src]="compania.fotoPerfil" class="perfilAvatar">

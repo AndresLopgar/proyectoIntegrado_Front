@@ -1,4 +1,5 @@
-<div class="container">
+<app-loader *ngIf="!loader"></app-loader>
+<div class="container" *ngIf="loader">
     <ng-container *ngIf="usuario && usuario.id === usuarioIdFromLocalStorage">
       <div class="row flex-sm-row flex-column custom-margin-bottom">
         <!--Información del usuario que actual-->

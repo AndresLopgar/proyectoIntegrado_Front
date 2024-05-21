@@ -14,12 +14,13 @@ import { PublicacionService } from '../../services/publicacion.service';
 import { Publicacion } from '../../model/publicacion';
 import { Comentario } from '../../model/comentario';
 import { ComentarioService } from '../../services/comentario.service';
+import { LoaderComponent } from '../../layout/loader/loader.component';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule],
+  imports: [CommonModule, FormsModule, ButtonModule, LoaderComponent],
   styleUrl: './perfil.component.scss'
 })
 export class PerfilComponent implements OnInit {
@@ -81,6 +82,7 @@ export class PerfilComponent implements OnInit {
   comentario!: Comentario;
   mostrarFormularioComentario: boolean = false;
   usuariosCargados: { [id: number]: Usuario } = {};
+  loader: boolean = false;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -124,6 +126,9 @@ export class PerfilComponent implements OnInit {
         this.getAmistadesBySeguidorySeguido(this.usuarioId);
       }
     });
+    setTimeout(() => {
+      this.loader = true;
+  }, 1500);
   }
 
   irAlPerfilUsuario(idUsuario: number) {

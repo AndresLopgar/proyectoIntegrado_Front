@@ -1,4 +1,5 @@
-<div class="container">
+<app-loader *ngIf="!loader"></app-loader>
+<div class="container" *ngIf="loader">
     <div class="row flex-sm-row flex-column">
         <div class="col-md-3 mb-3 mb-md-0">
           <h1>Personas que sigues</h1>
