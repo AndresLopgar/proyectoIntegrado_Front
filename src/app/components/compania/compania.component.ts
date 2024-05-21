@@ -12,6 +12,7 @@ import * as XLSX from 'xlsx';
 import { Publicacion } from '../../model/publicacion';
 import { PublicacionService } from '../../services/publicacion.service';
 import { ComentarioService } from '../../services/comentario.service';
+import { Comentario } from '../../model/comentario';
 
 
 @Component({
@@ -49,12 +50,19 @@ export class CompaniaComponent  implements OnInit{
   publicacionTemporal!: Publicacion;
   contenidoTemporal: string = '';
   publicacionEnEdicion: number | null = null;
+  usuarioIdFromLocalStorage!: number;
+  comentario !: Comentario;
+  mostrarFormularioComentario: boolean = false;
+  publicacionComentar: number | null = null;
+  usuariosCargados: { [id: number]: Usuario } = {};
+  publicacionesLiked: Set<number> = new Set();
 
   constructor(private companiaService: CompaniaService, 
     private route: ActivatedRoute,
     private router: Router,
     private usuarioService: UsuarioService,
-    private publicacionService: PublicacionService){}
+    private publicacionService: PublicacionService,
+    private comentarioService: ComentarioService){}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -64,6 +72,7 @@ export class CompaniaComponent  implements OnInit{
       const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
+        this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
         this.usuarioId = usuarioAlmacenado.id;
         this.loadUsuarioById(this.usuarioId);
         this.publicacion = {
@@ -76,11 +85,20 @@ export class CompaniaComponent  implements OnInit{
           idCompania: this.companiaId,
           comentarios: []
         };
+        this.comentario = {
+          id:0,
+          contenido:"",
+          fechaComentario:"",
+          idPublicacion:0,
+          idUsuario:this.usuarioIdFromLocalStorage
+        }
+        this.loadCompania();
+        this.getAllUsuarios();
+        this.getAllPublicacionesActuales(this.companiaId);
+        this.getAllPublicacionesNoActuales(this.companiaId);
       }
-      this.getAllPublicacionesByCompaniaId(this.companiaId);
       
-      this.loadCompania();
-      this.getAllUsuarios();
+      
     });
   }
 
@@ -316,23 +334,37 @@ crearPublicacionCompania() {
     );
 }
 
-  getAllPublicacionesByCompaniaId(idCompania: number){
-    this.publicacionService.getAllPublicacionesByCompania(this.companiaId).subscribe(
-      publicaciones => {
-        console.log(publicaciones);
-        console.log(this.usuarioId);
-        this.companiaService.getCompaniaById(idCompania).subscribe(
-          compania => {
-            if(this.usuarioId == this.compania.idCreador){
-              this.publicacionesActual = publicaciones;
-              console.log(this.publicacionesActual);
-            }else{
-              this.publicacionesNoActual = publicaciones;
-            }
-          }
-        )
-      });
+getAllPublicacionesActuales(idCompania: number) {
+  this.publicacionService.getAllPublicacionesByCompania(this.companiaId).subscribe(
+    publicaciones => {
+      this.companiaService.getCompaniaById(idCompania).subscribe(
+        compania => {
+          this.publicacionesActual = publicaciones.filter(publicacion => compania.idCreador == this.compania.idCreador);
+          this.publicacionesActual.forEach(publicacion => {
+            this.loadComentariosForPublicacion(publicacion);
+          });
+        }
+      );
     }
+  );
+}
+
+getAllPublicacionesNoActuales(idCompania: number) {
+  this.publicacionService.getAllPublicacionesByCompania(this.companiaId).subscribe(
+    publicaciones => {
+      this.companiaService.getCompaniaById(idCompania).subscribe(
+        compania => {
+          this.publicacionesNoActual = publicaciones.filter(publicacion => compania.idCreador != this.compania.idCreador);
+          this.publicacionesNoActual.forEach(publicacion => {
+            this.loadComentariosForPublicacion(publicacion);
+          });
+        }
+      );
+    }
+  );
+}
+
+
 
   mostrarCrearPublicacion(){
     this.mostrandoFormularioCrearPublicacion = true;
@@ -582,5 +614,120 @@ eliminarPublicacion(id: number) {
     a.click();
   }
   
+  loadComentariosForPublicacion(publicacion: Publicacion) {
+    const idPublicacion = publicacion.id;
+    this.comentarioService.getComentariosByPublicacionId(idPublicacion).subscribe(
+      comentarios => {
+        publicacion.comentarios = comentarios;
+        publicacion.comentarios.forEach(comentario => {
+          // Verificar si el usuario asociado al comentario ya está cargado
+          if (!this.usuariosCargados[comentario.idUsuario]) {
+            // Si no está cargado, cargarlo y agregarlo a usuariosCargados
+            this.usuarioService.getUsuarioById(comentario.idUsuario).subscribe(
+              usuario=> {
+                this.usuariosCargados[comentario.idUsuario] = usuario;
+              }
+            )
+          }
+        });
+      },
+      error => {
+        console.error(`Error al cargar comentarios para la publicación ${idPublicacion}:`, error);
+      }
+    );
+  }
+
+
+  crearComentario(publicacion: Publicacion, contenido: string) {
+    const nuevoComentario: Comentario = {
+      id: 0,
+      contenido: contenido,
+      fechaComentario: new Date().toISOString(),
+      idUsuario: this.usuarioIdFromLocalStorage,
+      idPublicacion: publicacion.id
+    };
+  
+    this.comentarioService.createComentario(nuevoComentario).subscribe(
+      id => {
+        nuevoComentario.id = id;
+        publicacion.comentarios.push(nuevoComentario);
+        Swal.fire({
+          icon: 'success',
+          title: 'Comentario creado',
+          text: 'El comentario ha sido creado correctamente.'
+        });
+        this.publicacionComentar = null;
+        this.router.navigate(['/perfil' + this.usuarioIdFromLocalStorage]);
+      },
+      error => {
+        console.error('Error al crear el comentario:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ha ocurrido un error al crear el comentario. Por favor, inténtalo de nuevo.'
+        });
+      }
+    );
+  }
+
+  mostrarCrearComentario(id: number){
+    this.publicacionComentar = id;
+    this.mostrarFormularioComentario = true;
+    
+  }
+
+  cancelarComentario() {
+    this.publicacionComentar = null;
+    this.comentario.contenido = '';
+
+    // Mostrar una alerta de cancelación
+    Swal.fire({
+        icon: 'info',
+        title: 'Creación cancelada',
+        text: 'Se ha cancelado la creación del comentario.'
+    });
+  }
+
+
+  darMeGusta(publicacion: Publicacion) {
+    // Verifica si el usuario ha dado "Me Gusta" a esta publicación
+    const haDadoMeGusta = this.publicacionesLiked.has(publicacion.id);
+  
+    // Actualiza el contador de "Me Gusta" en la interfaz y la lista de "Me Gusta" del usuario
+    if (haDadoMeGusta) {
+      publicacion.numMeGustas--;
+      this.publicacionesLiked.delete(publicacion.id);
+    } else {
+      publicacion.numMeGustas++;
+      this.publicacionesLiked.add(publicacion.id);
+    }
+  
+    // Llama al servicio para actualizar la publicación en la base de datos
+    this.publicacionService.updatePublicacion(publicacion.id, publicacion).subscribe(() => {
+    });
+  }
+  
+  eliminarComentario(id: number) {
+    this.comentarioService.deleteComentario(id).subscribe(
+      () => {
+        // Mostrar mensaje de éxito
+        Swal.fire({
+          icon: 'success',
+          title: 'Comentario eliminado',
+          text: 'El comentario ha sido eliminado correctamente.'
+        });
+        this.router.navigate(['/home']);
+      },
+      error => {
+        // Mostrar mensaje de error
+        console.error('Error al eliminar el comentario:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ha ocurrido un error al eliminar el comentario. Por favor, inténtalo de nuevo.'
+        });
+      }
+    );
+  }
   
 }

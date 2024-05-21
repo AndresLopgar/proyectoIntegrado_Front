@@ -80,7 +80,6 @@ export class PerfilComponent implements OnInit {
   publicacionesLiked: Set<number> = new Set();
   comentario!: Comentario;
   mostrarFormularioComentario: boolean = false;
-  textoBotonComentario: string = 'Comentar';
   usuariosCargados: { [id: number]: Usuario } = {};
 
   ngOnInit() {
@@ -181,6 +180,7 @@ export class PerfilComponent implements OnInit {
   
   cancelarComentario() {
     this.publicacionComentar = null;
+    this.comentario.contenido = '';
   
     // Mostrar una alerta de cancelación
     Swal.fire({
