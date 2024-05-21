@@ -113,9 +113,9 @@
             <div class="comentarios">
               <div *ngFor="let comentario of publicacion.comentarios" class="comentario">
                 <ng-container *ngIf="usuariosCargados[comentario.idUsuario]">
-                  <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                  <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" (click)="irAlPerfilUsuario(comentario.idUsuario)" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
                   <!-- Muestra el nombre del usuario -->
-                  <p style="cursor: pointer;">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
+                  <p style="cursor: pointer;" (click)="irAlPerfilUsuario(comentario.idUsuario)">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
                 </ng-container>
                 <p>{{ comentario.contenido }}</p>
                 <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>

@@ -126,6 +126,11 @@ export class PerfilComponent implements OnInit {
     });
   }
 
+  irAlPerfilUsuario(idUsuario: number) {
+    // Navegar al perfil del usuario
+    this.router.navigate(['/perfil', idUsuario]);
+  }
+
   darMeGusta(publicacion: Publicacion) {
     // Verifica si el usuario ha dado "Me Gusta" a esta publicación
     const haDadoMeGusta = this.publicacionesLiked.has(publicacion.id);
@@ -207,6 +212,29 @@ getAllpublicacionesNoActualByUsario(id: number) {
       this.publicacionesNoActual = publicaciones.filter(publicacion => publicacion.idCompania == 0);
       this.publicacionesNoActual.forEach(publicacion => {
         this.loadComentariosForPublicacion(publicacion);
+      });
+    }
+  );
+}
+
+eliminarComentario(id: number) {
+  this.comentarioService.deleteComentario(id).subscribe(
+    () => {
+      // Mostrar mensaje de éxito
+      Swal.fire({
+        icon: 'success',
+        title: 'Comentario eliminado',
+        text: 'El comentario ha sido eliminado correctamente.'
+      });
+      this.router.navigate(['/home']);
+    },
+    error => {
+      // Mostrar mensaje de error
+      console.error('Error al eliminar el comentario:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ha ocurrido un error al eliminar el comentario. Por favor, inténtalo de nuevo.'
       });
     }
   );
@@ -320,32 +348,6 @@ eliminarPublicacion(id: number) {
     }
   });
 }
-
-
-eliminarComentario(id: number) {
-  this.comentarioService.deleteComentario(id).subscribe(
-    () => {
-      // Mostrar mensaje de éxito
-      Swal.fire({
-        icon: 'success',
-        title: 'Comentario eliminado',
-        text: 'El comentario ha sido eliminado correctamente.'
-      });
-      this.router.navigate(['/home']);
-    },
-    error => {
-      // Mostrar mensaje de error
-      console.error('Error al eliminar el comentario:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Ha ocurrido un error al eliminar el comentario. Por favor, inténtalo de nuevo.'
-      });
-    }
-  );
-}
-
-  
 
   elegirFotoPerfilCompania(indice: number) {
     this.companiaTemporal.fotoPerfil = this.imagenesCompanias[indice];

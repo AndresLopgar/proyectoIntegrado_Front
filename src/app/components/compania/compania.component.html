@@ -104,6 +104,19 @@
                   <button type="button" (click)="cancelarComentario()" pButton>Cancelar</button>
                 </div>
               </form>
+              <div class="comentarios">
+                <div *ngFor="let comentario of publicacion.comentarios" class="comentario">
+                  <ng-container *ngIf="usuariosCargados[comentario.idUsuario]">
+                    <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" (click)="irAlPerfilUsuario(comentario.idUsuario)" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                    <p style="cursor: pointer;" (click)="irAlPerfilUsuario(comentario.idUsuario)">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
+                  </ng-container>
+                  <p>{{ comentario.contenido }}</p>
+                  <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy' }}</p>
+                  <div class="botones2">
+                    <button type="button" *ngIf="comentario.idUsuario === usuarioIdFromLocalStorage" (click)="eliminarComentario(comentario.id)" pButton>Eliminar</button>
+                  </div>
+                </div>
+              </div>
             </div>
             <div *ngFor="let publicacion of publicacionesNoActual" class="publicaciones">
               <div class="contenido">
@@ -113,6 +126,19 @@
               <div class="acciones botones">
                 <p ><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>{{ publicacion.numMeGustas}}</p>
               <p><i class="pi pi-comment" style="font-size: 1.5rem" (click)="mostrarCrearComentario(publicacion.id)"></i></p>
+              </div>
+              <div class="comentarios">
+                <div *ngFor="let comentario of publicacion.comentarios" class="comentario">
+                  <ng-container *ngIf="usuariosCargados[comentario.idUsuario]">
+                    <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" (click)="irAlPerfilUsuario(comentario.idUsuario)" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                    <p style="cursor: pointer;" (click)="irAlPerfilUsuario(comentario.idUsuario)">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
+                  </ng-container>
+                  <p>{{ comentario.contenido }}</p>
+                  <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy' }}</p>
+                  <div class="botones2">
+                    <button type="button" *ngIf="comentario.idUsuario === usuarioIdFromLocalStorage" (click)="eliminarComentario(comentario.id)" pButton>Eliminar</button>
+                  </div>
+                </div>
               </div>
             </div>
             <form *ngIf="publicacion.id === publicacionComentar" (ngSubmit)="crearComentario(publicacion, comentario.contenido)">
@@ -125,19 +151,6 @@
                 <button type="button" (click)="cancelarComentario()" pButton>Cancelar</button>
               </div>
             </form>
-            <div class="comentarios">
-              <div *ngFor="let comentario of publicacion.comentarios" class="comentario">
-                <ng-container *ngIf="usuariosCargados[comentario.idUsuario]">
-                  <img *ngIf="usuariosCargados[comentario.idUsuario].fotoPerfil" [src]="usuariosCargados[comentario.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
-                  <p style="cursor: pointer;">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
-                </ng-container>
-                <p>{{ comentario.contenido }}</p>
-                <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
-                <div class="botones2">
-                  <button type="button" *ngIf="comentario.idUsuario === usuarioIdFromLocalStorage" (click)="eliminarComentario(comentario.id)" pButton>Eliminar</button>
-                </div>
-              </div>
-            </div>
             <div *ngIf="publicacionesNoActual.length == 0 && publicacionesActual.length==0">
               <p> ESTA COMPAÑÍA TODAVÍA NO HA PUBLICADO NADA</p>
             </div>

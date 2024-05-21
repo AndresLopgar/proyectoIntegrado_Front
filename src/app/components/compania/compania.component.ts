@@ -365,6 +365,10 @@ getAllPublicacionesNoActuales(idCompania: number) {
 }
 
 
+irAlPerfilUsuario(idUsuario: number) {
+  // Navegar al perfil del usuario
+  this.router.navigate(['/perfil', idUsuario]);
+}
 
   mostrarCrearPublicacion(){
     this.mostrandoFormularioCrearPublicacion = true;
