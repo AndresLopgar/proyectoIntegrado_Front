@@ -286,7 +286,6 @@ guardarPublicacion(id: number) {
 
 
 eliminarPublicacion(id: number) {
-  /*
   Swal.fire({
     title: '¿Estás seguro?',
     text: 'No podrás revertir esto.',
@@ -301,27 +300,11 @@ eliminarPublicacion(id: number) {
       // Si el usuario confirma la eliminación
       this.publicacionService.deletePublicacion(id).subscribe(
         () => {
-          // Eliminar comentarios referenciados
-          this.comentarioService.deleteComentariosByPublicacionId(id).subscribe(
-            () => {
-              // Si la eliminación es exitosa, mostrar un mensaje de éxito
-              Swal.fire(
-                'Eliminado!',
-                'La publicación y sus comentarios han sido eliminados.',
-                'success'
-              );
-              this.router.navigate(['/home']);
-              // Aquí podrías realizar alguna acción adicional si es necesario
-            },
-            (error) => {
-              // Si ocurre un error durante la eliminación de comentarios, mostrar un mensaje de error
-              console.error('Error al eliminar los comentarios:', error);
-              Swal.fire(
-                'Error!',
-                'No se pudieron eliminar los comentarios de la publicación.',
-                'error'
-              );
-            }
+          // Si la eliminación es exitosa, mostrar un mensaje de éxito
+          Swal.fire(
+            'Eliminado!',
+            'La publicación ha sido eliminada.',
+            'success'
           );
         },
         (error) => {
@@ -336,8 +319,8 @@ eliminarPublicacion(id: number) {
       );
     }
   });
-  */
 }
+
 
 eliminarComentario(id: number) {
   this.comentarioService.deleteComentario(id).subscribe(
