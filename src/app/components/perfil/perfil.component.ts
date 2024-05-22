@@ -15,6 +15,8 @@ import { Publicacion } from '../../model/publicacion';
 import { Comentario } from '../../model/comentario';
 import { ComentarioService } from '../../services/comentario.service';
 import { LoaderComponent } from '../../layout/loader/loader.component';
+import { Notificacion } from '../../model/notificacion';
+import { NotificacionService } from '../../services/notificacion.service';
 
 @Component({
   selector: 'app-perfil',
@@ -33,7 +35,8 @@ export class PerfilComponent implements OnInit {
     private companiaService: CompaniaService,
     private amistadService: AmistadService,
     private publicacionService: PublicacionService,
-    private comentarioService: ComentarioService) { }
+    private comentarioService: ComentarioService,
+    private notificacionService: NotificacionService) { }
   
   usuarioStorage!: Usuario;
   companias: Compania[] = [];
@@ -83,6 +86,7 @@ export class PerfilComponent implements OnInit {
   mostrarFormularioComentario: boolean = false;
   usuariosCargados: { [id: number]: Usuario } = {};
   loader: boolean = false;
+  notificacion!: Notificacion;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -123,7 +127,16 @@ export class PerfilComponent implements OnInit {
           idPublicacion:0,
           idUsuario:this.usuarioIdFromLocalStorage
         }
-        this.getAmistadesBySeguidorySeguido(this.usuarioId);
+
+        this.notificacion = {
+          id:0,
+          contenido: "",
+          tipoNotificacion: "",
+          fechaNotificacion: "",
+          idUsuarioEmisor: this.usuarioIdFromLocalStorage,
+          idUsuarioRemitente: 0
+        }
+        this.getAmistadesBySeguidorySeguido(this.usuarioIdFromLocalStorage);
       }
     });
     setTimeout(() => {
@@ -151,6 +164,13 @@ export class PerfilComponent implements OnInit {
   
     // Llama al servicio para actualizar la publicación en la base de datos
     this.publicacionService.updatePublicacion(publicacion.id, publicacion).subscribe(() => {
+      this.notificacion.fechaNotificacion = new Date().toISOString();
+        this.notificacion.idUsuarioRemitente = this.usuarioId;
+        this.notificacion.tipoNotificacion = "meGusta";
+        this.notificacionService.createNotificacion(this.notificacion).subscribe(
+          ()=> {
+          }
+        )
     });
   }
   
@@ -169,6 +189,13 @@ export class PerfilComponent implements OnInit {
           title: 'Comentario creado',
           text: 'El comentario ha sido creado correctamente.'
         });
+        this.notificacion.fechaNotificacion = new Date().toISOString();
+        this.notificacion.idUsuarioRemitente = this.usuarioId;
+        this.notificacion.tipoNotificacion = "comenta";
+        this.notificacionService.createNotificacion(this.notificacion).subscribe(
+          ()=> {
+          }
+        )
         this.router.navigate(['/home']);
       },
       (error) => {
@@ -653,6 +680,13 @@ seguirUsuario() {
           title: 'Seguimiento exitoso',
           text: '¡Ahora sigues a este usuario!'
         });
+        this.notificacion.fechaNotificacion = new Date().toISOString();
+        this.notificacion.idUsuarioRemitente = this.usuarioId;
+        this.notificacion.tipoNotificacion = "seguimiento";
+        this.notificacionService.createNotificacion(this.notificacion).subscribe(
+          ()=> {
+          }
+        )
         this.router.navigateByUrl('/home');
       },
       error => {
@@ -665,6 +699,49 @@ seguirUsuario() {
       }
     );
   }
+}
+
+dejarDeSeguirUsuario(id: number) {
+  this.amistadService.getAllAmistades().subscribe(
+    amistades =>{
+      for (let i = 0; i < amistades.length; i++) {
+        if(amistades[i].idSeguido == id){
+          this.amistadElimnar = amistades[i].id;
+        }
+      }
+    }
+  )
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: '¿Quieres dejar de seguir a este usuario?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sí, dejar de seguir',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.amistadService.deleteAmistad(this.amistadElimnar).subscribe(
+        id => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Amistad eliminada',
+            text: '¡Amistad eliminada Correctamente!'
+          });
+          this.router.navigateByUrl('/home');
+          // Aquí puedes agregar lógica adicional después de eliminar la amistad
+        },
+        error => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '¡No se pudo eliminar la amistad!'
+          });
+        }
+      );
+    }
+  });
 }
 
 
@@ -682,12 +759,17 @@ seguirUsuario() {
       (amistades) => {
         this.amistadesBySeguidor = amistades;
   
-        if (this.amistadesBySeguidor.some(amistad => 
-            amistad.idSeguido === this.usuarioId)) {
-          this.estaEnAmistad = true;
-        } else {
-          this.estaEnAmistad = false;
-        }
+        for (let amistad of this.amistadesBySeguidor) {
+             if(amistad.idSeguido === this.usuarioId) {
+                this.estaEnAmistad = true;
+                break;
+             } else {
+                this.estaEnAmistad = false;
+              }
+            }
+
+        console.log("Esta en amistad: " + this.estaEnAmistad);
+        
         
         this.usuarioSeguido = [];
         let userIds = new Set<number>(); // Conjunto para almacenar los IDs de los usuarios ya agregados
@@ -706,52 +788,7 @@ seguirUsuario() {
             }
           })
       });
-  }
+    }
   
-
-  dejarDeSeguirUsuario(id: number) {
-    this.amistadService.getAllAmistades().subscribe(
-      amistades =>{
-        for (let i = 0; i < amistades.length; i++) {
-          if(amistades[i].idSeguido == id){
-            this.amistadElimnar = amistades[i].id;
-          }
-        }
-      }
-    )
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: '¿Quieres dejar de seguir a este usuario?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sí, dejar de seguir',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.amistadService.deleteAmistad(this.amistadElimnar).subscribe(
-          id => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Amistad eliminada',
-              text: '¡Amistad eliminada Correctamente!'
-            });
-            this.router.navigateByUrl('/home');
-            // Aquí puedes agregar lógica adicional después de eliminar la amistad
-          },
-          error => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: '¡No se pudo eliminar la amistad!'
-            });
-          }
-        );
-      }
-    });
-  }
-  
-
 
 }

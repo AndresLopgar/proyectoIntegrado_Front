@@ -1,3 +1,34 @@
-<div class="container">
-    <h1>Este es el componente notificaciones</h1>
+<app-loader *ngIf="!loader"></app-loader>
+<div class="container" *ngIf="loader">
+    <div class="col-md-11">
+        @if (notificaciones.length != 0) {
+        @for (notificacion of notificaciones; track $index) {
+            <div class="notificacion">
+                @if (usuariosCargados[notificacion.idUsuarioEmisor]) {
+                    <img (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)"  [src]="usuariosCargados[notificacion.idUsuarioEmisor].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                    @if (notificacion.tipoNotificacion === "seguimiento") {
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} te acaba de seguir</p>
+                    }
+                    @if (notificacion.tipoNotificacion === "meGusta") {
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} le ha dado me gusta a una publicación tuya</p>
+                    }
+                    @if (notificacion.tipoNotificacion === "comenta") {
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha comentado en una publicación tuya</p>
+                    }
+                    @if(esCreador && notificacion.tipoNotificacion === "unirseCompania"){
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} se ha unido a tu compañía {{compania.nombre.toLocaleUpperCase()}}</p>
+                    }
+                    @if(esCreador && notificacion.tipoNotificacion === "dejaCompania"){
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha abandonado a tu compañía {{compania.nombre.toLocaleUpperCase()}}</p>
+                    }
+                }
+                
+                <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">Fecha Notificación: {{notificacion.fechaNotificacion | date:'dd/MM/yyyy'}}</p>
+                <i class="pi pi-trash" style="font-size: 1.5rem" (click)="eliminarNotificacion(notificacion.id)"></i>
+            </div>
+        }}@else{
+            <h1>NO HAY NOTIFICACIONES</h1>
+        }
+
+    </div>
 </div>

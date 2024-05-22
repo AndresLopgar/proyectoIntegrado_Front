@@ -14,6 +14,8 @@ import { PublicacionService } from '../../services/publicacion.service';
 import { ComentarioService } from '../../services/comentario.service';
 import { Comentario } from '../../model/comentario';
 import { LoaderComponent } from '../../layout/loader/loader.component';
+import { Notificacion } from '../../model/notificacion';
+import { NotificacionService } from '../../services/notificacion.service';
 
 
 @Component({
@@ -58,13 +60,15 @@ export class CompaniaComponent  implements OnInit{
   usuariosCargados: { [id: number]: Usuario } = {};
   publicacionesLiked: Set<number> = new Set();
   loader: boolean = false;
+  notificacion!: Notificacion;
 
   constructor(private companiaService: CompaniaService, 
     private route: ActivatedRoute,
     private router: Router,
     private usuarioService: UsuarioService,
     private publicacionService: PublicacionService,
-    private comentarioService: ComentarioService){}
+    private comentarioService: ComentarioService,
+    private notificacionService: NotificacionService){}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -93,6 +97,14 @@ export class CompaniaComponent  implements OnInit{
           fechaComentario:"",
           idPublicacion:0,
           idUsuario:this.usuarioIdFromLocalStorage
+        }
+        this.notificacion = {
+          id:0,
+          contenido: "",
+          tipoNotificacion: "",
+          fechaNotificacion: "",
+          idUsuarioEmisor: this.usuarioIdFromLocalStorage,
+          idUsuarioRemitente: 0
         }
         this.loadCompania();
         this.getAllUsuarios();
@@ -482,44 +494,73 @@ eliminarPublicacion(id: number) {
   }
 
   abandonarCompania(idCompania: number) {
-    // Obtener el usuario actual
-    const usuarioLocalStorage = localStorage.getItem('usuario');
-    if (usuarioLocalStorage) {
-      const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
-      const userId = usuarioAlmacenado.id;
-      
-      // Actualizar el atributo companiaSeguida del usuario a 0
-      this.usuarioService.updateCompaniaSeguida(userId, 0).subscribe(
-        () => {
-          console.log('companiaSeguida actualizado a 0 correctamente');
-          
-          // Obtener el valor actual del atributo miembros de la compañía
-          this.companiaService.getCompaniaById(idCompania).subscribe(
-            (compania: Compania) => {
-              const nuevosMiembros = compania.miembros - 1;
-              // Actualizar el atributo miembros de la compañía
-              this.companiaService.updateMiembrosCompania(idCompania, nuevosMiembros).subscribe(
-                () => {
-                  console.log('Atributo miembros decrementado correctamente.');
-                  this.router.navigateByUrl('/home');
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Quieres abandonar esta compañía?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, abandonar',
+      cancelButtonText: 'cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Obtener el usuario actual
+        const usuarioLocalStorage = localStorage.getItem('usuario');
+        if (usuarioLocalStorage) {
+          const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
+          const userId = usuarioAlmacenado.id;
+
+          // Actualizar el atributo companiaSeguida del usuario a 0
+          this.usuarioService.updateCompaniaSeguida(userId, 0).subscribe(
+            () => {
+              console.log('companiaSeguida actualizado a 0 correctamente');
+              this.notificacion.fechaNotificacion = new Date().toISOString();
+              this.notificacion.idUsuarioRemitente = this.compania.idCreador;
+              this.notificacion.tipoNotificacion = "dejaCompania";
+              this.notificacionService.createNotificacion(this.notificacion).subscribe(
+              ()=> {
+              }
+            )
+              
+              // Obtener el valor actual del atributo miembros de la compañía
+              this.companiaService.getCompaniaById(idCompania).subscribe(
+                (compania: Compania) => {
+                  const nuevosMiembros = compania.miembros - 1;
+                  // Actualizar el atributo miembros de la compañía
+                  this.companiaService.updateMiembrosCompania(idCompania, nuevosMiembros).subscribe(
+                    () => {
+                      console.log('Atributo miembros decrementado correctamente.');
+                      this.router.navigateByUrl('/home');
+                    },
+                    error => {
+                      console.error('Error al decrementar el atributo miembros:', error);
+                    }
+                  );
                 },
                 error => {
-                  console.error('Error al decrementar el atributo miembros:', error);
+                  console.error('Error al obtener la compañía:', error);
                 }
               );
             },
             error => {
-              console.error('Error al obtener la compañía:', error);
+              console.error('Error al actualizar companiaSeguida:', error);
             }
           );
-        },
-        error => {
-          console.error('Error al actualizar companiaSeguida:', error);
+        } else {
+          Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'Se ha abandonado la compañía correctamente.',
+            confirmButtonText: 'Entendido'
+          }).then((result) => {
+            if (result.isConfirmed) {
+            }
+          });
+          this.router.navigateByUrl('/home');
         }
-      );
-    } else {
-      this.router.navigateByUrl('/home');
-    }
+      }
+    });
   }
   
   async entrarCompania(idCompania: number) {
@@ -548,6 +589,13 @@ eliminarPublicacion(id: number) {
             title: 'Entrada a compañía exitosa',
             text: 'Has ingresado a la compañía correctamente.'
           });
+          this.notificacion.fechaNotificacion = new Date().toISOString();
+          this.notificacion.idUsuarioRemitente = this.compania.idCreador;
+          this.notificacion.tipoNotificacion = "unirseCompania";
+          this.notificacionService.createNotificacion(this.notificacion).subscribe(
+          ()=> {
+          }
+        )
   
           // Redirigir a la página de inicio
           this.router.navigateByUrl('/home');

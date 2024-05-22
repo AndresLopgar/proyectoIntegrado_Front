@@ -13,7 +13,7 @@ export class ChatService {
     private messageSubject: BehaviorSubject<ChatMessage[]> = new BehaviorSubject<ChatMessage[]>([]);
 
     //heroku
-    //private baseUrl = 'wss://artconnect-9bc127224463.herokuapp.com/chat-socket';
+    //private baseUrl = 'https://artconnect-9bc127224463.herokuapp.com/chat-socket';
 
     //localhost
     private baseUrl = 'http://localhost:8081/chat-socket';

@@ -33,6 +33,7 @@ export class MensajesComponent implements OnInit{
     private route: ActivatedRoute, ){}
 
   ngOnInit() {
+    console.log(typeof this.chatService.joinRoom);
     this.usuarioId =this.route.snapshot.params["id"];
     this.chatService.joinRoom("ABC");
     this.listenerMessage();
