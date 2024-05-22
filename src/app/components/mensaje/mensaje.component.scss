@@ -18,37 +18,90 @@
             height: 70vh;
             flex-direction: column;
 
-            .conversaciones{
+            .conversaciones {
                 border-radius: 10px;
                 height: 70vh;
                 border: 2px solid var(--color-enlaces-hover);
 
-                .enviar {
-                width: 100%;
-                margin-top: 45%;
+                .messages {
+                    height: 1vh;
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 0;
+                    
+                    .message {
+                        display: flex;
+                        margin: 10px 0;
+                
+                        .avatar {
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                            background-color: gray;
+                            margin: 0 10px;
+                        }
+                
+                        &.left {
+                            justify-content: flex-start;
+                            
+                            .text-wrapper {
+                                background-color: var(--color-enlaces-hover);
+                                color: white;
+                                border: 1px solid white;
+                                margin-left: 5px; // Espacio entre el avatar y el texto
+                            }
+                        }
+                
+                        &.right {
+                            justify-content: flex-end;
+                            
+                            .text-wrapper {
+                                background-color: var(--color-primario);
+                                color: white;
+                                border: 1px solid white;
+                                margin-right: 5px; // Espacio entre el avatar y el texto
+                            }
+                
+                            .avatar {
+                                order: 2; // Cambia el orden del avatar para estar a la derecha del mensaje
+                                margin: 0 10px;
+                            }
+                        }
+                
+                        .text-wrapper {
+                            max-width: 70%;
+                            padding: 10px;
+                            border-radius: 10px;
+                        }
+                    }
+                }
+                
 
-                    input{
+                .enviar {
+                    width: 100%;
+                    margin-top: 44%;
+
+                    input {
                         border-radius: 10px;
                         width: 80%;
                         height: 6vh;
                     }
 
-                    button{
+                    button {
                         margin-left: 1%;
                         padding: 1%;
                         border-radius: 10px;
                         background-color: white !important;
-                        color: black; /* Cambia el color de fondo de los botones pButton */
+                        color: black;
                         border-color: black;
 
-                        &:hover{
+                        &:hover {
                             box-shadow: 0px 0px 20px 0px var(--color-enlaces-hover);
                         }
                     }
                 }
             }
         }
-
 
         .col-md-3 {
             padding: 1%;
@@ -61,7 +114,7 @@
             flex-direction: column;
             margin-bottom: 20px;
 
-            h1{
+            h1 {
                 padding-bottom: 3%;
                 border-bottom: 2px solid var(--color-enlaces-hover);
             }
@@ -71,41 +124,41 @@
                 margin-top: 2%;
                 padding: 1%;
                 margin-bottom: 3%;
-                display: flex; 
-                align-items: stretch; 
+                display: flex;
+                align-items: stretch;
                 justify-content: space-evenly;
                 flex-direction: row;
                 width: 100%;
                 border: solid 2px white;
                 border-radius: 10px;
 
-                &:hover{
+                &:hover {
                     cursor: pointer;
                 }
 
                 img {
-                    width: 50px; // Ajusta el tamaño de la imagen según sea necesario
-                    height: 50px; // Ajusta el tamaño de la imagen según sea necesario
-                    margin-right: 10px; // Añade un espacio entre la imagen y los textos
+                    width: 50px;
+                    height: 50px;
+                    margin-right: 10px;
                     border-radius: 50%;
-                    border: 2px solid white; /* Borde blanco */
+                    border: 2px solid white;
                     text-align: center;
-                    line-height: 40px; /* Ajusta según el tamaño deseado */
+                    line-height: 40px;
                 }
 
                 p {
-                    margin-top: 2.5%;// Centra los elementos p dentro de la clase .usuario
+                    margin-top: 2.5%;
                 }
 
                 .custom-button {
                     display: flex;
                     justify-content: space-around;
-                    align-items:  center;
+                    align-items: center;
                     width: 20%;
                     padding: 1%;
                     border-radius: 10px;
                     background-color: white !important;
-                    color: black; /* Cambia el color de fondo de los botones pButton */
+                    color: black;
                     border-color: black;
                 }
             }
@@ -113,11 +166,11 @@
     }
 }
 
-@media (max-width: 991px) { /* Estilo aplicado cuando el ancho de la pantalla es menor o igual a 991px */
-    .container {       
-        .col-md-8, .col-md-3 { /* Estilos para las columnas de tamaño md */
-          height: auto !important; /* Cambia la altura a auto para ajustarse al contenido */
-          margin-bottom: 10px; /* Añade un margen inferior entre las columnas */   
+@media (max-width: 991px) {
+    .container {
+        .col-md-8, .col-md-3 {
+            height: auto !important;
+            margin-bottom: 10px;
         }
     }
 }

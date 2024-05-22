@@ -6,10 +6,13 @@ import { AmistadService } from '../../services/amistad.service';
 import { Amistad } from '../../model/amistad';
 import { ActivatedRoute } from '@angular/router';
 import { LoaderComponent } from '../../layout/loader/loader.component';
+import { ChatService } from '../../services/chat.service';
+import { ChatMessage } from '../../model/chatMessage';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-mensajes',
   standalone: true,
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, FormsModule],
   templateUrl: './mensaje.component.html',
   styleUrl: './mensaje.component.scss'
 })
@@ -21,10 +24,18 @@ export class MensajesComponent implements OnInit{
   usuarioIdFromLocalStorage!: number;
   mostrarMensaje: boolean = false;
   loader: boolean = false;
+  messageInput : string = "";
+  messageList: any[] = [];
 
-  constructor (private usuarioService: UsuarioService, private amistadService: AmistadService,private route: ActivatedRoute, ){}
+  constructor (private usuarioService: UsuarioService, 
+    private amistadService: AmistadService,
+    private chatService: ChatService,
+    private route: ActivatedRoute, ){}
 
   ngOnInit() {
+    this.usuarioId =this.route.snapshot.params["id"];
+    this.chatService.joinRoom("ABC");
+    this.listenerMessage();
       // Cargar el perfil del usuario utilizando el ID
       const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
@@ -66,5 +77,23 @@ export class MensajesComponent implements OnInit{
             }
           })
       });
+  }
+
+  sendMessage(){
+    const chatMessage : ChatMessage = {
+      message: this.messageInput,
+      usuarioId: this.usuarioId
+    }
+    this.chatService.sendMessage("ABC", chatMessage);
+    this.messageInput = "";
+  }
+
+  listenerMessage(){
+    this.chatService.getMessageSubject().subscribe((messages : any) =>{
+      this.messageList = messages.map ((item: any) => ({
+        ...item,
+        message_side: item.usuarioId=== this.usuarioIdFromLocalStorage ?  'sender' : 'reciever'
+      }));
+    });
   }
 }

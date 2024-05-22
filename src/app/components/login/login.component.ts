@@ -6,6 +6,7 @@ import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../services/usuario.service';
 import Swal from 'sweetalert2';
+import { Usuario } from '../../model/usuario';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,6 @@ export class LoginComponent {
   iconName: string = 'pi pi-lock';
   usuarios: any;
 
-
   constructor(private router: Router, private usuarioService: UsuarioService) {}
   loginData = {
     usuario: '',
@@ -32,7 +32,7 @@ export class LoginComponent {
     this.usuarioService.getAllUsuarios().subscribe(
       data => {
         this.usuarios = data;
-        const usuarioEncontrado = this.usuarios.find((usuario: any) => 
+        const usuarioEncontrado = this.usuarios.find((usuario: Usuario) => 
           usuario.nombre === this.loginData.usuario && usuario.contrasena === this.loginData.contrasenaLogin
         );
   

@@ -16,7 +16,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     {path: 'registro', component: RegistroComponent},
     { path: 'perfil/:id', component: PerfilComponent },
-    {path: 'mensajes', component: MensajesComponent},
+    {path: 'mensajes/:id', component: MensajesComponent},
     {path: 'buscar', component: BuscarComponent},
     {path: 'notificaciones', component: NotificacionesComponent},
     {path: 'moderar', component: ModerarComponent},

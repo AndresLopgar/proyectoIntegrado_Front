@@ -59,14 +59,14 @@ export class CabeceraComponent implements OnInit {
       case currentRoute === '/notificaciones':
         this.titulo = 'Notificaciones';
         break;
-        case currentRoute === '/mensajes':
-        this.titulo = 'mensajes';
-        break;
       case currentRoute === '/moderar':
         this.titulo = 'Moderación';
         break;
       case currentRoute.includes('/compania'):
         this.titulo = 'Compañía';
+        break;
+        case currentRoute.includes('/mensajes'):
+        this.titulo = 'mensajes';
         break;
       case currentRoute.includes('/perfil'):
         this.titulo = 'Perfil';
@@ -78,6 +78,10 @@ export class CabeceraComponent implements OnInit {
   goPerfil(usuarioId: number) {
     this.router.navigate(['/perfil', usuarioId]); // Suponiendo que la ruta para el perfil sea '/perfil'
 }
+
+  goMensajes(usuarioId: number) {
+    this.router.navigate(['/mensajes', usuarioId]); // Suponiendo que la ruta para el perfil sea '/perfil'
+  }
 
   navegarlogin(){
     this.router.navigateByUrl('/login'); 

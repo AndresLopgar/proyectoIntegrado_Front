@@ -13,9 +13,18 @@
         </div>
         <div class="col-md-8">
           <div class="conversaciones">
+            <ul class="messages">
+              <li class="message right" *ngFor="let item of messageList"
+              [ngClass]="{'left': item.message_side === 'reciever', 'right': item.message_side === 'sender'}"> 
+                <div class="avatar"></div>
+                <div class="text-wrapper">
+                  <div class="text">{{item.message}}</div>
+                </div>
+              </li>
+            </ul>
             <div class="enviar">
-                <input type="text" placeholder="Enviar Mensaje...">
-                <button>Enviar</button>
+                <input type="text" placeholder="Enviar Mensaje..." [(ngModel)] = "messageInput"/>
+                <button (click)="sendMessage()">Enviar</button>
             </div>
           </div>
         </div>
