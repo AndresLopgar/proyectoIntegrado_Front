@@ -18,6 +18,7 @@
                   <!-- Agrega más opciones según los tipos de notificación disponibles -->
                 </select>
               </div>
+              <button (click)="eliminarNotificaciones()" type="button" pButton>Eliminar notificaciones</button>
         @for (notificacion of notificacionesFiltradas; track $index) {
             <div class="notificacion">
                 @if (usuariosCargados[notificacion.idUsuarioEmisor]) {
@@ -55,7 +56,7 @@
                 <i class="pi pi-trash" style="font-size: 1rem; cursor: pointer;" (click)="eliminarNotificacion(notificacion.id)"></i>
             </div>
         }}@else{
-            <h1>NO HAY NOTIFICACIONES</h1>
+            <h1 style="text-align: center;">NO HAY NOTIFICACIONES</h1>
         }
     </div>
 </div>

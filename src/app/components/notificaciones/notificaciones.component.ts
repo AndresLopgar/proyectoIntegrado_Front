@@ -10,13 +10,14 @@ import { CompaniaService } from '../../services/compania.service';
 import { Compania } from '../../model/compania';
 import { toZonedTime } from 'date-fns-tz';
 import { addHours, format } from 'date-fns';
+import { ButtonModule } from 'primeng/button';
 
 
 
 @Component({
   selector: 'app-notificaciones',
   standalone: true,
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, ButtonModule],
   templateUrl: './notificaciones.component.html',
   styleUrl: './notificaciones.component.scss'
 })
@@ -153,6 +154,23 @@ formatDateToLocal(date: string): string {
     this.notificacionService.deleteNotificacion(id).subscribe(() =>
     location.reload())
   }
+
+  eliminarNotificaciones() {
+    this.notificacionService.getAllNotificaciones().subscribe(
+      notificaciones => {
+        notificaciones.forEach(notificacion => {
+          if (notificacion.idUsuarioRemitente === this.usuarioIdFromLocalStorage) {
+            this.eliminarNotificacion(notificacion.id);
+          }
+        });
+        this.router.navigateByUrl('/notificaciones');
+      },
+      error => {
+        console.error('Error al cargar notificaciones:', error);
+      }
+    );
+  }
+  
 
   loadCompaniaByIdCreador(id:number){
     this.companiaService.getCompaniaByIdCreador(id).subscribe(
