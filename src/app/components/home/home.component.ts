@@ -13,6 +13,8 @@ import { Compania } from '../../model/compania';
 import { ComentarioService } from '../../services/comentario.service';
 import { Comentario } from '../../model/comentario';
 import { LoaderComponent } from '../../layout/loader/loader.component';
+import { Notificacion } from '../../model/notificacion';
+import { NotificacionService } from '../../services/notificacion.service';
 
 @Component({
   selector: 'app-home',
@@ -52,17 +54,27 @@ export class HomeComponent implements OnInit {
     idPublicacion: 0
   };
   textoBotonComentario: string = "Comentar"; // Texto dinámico para el botón de comentario
+  notificacion!: Notificacion;
 
   constructor(private usuarioService: UsuarioService, 
     private publicacionService: PublicacionService,
     private companiaService: CompaniaService,
-    private comentarioService: ComentarioService, 
+    private comentarioService: ComentarioService,
+    private notificacionService: NotificacionService, 
     private router: Router) { 
     const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
         this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
         this.noHayUsuarioIniciado = true;
+        this.notificacion = {
+          id:0,
+          contenido: "",
+          tipoNotificacion: "",
+          fechaNotificacion: "",
+          idUsuarioEmisor: this.usuarioIdFromLocalStorage,
+          idUsuarioRemitente: 0
+        }
       } else {
         this.noHayUsuarioIniciado = false;
       }
@@ -250,9 +262,20 @@ export class HomeComponent implements OnInit {
       publicacion.numMeGustas++;
       this.publicacionesLiked.add(publicacion.id); 
     }
+    
     this.publicacionService.updatePublicacion(publicacion.id, publicacion).subscribe(() => {
+      this.notificacion.fechaNotificacion = new Date().toISOString();
+      this.notificacion.idUsuarioRemitente = publicacion.idUsuario; 
+      this.notificacion.tipoNotificacion = "meGusta";
+      this.notificacionService.createNotificacion(this.notificacion).subscribe(
+        () => {
+          console.log("Notificación creada correctamente");
+          console.log(this.notificacion);
+        }
+      );
     });
   }
+  
   
   crearComentario(publicacion: Publicacion, contenido: string) {
     const nuevoComentario: Comentario = {
@@ -272,6 +295,13 @@ export class HomeComponent implements OnInit {
           title: 'Comentario creado',
           text: 'El comentario ha sido creado correctamente.'
         });
+        this.notificacion.fechaNotificacion = new Date().toISOString();
+        this.notificacion.idUsuarioRemitente = publicacion.idUsuario; 
+        this.notificacion.tipoNotificacion = "comenta";
+        this.notificacionService.createNotificacion(this.notificacion).subscribe(
+          ()=> {
+          }
+        )
         this.publicacionComentar = null;
         this.router.navigate(['/perfil' + this.usuarioIdFromLocalStorage]);
       },

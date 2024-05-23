@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit} from '@angular/core';
 import { Router, NavigationEnd} from '@angular/router';
 import { filter } from 'rxjs';
-import { UsuarioService } from '../../services/usuario.service';
 
 
 @Component({
@@ -18,7 +17,7 @@ export class CabeceraComponent implements OnInit {
   idUsuario!:number;
   fotoPerfilUsuario!: string;
 
-  constructor(private router: Router, private usuarioService: UsuarioService) {}
+  constructor(private router: Router,) {}
 
   ngOnInit(): void {
     // Escucha cambios en la ruta para actualizar el título

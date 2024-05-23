@@ -2,10 +2,28 @@
 <div class="container" *ngIf="loader">
     <div class="col-md-11">
         @if (notificaciones.length != 0) {
-        @for (notificacion of notificaciones; track $index) {
+            <h3>Filtros</h3>
+            <div class="form-group" style="margin-bottom: 2%;">
+                <label for="filtroTipo">Filtrar por tipo de notificación:</label>
+                <select class="form-control" id="filtroTipo" name="filtroTipo" (change)="filtrarNotificaciones($event)">
+                    <option value="todos">Todos</option>
+                    <option value="seguimiento">Seguimiento</option>
+                    <option value="meGusta">Me gusta</option>
+                    <option value="comenta">Comenta</option>
+                    <option value="unirseCompania">Unirse a Compañía</option>
+                    <option value="dejaCompania">Dejar Compañía</option>
+                    <option value="comentaCompania">Comenta Compañía</option>
+                    <option value="meGustaCompania">Me gusta Compañía</option>
+                    <option value="publicacionCompania">Publicación Compañía</option>
+                  <!-- Agrega más opciones según los tipos de notificación disponibles -->
+                </select>
+              </div>
+        @for (notificacion of notificacionesFiltradas; track $index) {
             <div class="notificacion">
                 @if (usuariosCargados[notificacion.idUsuarioEmisor]) {
-                    <img (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)"  [src]="usuariosCargados[notificacion.idUsuarioEmisor].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                    @if (notificacion.tipoNotificacion != "publicacionCompania") {
+                        <img (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)"  [src]="usuariosCargados[notificacion.idUsuarioEmisor].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                    }
                     @if (notificacion.tipoNotificacion === "seguimiento") {
                         <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} te acaba de seguir</p>
                     }
@@ -21,14 +39,23 @@
                     @if(esCreador && notificacion.tipoNotificacion === "dejaCompania"){
                         <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha abandonado a tu compañía {{compania.nombre.toLocaleUpperCase()}}</p>
                     }
+                    @if(esCreador && notificacion.tipoNotificacion === "comentaCompania"){
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha comentado en una publicación de tu compañía {{compania.nombre.toLocaleUpperCase()}}</p>
+                    }
+                    @if(esCreador && notificacion.tipoNotificacion === "meGustaCompania"){
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha dado me gusta en una publicación de tu compañía {{compania.nombre.toLocaleUpperCase()}}</p>
+                    }
+                }
+                @if(!esCreador && estaEnCompania && notificacion.tipoNotificacion === "publicacionCompania"){
+                    <img (click)="irAlPerfilCompania(compania.id)" [src]="compania.fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                    <p>{{compania.nombre.toLocaleUpperCase()}} ha subido una publicacion</p>
                 }
                 
-                <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">Fecha Notificación: {{notificacion.fechaNotificacion | date:'dd/MM/yyyy'}}</p>
-                <i class="pi pi-trash" style="font-size: 1.5rem" (click)="eliminarNotificacion(notificacion.id)"></i>
+                <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">Fecha Notificación: Fecha Notificación: {{ formatDateToLocal(notificacion.fechaNotificacion) }}</p>
+                <i class="pi pi-trash" style="font-size: 1rem; cursor: pointer;" (click)="eliminarNotificacion(notificacion.id)"></i>
             </div>
         }}@else{
             <h1>NO HAY NOTIFICACIONES</h1>
         }
-
     </div>
 </div>

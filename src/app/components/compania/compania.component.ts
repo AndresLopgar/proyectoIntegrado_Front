@@ -322,33 +322,49 @@ export class CompaniaComponent  implements OnInit{
     }
   }
 
-crearPublicacionCompania() {
+  crearPublicacionCompania() {
     this.publicacion.fechaPublicacion = new Date().toISOString();
     this.publicacion.idCompania = this.companiaId;
     
     this.publicacionService.createPublicacion(this.publicacion).subscribe(
-        () => {
-            // Alerta de éxito si la publicación se crea correctamente
-            Swal.fire({
-                icon: 'success',
-                title: 'Publicación creada correctamente',
-                showConfirmButton: false,
-                timer: 1500
-            });
-            this.router.navigateByUrl('/');
-        },
-        (error) => {
-            // Alerta de error si la publicación no se crea correctamente
-            Swal.fire({
-                icon: 'error',
-                title: 'Error al crear la publicación',
-                text: 'Por favor, inténtalo de nuevo más tarde.',
-                showConfirmButton: true
-            });
-            console.error('Error al crear la publicación:', error);
-        }
+      () => {
+        // Alerta de éxito si la publicación se crea correctamente
+        Swal.fire({
+          icon: 'success',
+          title: 'Publicación creada correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+            // Iterar sobre todos los usuarios para buscar coincidencias
+            for (const usuario of this.usuariosSeguidores) {
+              if (usuario.id !== this.compania.idCreador) {
+                // Crear una nueva instancia de Notificacion para cada usuario coincidente
+                const notificacion: Notificacion = {
+                  id: 0,
+                  contenido: "",
+                  idUsuarioEmisor: this.usuarioIdFromLocalStorage,
+                  fechaNotificacion: new Date().toISOString(),
+                  idUsuarioRemitente: usuario.id,
+                  tipoNotificacion: "publicacionCompania"
+                };
+  
+                // Crear la notificación
+                this.notificacionService.createNotificacion(notificacion).subscribe(
+                  () => {
+                    this.router.navigate(['/perfil', this.usuarioIdFromLocalStorage]);
+                  },
+                  error => {
+                    console.error('Error al crear la notificación:', error);
+                  }
+                );
+                break; 
+              }
+            }
+      }
     );
-}
+  }
+  
+            
 
 getAllPublicacionesActuales(idCompania: number) {
   this.publicacionService.getAllPublicacionesByCompania(this.companiaId).subscribe(
@@ -462,7 +478,7 @@ eliminarPublicacion(id: number) {
             'La publicación ha sido eliminada.',
             'success'
           );
-          this.router.navigate(['/home']);
+          this.router.navigate(['/perfil', this.usuarioIdFromLocalStorage]);
           // Aquí podrías realizar alguna acción adicional si es necesario
         },
         (error) => {
@@ -712,6 +728,13 @@ eliminarPublicacion(id: number) {
           title: 'Comentario creado',
           text: 'El comentario ha sido creado correctamente.'
         });
+        this.notificacion.fechaNotificacion = new Date().toISOString();
+        this.notificacion.idUsuarioRemitente = this.compania.idCreador;
+        this.notificacion.tipoNotificacion = "comentaCompania";
+        this.notificacionService.createNotificacion(this.notificacion).subscribe(
+          ()=> {
+          }
+        )
         this.publicacionComentar = null;
         this.router.navigate(['/perfil' + this.usuarioIdFromLocalStorage]);
       },
@@ -759,7 +782,14 @@ eliminarPublicacion(id: number) {
     }
   
     // Llama al servicio para actualizar la publicación en la base de datos
-    this.publicacionService.updatePublicacion(publicacion.id, publicacion).subscribe(() => {
+        this.publicacionService.updatePublicacion(publicacion.id, publicacion).subscribe(() => {
+        this.notificacion.fechaNotificacion = new Date().toISOString();
+        this.notificacion.idUsuarioRemitente = this.compania.idCreador;
+        this.notificacion.tipoNotificacion = "meGustaCompania";
+        this.notificacionService.createNotificacion(this.notificacion).subscribe(
+          ()=> {
+          }
+        )
     });
   }
   

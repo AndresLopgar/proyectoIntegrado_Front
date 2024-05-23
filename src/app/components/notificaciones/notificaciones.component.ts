@@ -8,6 +8,10 @@ import { Router } from '@angular/router';
 import { LoaderComponent } from '../../layout/loader/loader.component';
 import { CompaniaService } from '../../services/compania.service';
 import { Compania } from '../../model/compania';
+import { toZonedTime } from 'date-fns-tz';
+import { addHours, format } from 'date-fns';
+
+
 
 @Component({
   selector: 'app-notificaciones',
@@ -27,9 +31,21 @@ export class NotificacionesComponent implements OnInit{
   usuarioIdFromLocalStorage!: number;
   notificaciones: Notificacion[] = [];
   usuariosCargados: { [id: number]: Usuario } = {};
+  companiasCargadas: { [id: number]: Compania } = {};
   compania!: Compania;
   loader: boolean = false;
   esCreador: boolean = false;
+  estaEnCompania: boolean = false;
+  usuario!: Usuario;
+  imagenesCompanias: string[] = [   // Rutas de las imágenes
+    '../../../assets/perfiles/companias/imagenCompania1.png',
+    '../../../assets/perfiles/companias/imagenCompania2.png',
+    '../../../assets/perfiles/companias/imagenCompania3.png',
+    '../../../assets/perfiles/companias/imagenCompania4.png',
+    '../../../assets/perfiles/companias/imagenCompania5.png',
+  ];
+  filtroTipo: string = '';
+  notificacionesFiltradas: Notificacion[] = [];
 
   ngOnInit(): void {     
       const usuarioLocalStorage = localStorage.getItem('usuario');
@@ -38,16 +54,29 @@ export class NotificacionesComponent implements OnInit{
         this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
         this.cargarNotificacionesByIdRemitente(this.usuarioIdFromLocalStorage);
         this.loadCompaniaByIdCreador(this.usuarioIdFromLocalStorage);
+        this.loadUsuarioFromLocalStorage();
       }
       setTimeout(() => {
         this.loader = true;
     }, 1500);
+    this.loadCompania();
   }
+
+formatDateToLocal(date: string): string {
+  const zonedDate = toZonedTime(new Date(date), 'Europe/Madrid');
+  const zonedDatePlusTwoHours = addHours(zonedDate, 2); // Agrega dos horas
+  return format(zonedDatePlusTwoHours, 'dd/MM/yyyy HH:mm');
+}
 
   cargarNotificacionesByIdRemitente(id: number) {
     this.notificacionService.getNotificacionesByUsuarioRemitente(id).subscribe(
       notificaciones => {
-        this.notificaciones = notificaciones;
+        // Ordenar las notificaciones por fecha de más reciente a más antigua
+        this.notificaciones = notificaciones.sort((a, b) => {
+          return new Date(b.fechaNotificacion).getTime() - new Date(a.fechaNotificacion).getTime();
+        });
+        this.notificacionesFiltradas = [...this.notificaciones];
+  
         notificaciones.forEach(notificacion => {
           this.loadUsuario(notificacion.idUsuarioEmisor);
         });
@@ -57,6 +86,44 @@ export class NotificacionesComponent implements OnInit{
       }
     );
   }
+
+  filtrarNotificaciones(event: Event) {
+    console.log("Evento de cambio detectado");
+    const target = event.target as HTMLSelectElement;
+    const tipo = target.value;
+    console.log("Valor seleccionado:", target.value);
+  
+    if (tipo === 'todos') {
+      this.notificacionesFiltradas = [...this.notificaciones];
+    } else {
+      this.notificacionesFiltradas = this.notificaciones.filter(notificacion => notificacion.tipoNotificacion === tipo);
+      console.log(this.notificacionesFiltradas);
+      
+    }
+  }
+  
+  loadUsuarioFromLocalStorage(){
+    this.usuarioService.getUsuarioById(this.usuarioIdFromLocalStorage).subscribe(
+      usuario => {
+        this.usuario = usuario;
+        const companiaSeguidaId = usuario.companiaSeguida;
+        if (companiaSeguidaId) {
+          this.companiaService.getAllCompanias().subscribe(
+            companias => {
+              for (const compania of companias) {
+                if (compania.id === companiaSeguidaId) {
+                  this.estaEnCompania = true;
+                  break; 
+                }}},
+            error => {
+              console.error('Error al cargar todas las compañías:', error);
+            });
+          }},
+      error => {
+        console.error('Error al cargar usuario desde el almacenamiento local:', error);
+      });
+  }
+  
 
   loadUsuario(id: number) {
     if (!this.usuariosCargados[id]) {
@@ -69,6 +136,19 @@ export class NotificacionesComponent implements OnInit{
         }
       );
     }
+  }
+
+  loadCompania(){
+    this.companiaService.getAllCompanias().subscribe(
+      companias => {
+        companias.forEach(compania => {
+          if(this.usuario.companiaSeguida === compania.id && this.usuario.id != compania.idCreador){
+            this.compania = compania;
+            console.log(compania);
+          }
+        });
+      }
+    )
   }
 
   eliminarNotificacion(id: number){
@@ -93,4 +173,11 @@ export class NotificacionesComponent implements OnInit{
     // Navegar al perfil del usuario
     this.router.navigate(['/perfil', idUsuario]);
   }
+
+  irAlPerfilCompania(idCompania: number){
+    this.router.navigate(['/compania', idCompania]);
+  }
+
 }
+
+
