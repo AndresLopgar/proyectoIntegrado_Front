@@ -767,9 +767,6 @@ dejarDeSeguirUsuario(id: number) {
                 this.estaEnAmistad = false;
               }
             }
-
-        console.log("Esta en amistad: " + this.estaEnAmistad);
-        
         
         this.usuarioSeguido = [];
         let userIds = new Set<number>(); // Conjunto para almacenar los IDs de los usuarios ya agregados

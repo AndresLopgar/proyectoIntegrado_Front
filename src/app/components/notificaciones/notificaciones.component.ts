@@ -88,10 +88,8 @@ formatDateToLocal(date: string): string {
   }
 
   filtrarNotificaciones(event: Event) {
-    console.log("Evento de cambio detectado");
     const target = event.target as HTMLSelectElement;
     const tipo = target.value;
-    console.log("Valor seleccionado:", target.value);
   
     if (tipo === 'todos') {
       this.notificacionesFiltradas = [...this.notificaciones];
