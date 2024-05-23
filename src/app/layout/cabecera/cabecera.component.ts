@@ -75,11 +75,11 @@ export class CabeceraComponent implements OnInit {
   }
 
   goPerfil(usuarioId: number) {
-    this.router.navigate(['/perfil', usuarioId]); // Suponiendo que la ruta para el perfil sea '/perfil'
+    this.router.navigate(['/perfil', usuarioId]); 
 }
 
   goMensajes(usuarioId: number) {
-    this.router.navigate(['/mensajes', usuarioId]); // Suponiendo que la ruta para el perfil sea '/perfil'
+    this.router.navigate(['/mensajes', usuarioId]);
   }
 
   navegarlogin(){

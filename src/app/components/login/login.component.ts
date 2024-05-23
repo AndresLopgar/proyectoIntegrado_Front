@@ -44,7 +44,7 @@ export class LoginComponent {
           }).then((result) => {
             if (result.isConfirmed) {
               localStorage.setItem('usuario', JSON.stringify(usuarioEncontrado)); // Guardar usuario en Local Storage
-              this.router.navigate(['/perfil', usuarioEncontrado.id]).then(() =>{
+              this.router.navigateByUrl('/home').then(() =>{
                 window.location.reload();
               });
             }
