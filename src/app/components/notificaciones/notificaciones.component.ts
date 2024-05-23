@@ -11,6 +11,7 @@ import { Compania } from '../../model/compania';
 import { toZonedTime } from 'date-fns-tz';
 import { addHours, format } from 'date-fns';
 import { ButtonModule } from 'primeng/button';
+import { AmistadService } from '../../services/amistad.service';
 
 
 
@@ -26,6 +27,7 @@ export class NotificacionesComponent implements OnInit{
   constructor(private notificacionService: NotificacionService,
     private usuarioService: UsuarioService,
     private companiaService: CompaniaService,
+    private amistadService: AmistadService,
     private router: Router, 
   ){}
 
@@ -47,6 +49,8 @@ export class NotificacionesComponent implements OnInit{
   ];
   filtroTipo: string = '';
   notificacionesFiltradas: Notificacion[] = [];
+  esSeguidor: boolean = false;
+  usuariosSeguidos: Usuario[] = [];
 
   ngOnInit(): void {     
       const usuarioLocalStorage = localStorage.getItem('usuario');
@@ -56,6 +60,7 @@ export class NotificacionesComponent implements OnInit{
         this.cargarNotificacionesByIdRemitente(this.usuarioIdFromLocalStorage);
         this.loadCompaniaByIdCreador(this.usuarioIdFromLocalStorage);
         this.loadUsuarioFromLocalStorage();
+        this.compruebaEsSeguidor(this.usuarioIdFromLocalStorage);
       }
       setTimeout(() => {
         this.loader = true;
@@ -170,7 +175,25 @@ formatDateToLocal(date: string): string {
       }
     );
   }
-  
+
+  compruebaEsSeguidor(usuarioId: number) {
+    this.amistadService.findBySeguidor(usuarioId).subscribe(amistades => {
+      this.esSeguidor = amistades.some(amistad => amistad.idSeguidor === this.usuarioIdFromLocalStorage);
+      if (this.esSeguidor) {
+        this.cargarUsuariosSeguidos(amistades);
+      }
+    });
+  }
+
+  cargarUsuariosSeguidos(amistades: any[]) {
+    amistades.forEach(amistad => {
+      if (amistad.idSeguidor === this.usuarioIdFromLocalStorage) {
+        this.usuarioService.getUsuarioById(amistad.idSeguido).subscribe(usuarioSeguido => {
+          this.usuariosSeguidos.push(usuarioSeguido);
+        });
+      }
+    });
+  }
 
   loadCompaniaByIdCreador(id:number){
     this.companiaService.getCompaniaByIdCreador(id).subscribe(

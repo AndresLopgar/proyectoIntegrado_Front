@@ -11,11 +11,11 @@
                     <option value="meGusta">Me gusta</option>
                     <option value="comenta">Comenta</option>
                     <option value="unirseCompania">Unirse a Compañía</option>
-                    <option value="dejaCompania">Dejar Compañía</option>
+                    <option value="publicacionCompania">Publicación Compañía</option>
                     <option value="comentaCompania">Comenta Compañía</option>
                     <option value="meGustaCompania">Me gusta Compañía</option>
-                    <option value="publicacionCompania">Publicación Compañía</option>
-                  <!-- Agrega más opciones según los tipos de notificación disponibles -->
+                    <option value="dejaCompania">Dejar Compañía</option>
+                    <option value="PublicacionSeguido">Publicaciones Seguidos</option>
                 </select>
               </div>
               <button (click)="eliminarNotificaciones()" type="button" pButton>Eliminar notificaciones</button>
@@ -46,13 +46,11 @@
                     @if(esCreador && notificacion.tipoNotificacion === "meGustaCompania"){
                         <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha dado me gusta en una publicación de tu compañía {{compania.nombre.toLocaleUpperCase()}}</p>
                     }
-                }
-                @if(!esCreador && estaEnCompania && notificacion.tipoNotificacion === "publicacionCompania"){
-                    <img (click)="irAlPerfilCompania(compania.id)" [src]="compania.fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
-                    <p>{{compania.nombre.toLocaleUpperCase()}} ha subido una publicacion</p>
-                }
-                
-                <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">Fecha Notificación: Fecha Notificación: {{ formatDateToLocal(notificacion.fechaNotificacion) }}</p>
+                    @if(esSeguidor && notificacion.tipoNotificacion === "PublicacionSeguido"){
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} a quien sigues ha subido una publicación</p>
+                    }
+                }         
+                <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">Fecha Notificación: {{ formatDateToLocal(notificacion.fechaNotificacion) }}</p>     
                 <i class="pi pi-trash" style="font-size: 1rem; cursor: pointer;" (click)="eliminarNotificacion(notificacion.id)"></i>
             </div>
         }}@else{

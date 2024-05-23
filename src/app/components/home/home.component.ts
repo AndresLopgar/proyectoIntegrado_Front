@@ -15,6 +15,7 @@ import { Comentario } from '../../model/comentario';
 import { LoaderComponent } from '../../layout/loader/loader.component';
 import { Notificacion } from '../../model/notificacion';
 import { NotificacionService } from '../../services/notificacion.service';
+import { AmistadService } from '../../services/amistad.service';
 
 @Component({
   selector: 'app-home',
@@ -60,7 +61,8 @@ export class HomeComponent implements OnInit {
     private publicacionService: PublicacionService,
     private companiaService: CompaniaService,
     private comentarioService: ComentarioService,
-    private notificacionService: NotificacionService, 
+    private notificacionService: NotificacionService,
+    private amistadService: AmistadService, 
     private router: Router) { 
     const usuarioLocalStorage = localStorage.getItem('usuario');
       if (usuarioLocalStorage) {
@@ -240,6 +242,23 @@ export class HomeComponent implements OnInit {
           'La publicación se ha creado correctamente.',
           'success'
         );
+        this.amistadService.getAllAmistades().subscribe(amistades => {
+          amistades.forEach(amistad => {
+            if (amistad.idSeguido === this.usuarioIdFromLocalStorage) {
+              const nuevaNotificacion: Notificacion = {
+                id: 0,
+                contenido: "",
+                idUsuarioEmisor: this.usuarioIdFromLocalStorage,
+                fechaNotificacion: new Date().toISOString(),
+                idUsuarioRemitente: amistad.idSeguidor,
+                tipoNotificacion: 'PublicacionSeguido'
+              };
+              this.notificacionService.createNotificacion(nuevaNotificacion).subscribe(() => {
+                console.log('Notificación creada correctamente');
+              });
+            }
+          });
+        });
         this.publicacionForm.resetForm();
         this.mostrarCrear = false;
         this.router.navigate(['/perfil',  this.usuarioIdFromLocalStorage]);
@@ -270,7 +289,6 @@ export class HomeComponent implements OnInit {
       this.notificacionService.createNotificacion(this.notificacion).subscribe(
         () => {
           console.log("Notificación creada correctamente");
-          console.log(this.notificacion);
         }
       );
     });
