@@ -177,6 +177,10 @@ formatDateToLocal(date: string): string {
     );
   }
 
+  irAMensajes(){
+    this.router.navigate(['/mensajes', this.usuarioIdFromLocalStorage]);
+  }
+
   compruebaEsSeguidor(usuarioId: number) {
     this.amistadService.findBySeguidor(usuarioId).subscribe(amistades => {
       this.esSeguidor = amistades.some(amistad => amistad.idSeguidor === this.usuarioIdFromLocalStorage);

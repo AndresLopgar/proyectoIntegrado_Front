@@ -10,6 +10,7 @@
                     <option value="seguimiento">Seguimiento</option>
                     <option value="meGusta">Me gusta</option>
                     <option value="comenta">Comenta</option>
+                    <option value="mensaje">Mensajes</option>
                     <option value="unirseCompania">Unirse a Compañía</option>
                     <option value="publicacionCompania">Publicación Compañía</option>
                     <option value="comentaCompania">Comenta Compañía</option>
@@ -27,6 +28,9 @@
                     }
                     @if (notificacion.tipoNotificacion === "seguimiento") {
                         <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} te acaba de seguir</p>
+                    }
+                    @if (notificacion.tipoNotificacion === "mensaje") {
+                        <p (click)="irAMensajes()" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} te acaba de enviar un mensaje</p>
                     }
                     @if (notificacion.tipoNotificacion === "meGusta") {
                         <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} le ha dado me gusta a una publicación tuya</p>

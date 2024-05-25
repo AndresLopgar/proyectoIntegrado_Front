@@ -10,6 +10,9 @@ import { ChatService } from '../../services/chat.service';
 import { ChatMessage } from '../../model/chatMessage';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, map } from 'rxjs';
+import { NotificacionService } from '../../services/notificacion.service';
+import { Notificacion } from '../../model/notificacion';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-mensajes',
@@ -38,11 +41,14 @@ export class MensajesComponent implements OnInit {
     '../../../assets/perfiles/usuarios/imagenHombre3.png',
     '../../../assets/perfiles/usuarios/imagenMujer3.png',
   ];
+  notificacion!: Notificacion;
+  otherUserId!: number;
 
   constructor(
     private usuarioService: UsuarioService, 
     private amistadService: AmistadService,
     private chatService: ChatService,
+    private notificacionService: NotificacionService,
     private route: ActivatedRoute,
   ) {}
 
@@ -55,6 +61,14 @@ export class MensajesComponent implements OnInit {
       const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
       this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
       this.loadUsuarioSeguidos(this.usuarioIdFromLocalStorage);
+      this.notificacion = {
+        id:0,
+        contenido: "",
+        tipoNotificacion: "",
+        fechaNotificacion: "",
+        idUsuarioEmisor: this.usuarioIdFromLocalStorage,
+        idUsuarioRemitente: 0
+      }
     }
 
     setTimeout(() => {
@@ -97,8 +111,8 @@ export class MensajesComponent implements OnInit {
   }
 
   selectUsuario(usuario: Usuario) {
-    const otherUserId = usuario.id;
-    this.currentRoom = this.generateRoomName(this.usuarioIdFromLocalStorage, otherUserId);
+    this.otherUserId = usuario.id;
+    this.currentRoom = this.generateRoomName(this.usuarioIdFromLocalStorage,  this.otherUserId);
     this.chatService.joinRoom(this.currentRoom);
     this.messageList = [];
   }
@@ -108,13 +122,37 @@ export class MensajesComponent implements OnInit {
   }
 
   sendMessage() {
+    // Verificar si el mensaje está en blanco o solo contiene espacios en blanco
+    if (!this.messageInput.trim()) {
+      // Mostrar alerta utilizando SweetAlert si el mensaje está vacío
+      Swal.fire({
+        icon: 'warning',
+        title: 'Mensaje vacío',
+        text: 'El mensaje no puede estar vacío',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+  
+    // Si el mensaje no está en blanco, continuar con el envío del mensaje
     const chatMessage: ChatMessage = {
       message: this.messageInput,
       usuarioId: this.usuarioIdFromLocalStorage.toString()
     }
+    this.listenerMessage();
     this.chatService.sendMessage(this.currentRoom, chatMessage);
     this.messageInput = "";
+    this.notificacion.fechaNotificacion = new Date().toISOString();
+    this.notificacion.idUsuarioRemitente = this.otherUserId; 
+    this.notificacion.tipoNotificacion = "mensaje";
+    this.notificacionService.createNotificacion(this.notificacion).subscribe(
+      () => {
+        console.log("Notificación creada correctamente");
+      }
+    );
   }
+  
+  
 
   listenerMessage() {
     this.chatService.getMessageSubject().subscribe(
