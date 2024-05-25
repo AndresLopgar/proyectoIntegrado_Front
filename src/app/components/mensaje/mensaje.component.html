@@ -3,9 +3,11 @@
   <div class="row flex-sm-row flex-column">
     <div class="col-md-3 mb-3 mb-md-0">
       <h1>Personas que sigues</h1>
-      <div *ngFor="let usuario of usuariosEnAmistad" class="usuario" (click)="selectUsuario(usuario)">
-        <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
-        <p>{{ usuario.nombre.toUpperCase() }}</p>
+      <div class="usuarios">
+        <div *ngFor="let usuario of usuariosEnAmistad" class="usuario" (click)="selectUsuario(usuario)">
+          <img [src]="usuario.fotoPerfil" alt="Foto de perfil">
+          <p>{{ usuario.nombre.toUpperCase() }}</p>
+        </div>
       </div>
       <div *ngIf="usuariosEnAmistad.length === 0">
         <h2>Para escribir a alguien debes seguirle</h2>
@@ -24,10 +26,10 @@
               </div>
           </li>
       </ul>
-        <div class="enviar">
-          <input type="text" placeholder="Enviar Mensaje..." [(ngModel)]="messageInput"/>
-          <button (click)="sendMessage()">Enviar</button>
-        </div>
+      </div>
+      <div class="enviar">
+        <input type="text" placeholder="Enviar Mensaje..." [(ngModel)]="messageInput"/>
+        <button (click)="sendMessage()">Enviar</button>
       </div>
     </div>
   </div>

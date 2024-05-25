@@ -100,6 +100,7 @@ export class MensajesComponent implements OnInit {
     const otherUserId = usuario.id;
     this.currentRoom = this.generateRoomName(this.usuarioIdFromLocalStorage, otherUserId);
     this.chatService.joinRoom(this.currentRoom);
+    this.messageList = [];
   }
 
   generateRoomName(userId1: number, userId2: number): string {
