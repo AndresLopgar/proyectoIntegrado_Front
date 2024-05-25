@@ -9,4 +9,5 @@ export class Usuario{
     fotoPerfil!: String;
     tipoUsuario!: string;
     companiaSeguida!: number;
+    publicacionesLiked!: number[];
 }

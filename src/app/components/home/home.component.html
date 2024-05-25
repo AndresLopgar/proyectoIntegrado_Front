@@ -36,7 +36,18 @@
             </div>
           </ng-container>
           <div class="acciones">
-            <p><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>{{ publicacion.numMeGustas }}</p>
+            <p>
+              <!-- Verifica si la publicación le gusta al usuario -->
+              <ng-container *ngIf="publicacion.meGusta; else noMeGusta">
+                <!-- Si la publicación le gusta -->
+                <i class="pi pi-heart-fill" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>
+              </ng-container>
+              <!-- Si la publicación no le gusta -->
+              <ng-template #noMeGusta>
+                <i class="pi pi-heart" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>
+              </ng-template>
+              {{ publicacion.numMeGustas }}
+            </p>
             <p><i class="pi pi-comment" style="font-size: 1.5rem" (click)="mostrarCrearComentario(publicacion.id)"></i></p>
           </div>
           <!-- Formulario de comentario -->
@@ -103,10 +114,21 @@
                   <p *ngIf="companiasCargadas[publicacion.idCompania]" (click)="irAlLogin()" style="cursor: pointer;">Publicado por: {{ companiasCargadas[publicacion.idCompania].nombre }}</p>
                   <p style="margin-bottom: 0;">Publicación: {{ formatDateToLocal(publicacion.fechaPublicacion) }}</p>
                 </div>
-              <div class="acciones">
-                <p><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="irAlLogin()"></i>{{ publicacion.numMeGustas }}</p>
-                <p><i class="pi pi-comment" style="font-size: 1.5rem" (click)="irAlLogin()"></i></p>
-              </div>
+                <div class="acciones">
+                  <p>
+                    <!-- Verifica si la publicación le gusta al usuario -->
+                    <ng-container *ngIf="publicacion.meGusta; else noMeGusta">
+                      <!-- Si la publicación le gusta -->
+                      <i class="pi pi-heart-fill" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>
+                    </ng-container>
+                    <!-- Si la publicación no le gusta -->
+                    <ng-template #noMeGusta>
+                      <i class="pi pi-heart" style="font-size: 1.5rem;" (click)="darMeGusta(publicacion)"></i>
+                    </ng-template>
+                    {{ publicacion.numMeGustas }}
+                  </p>
+                  <p><i class="pi pi-comment" style="font-size: 1.5rem" (click)="mostrarCrearComentario(publicacion.id)"></i></p>
+                </div>
           </ng-template>
           <div class="comentarios">
             <div *ngFor="let comentario of publicacion.comentarios" class="comentario">

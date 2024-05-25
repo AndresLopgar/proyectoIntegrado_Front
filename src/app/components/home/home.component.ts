@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
   loader: boolean = false;
   mostrarCrear: boolean = false;
   companiasCargadas: { [id: number]: Compania } = {};
-  publicacionesLiked: Set<number> = new Set();
+  publicacionesLiked!: number[];
   publicacionComentar: number | null = null; // ID de la publicación para la cual se está creando un comentario
   comentario: Comentario = {
     id: 0,
@@ -58,6 +58,7 @@ export class HomeComponent implements OnInit {
   };
   textoBotonComentario: string = "Comentar"; // Texto dinámico para el botón de comentario
   notificacion!: Notificacion;
+  usuarioUpdate!: Usuario;
 
   constructor(private usuarioService: UsuarioService, 
     private publicacionService: PublicacionService,
@@ -116,7 +117,52 @@ export class HomeComponent implements OnInit {
         console.error('Error al cargar las publicaciones:', error);
       }
     );
-  
+    this.cargarUsuarioYPublicaciones();
+  }
+
+  cargarUsuarioYPublicaciones() {
+    // Primero carga el usuario
+    this.usuarioService.getUsuarioById(this.usuarioIdFromLocalStorage).subscribe(
+      usuario => {
+        this.usuarioUpdate = usuario;
+
+        // Asegúrate de que publicacionesLiked esté inicializado
+        if (!this.usuarioUpdate.publicacionesLiked) {
+          this.usuarioUpdate.publicacionesLiked = [];
+        }
+
+        // Luego carga las publicaciones
+        this.publicacionService.getAllPublicaciones().subscribe(
+          publicaciones => {
+            this.publicaciones = publicaciones;
+            // Ordenar las publicaciones por fecha, más recientes primero
+            this.publicaciones.sort((a, b) => {
+              const dateA = new Date(a.fechaPublicacion).getTime();
+              const dateB = new Date(b.fechaPublicacion).getTime();
+              return dateB - dateA;
+            });
+
+            this.publicaciones.forEach(publicacion => {
+              if (publicacion.idCompania !== null) {
+                this.loadCompaniaById(publicacion.idCompania);
+              }
+              this.loadUsuarioById(publicacion.idUsuario);
+              this.loadComentariosForPublicacion(publicacion); // Cargar comentarios para esta publicación
+
+              // Verifica si la publicación está en publicacionesLiked
+              publicacion.meGusta = this.usuarioUpdate.publicacionesLiked.includes(publicacion.id);
+            });
+          },
+          error => {
+            console.error('Error al cargar las publicaciones:', error);
+          }
+        );
+      },
+      error => {
+        console.log('Error al recuperar el usuario:', error);
+      }
+    );
+
     setTimeout(() => {
       this.loader = true;
     }, 1500);
@@ -289,25 +335,67 @@ export class HomeComponent implements OnInit {
   } 
 
   darMeGusta(publicacion: Publicacion) {
-    if (this.publicacionesLiked.has(publicacion.id)) {
-      publicacion.numMeGustas--;
-      this.publicacionesLiked.delete(publicacion.id); 
-    } else {
-      publicacion.numMeGustas++;
-      this.publicacionesLiked.add(publicacion.id); 
-    }
-    
-    this.publicacionService.updatePublicacion(publicacion.id, publicacion).subscribe(() => {
-      this.notificacion.fechaNotificacion = new Date().toISOString();
-      this.notificacion.idUsuarioRemitente = publicacion.idUsuario; 
-      this.notificacion.tipoNotificacion = "meGusta";
-      this.notificacionService.createNotificacion(this.notificacion).subscribe(
-        () => {
-          console.log("Notificación creada correctamente");
+    this.usuarioService.getUsuarioById(this.usuarioIdFromLocalStorage).subscribe(
+      usuario => {
+        this.usuarioUpdate = usuario;
+  
+        // Asegúrate de que publicacionesLiked esté inicializado
+        if (!this.usuarioUpdate.publicacionesLiked) {
+          this.usuarioUpdate.publicacionesLiked = [];
         }
-      );
-    });
+  
+        if (publicacion.meGusta) {
+          // Si el usuario ya dio me gusta a esta publicación, quita el me gusta
+          publicacion.numMeGustas--;
+          publicacion.meGusta = false;
+  
+          // Busca el índice de la publicación en el array
+          const index = this.usuarioUpdate.publicacionesLiked.indexOf(publicacion.id);
+  
+          // Si se encuentra la publicación en el array, quítala
+          if (index !== -1) {
+            this.usuarioUpdate.publicacionesLiked.splice(index, 1);
+          }
+  
+          // Llama a la función de actualización de usuario
+          this.updateUsuario();
+        } else {
+          // Si el usuario no ha dado me gusta a esta publicación, dale me gusta
+          publicacion.numMeGustas++;
+          publicacion.meGusta = true;
+  
+          // Agrega la ID de la publicación al array
+          this.usuarioUpdate.publicacionesLiked.push(publicacion.id);
+          
+          // Llama a la función de actualización de usuario
+          this.updateUsuario();
+        }
+  
+        this.publicacionService.updatePublicacion(publicacion.id, publicacion).subscribe(() => {
+          this.notificacion.fechaNotificacion = new Date().toISOString();
+          this.notificacion.idUsuarioRemitente = publicacion.idUsuario; 
+          this.notificacion.tipoNotificacion = "meGusta";
+          this.notificacionService.createNotificacion(this.notificacion).subscribe(
+            () => {
+              console.log("Notificación creada correctamente");
+            }
+          );
+        });
+      }
+    );
   }
+  
+  updateUsuario() {
+    this.usuarioService.updateUsuario(this.usuarioIdFromLocalStorage, this.usuarioUpdate).subscribe(
+      () => {
+        console.log("Usuario actualizado correctamente");
+      },
+      error => {
+        console.error("Error al actualizar el usuario", error);
+      }
+    );
+  }
+  
   
   
   crearComentario(publicacion: Publicacion, contenido: string) {

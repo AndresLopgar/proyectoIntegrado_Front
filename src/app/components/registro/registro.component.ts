@@ -42,7 +42,8 @@ usuario: Usuario = {
   fechaRegistro: '', 
   fotoPerfil: '',
   tipoUsuario: 'estandar', // Dependiendo de tu lógica de negocio
-  companiaSeguida: 0
+  companiaSeguida: 0,
+  publicacionesLiked: []
 };
 
   togglePasswordVisibility() {
