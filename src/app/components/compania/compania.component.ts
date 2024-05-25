@@ -58,12 +58,9 @@ export class CompaniaComponent  implements OnInit{
   mostrarFormularioComentario: boolean = false;
   publicacionComentar: number | null = null;
   usuariosCargados: { [id: number]: Usuario } = {};
-  publicacionesLiked!: number[];
+  publicacionesLiked: Set<number> = new Set();
   loader: boolean = false;
   notificacion!: Notificacion;
-  publicaciones: Publicacion[] = [];
-  usuarioUpdate!: Usuario;
-  companiasCargadas: { [id: number]: Compania } = {};
 
   constructor(private companiaService: CompaniaService, 
     private route: ActivatedRoute,
@@ -116,43 +113,9 @@ export class CompaniaComponent  implements OnInit{
       }
     });
 
-    this.cargarUsuarioYPublicaciones();
-  }
-
-  cargarUsuarioYPublicaciones() {
-    // Primero carga el usuario
-    this.usuarioService.getUsuarioById(this.usuarioIdFromLocalStorage).subscribe(
-      usuario => {
-        this.usuarioUpdate = usuario;
-
-        // Asegúrate de que publicacionesLiked esté inicializado
-        if (!this.usuarioUpdate.publicacionesLiked) {
-          this.usuarioUpdate.publicacionesLiked = [];
-        }
-
-        // Cargar publicaciones actuales y no actuales
-        this.getAllPublicacionesActuales(this.companiaId);
-        this.getAllPublicacionesNoActuales(this.companiaId);
-      },
-      error => {
-        console.log('Error al recuperar el usuario:', error);
-      }
-    );
-
     setTimeout(() => {
       this.loader = true;
-    }, 1500);
-  }
-
-  loadCompaniaById(idCompania: number) {
-    this.companiaService.getCompaniaById(idCompania).subscribe(
-      (compania: Compania) => {
-        this.companiasCargadas[idCompania] = compania;
-      },
-      (error) => {
-        console.error('Error al cargar compañía por ID:', error);
-      }
-    );
+  }, 1500);
   }
 
   elegirFotoPerfilCompania(indice: number) {
@@ -403,46 +366,35 @@ export class CompaniaComponent  implements OnInit{
   
             
 
-  getAllPublicacionesActuales(idCompania: number) {
-    this.publicacionService.getAllPublicacionesByCompania(idCompania).subscribe(
-      publicaciones => {
-        this.companiaService.getCompaniaById(idCompania).subscribe(
-          compania => {
-            this.publicacionesActual = publicaciones.filter(publicacion => compania.idCreador === compania.idCreador);
-            this.publicacionesActual.forEach(publicacion => {
-              this.loadComentariosForPublicacion(publicacion);
-              this.loadUsuarioById(publicacion.idUsuario);
-              publicacion.meGusta = this.usuarioUpdate.publicacionesLiked.includes(publicacion.id);
-            });
-          }
-        );
-      },
-      error => {
-        console.error('Error al cargar las publicaciones actuales:', error);
-      }
-    );
-  }
-  
-  getAllPublicacionesNoActuales(idCompania: number) {
-    this.publicacionService.getAllPublicacionesByCompania(idCompania).subscribe(
-      publicaciones => {
-        this.companiaService.getCompaniaById(idCompania).subscribe(
-          compania => {
-            this.publicacionesNoActual = publicaciones.filter(publicacion => compania.idCreador != this.compania.idCreador);
-            this.publicacionesNoActual.forEach(publicacion => {
-              this.loadComentariosForPublicacion(publicacion);
-              this.loadUsuarioById(publicacion.idUsuario);
-              publicacion.meGusta = this.usuarioUpdate.publicacionesLiked.includes(publicacion.id);
-            });
-          }
-        );
-      },
-      error => {
-        console.error('Error al cargar las publicaciones no actuales:', error);
-      }
-    );
-  }
-  
+getAllPublicacionesActuales(idCompania: number) {
+  this.publicacionService.getAllPublicacionesByCompania(this.companiaId).subscribe(
+    publicaciones => {
+      this.companiaService.getCompaniaById(idCompania).subscribe(
+        compania => {
+          this.publicacionesActual = publicaciones.filter(publicacion => compania.idCreador == this.compania.idCreador);
+          this.publicacionesActual.forEach(publicacion => {
+            this.loadComentariosForPublicacion(publicacion);
+          });
+        }
+      );
+    }
+  );
+}
+
+getAllPublicacionesNoActuales(idCompania: number) {
+  this.publicacionService.getAllPublicacionesByCompania(this.companiaId).subscribe(
+    publicaciones => {
+      this.companiaService.getCompaniaById(idCompania).subscribe(
+        compania => {
+          this.publicacionesNoActual = publicaciones.filter(publicacion => compania.idCreador != this.compania.idCreador);
+          this.publicacionesNoActual.forEach(publicacion => {
+            this.loadComentariosForPublicacion(publicacion);
+          });
+        }
+      );
+    }
+  );
+}
 
 
 irAlPerfilUsuario(idUsuario: number) {
@@ -817,65 +769,28 @@ eliminarPublicacion(id: number) {
 
 
   darMeGusta(publicacion: Publicacion) {
-    this.usuarioService.getUsuarioById(this.usuarioIdFromLocalStorage).subscribe(
-      usuario => {
-        this.usuarioUpdate = usuario;
+    // Verifica si el usuario ha dado "Me Gusta" a esta publicación
+    const haDadoMeGusta = this.publicacionesLiked.has(publicacion.id);
   
-        // Asegúrate de que publicacionesLiked esté inicializado
-        if (!this.usuarioUpdate.publicacionesLiked) {
-          this.usuarioUpdate.publicacionesLiked = [];
-        }
+    // Actualiza el contador de "Me Gusta" en la interfaz y la lista de "Me Gusta" del usuario
+    if (haDadoMeGusta) {
+      publicacion.numMeGustas--;
+      this.publicacionesLiked.delete(publicacion.id);
+    } else {
+      publicacion.numMeGustas++;
+      this.publicacionesLiked.add(publicacion.id);
+    }
   
-        if (publicacion.meGusta) {
-          // Si el usuario ya dio me gusta a esta publicación, quita el me gusta
-          publicacion.numMeGustas--;
-          publicacion.meGusta = false;
-  
-          // Busca el índice de la publicación en el array
-          const index = this.usuarioUpdate.publicacionesLiked.indexOf(publicacion.id);
-  
-          // Si se encuentra la publicación en el array, quítala
-          if (index !== -1) {
-            this.usuarioUpdate.publicacionesLiked.splice(index, 1);
-          }
-  
-          // Llama a la función de actualización de usuario
-          this.updateUsuario();
-        } else {
-          // Si el usuario no ha dado me gusta a esta publicación, dale me gusta
-          publicacion.numMeGustas++;
-          publicacion.meGusta = true;
-  
-          // Agrega la ID de la publicación al array
-          this.usuarioUpdate.publicacionesLiked.push(publicacion.id);
-          
-          // Llama a la función de actualización de usuario
-          this.updateUsuario();
-        }
-  
+    // Llama al servicio para actualizar la publicación en la base de datos
         this.publicacionService.updatePublicacion(publicacion.id, publicacion).subscribe(() => {
-          this.notificacion.fechaNotificacion = new Date().toISOString();
-          this.notificacion.idUsuarioRemitente = publicacion.idUsuario; 
-          this.notificacion.tipoNotificacion = "meGusta";
-          this.notificacionService.createNotificacion(this.notificacion).subscribe(
-            () => {
-              console.log("Notificación creada correctamente");
-            }
-          );
-        });
-      }
-    );
-  }
-  
-  updateUsuario() {
-    this.usuarioService.updateUsuario(this.usuarioIdFromLocalStorage, this.usuarioUpdate).subscribe(
-      () => {
-        console.log("Usuario actualizado correctamente");
-      },
-      error => {
-        console.error("Error al actualizar el usuario", error);
-      }
-    );
+        this.notificacion.fechaNotificacion = new Date().toISOString();
+        this.notificacion.idUsuarioRemitente = this.compania.idCreador;
+        this.notificacion.tipoNotificacion = "meGustaCompania";
+        this.notificacionService.createNotificacion(this.notificacion).subscribe(
+          ()=> {
+          }
+        )
+    });
   }
   
   eliminarComentario(id: number) {
