@@ -35,19 +35,23 @@
                         <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha comentado en una publicación tuya</p>
                     }
                     @if(esCreador && notificacion.tipoNotificacion === "unirseCompania"){
-                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} se ha unido a tu compañía {{compania.nombre.toLocaleUpperCase()}}</p>
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} se ha unido a tu compañía </p><p (click)="irAlPerfilCompania(compania.id)" style="cursor: pointer;">{{compania.nombre.toLocaleUpperCase()}}</p>
                     }
                     @if(esCreador && notificacion.tipoNotificacion === "dejaCompania"){
-                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha abandonado a tu compañía {{compania.nombre.toLocaleUpperCase()}}</p>
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha abandonado a tu compañía </p><p (click)="irAlPerfilCompania(compania.id)" style="cursor: pointer;">{{compania.nombre.toLocaleUpperCase()}}</p>
                     }
                     @if(esCreador && notificacion.tipoNotificacion === "comentaCompania"){
-                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha comentado en una publicación de tu compañía {{compania.nombre.toLocaleUpperCase()}}</p>
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha comentado en una publicación de tu compañía </p><p (click)="irAlPerfilCompania(compania.id)" style="cursor: pointer;">{{compania.nombre.toLocaleUpperCase()}}</p>
                     }
                     @if(esCreador && notificacion.tipoNotificacion === "meGustaCompania"){
-                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha dado me gusta en una publicación de tu compañía {{compania.nombre.toLocaleUpperCase()}}</p>
+                        <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} ha dado me gusta en una publicación de tu compañía </p><p (click)="irAlPerfilCompania(compania.id)" style="cursor: pointer;">{{compania.nombre.toLocaleUpperCase()}}</p>
                     }
                     @if(esSeguidor && notificacion.tipoNotificacion === "PublicacionSeguido"){
                         <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} a quien sigues ha subido una publicación</p>
+                    }
+                    @if(notificacion.tipoNotificacion === "publicacionCompania"){
+                        <img [src]="compania.fotoPerfil" (click)="irAlPerfilCompania(compania.id)" style="cursor: pointer;" class="perfilAvatar">
+                        <p (click)="irAlPerfilCompania(compania.id)" style="cursor: pointer;">{{compania.nombre.toLocaleUpperCase()}} a quien perteneces ha subido una publicación</p>
                     }
                 }         
                 <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">Fecha Notificación: {{ formatDateToLocal(notificacion.fechaNotificacion) }}</p>     

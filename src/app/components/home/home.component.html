@@ -18,7 +18,7 @@
               <img *ngIf="usuariosCargados[publicacion.idUsuario].fotoPerfil" (click)="irAlPerfilUsuario(publicacion.idUsuario)" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
               <!-- Muestra el nombre del usuario asociado a la publicación -->
               <p *ngIf="usuariosCargados[publicacion.idUsuario].nombre" (click)="irAlPerfilUsuario(publicacion.idUsuario)">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
-              <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+              <p style="margin-bottom: 0;">Publicación: {{ formatDateToLocal(publicacion.fechaPublicacion) }}</p>
             </div>
           </ng-container>
           <!-- Si no hay usuario asociado a la publicación -->
@@ -32,7 +32,7 @@
               <img *ngIf="companiasCargadas[publicacion.idCompania].fotoPerfil" (click)="irAlPerfilCompania(publicacion.idCompania)" [src]="companiasCargadas[publicacion.idCompania].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
               <!-- Muestra el nombre de la compañía asociada a la publicación -->
               <p *ngIf="companiasCargadas[publicacion.idCompania].nombre" (click)="irAlPerfilCompania(publicacion.idCompania)">{{ companiasCargadas[publicacion.idCompania].nombre }}</p>
-              <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+              <p style="margin-bottom: 0;">Publicación: {{ formatDateToLocal(publicacion.fechaPublicacion) }}</p>
             </div>
           </ng-container>
           <div class="acciones">
@@ -58,7 +58,7 @@
                 <p (click)="irAlPerfilUsuario(comentario.idUsuario)" style="cursor: pointer;">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
               </ng-container>
               <p>{{ comentario.contenido }}</p>
-              <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
+              <p>{{ formatDateToLocal(comentario.fechaComentario) }}</p>
               <div class="botones2">
                 <button *ngIf="comentario.idUsuario === usuarioIdFromLocalStorage" type="button" (click)="eliminarComentario(publicacion, comentario, comentario.idUsuario)" pButton>Eliminar</button>
               </div>
@@ -92,7 +92,7 @@
               <div class="acciones">
                   <img *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlLogin()" [src]="usuariosCargados[publicacion.idUsuario].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
                   <p *ngIf="usuariosCargados[publicacion.idUsuario]" (click)="irAlLogin()" style="cursor: pointer;">Publicado por: {{ usuariosCargados[publicacion.idUsuario].nombre }}</p>
-                  <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+                  <p style="margin-bottom: 0;">Publicación: {{ formatDateToLocal(publicacion.fechaPublicacion) }}</p>
                 </div>
           </ng-container>
           <!-- Si idCompania no es null -->
@@ -101,7 +101,7 @@
                   <!-- Utilizar companiasCargadas en lugar de usuariosCargados -->
                   <img *ngIf="companiasCargadas[publicacion.idCompania]" (click)="irAlLogin()" [src]="companiasCargadas[publicacion.idCompania].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
                   <p *ngIf="companiasCargadas[publicacion.idCompania]" (click)="irAlLogin()" style="cursor: pointer;">Publicado por: {{ companiasCargadas[publicacion.idCompania].nombre }}</p>
-                  <p style="margin-bottom: 0;">Publicación: {{ publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+                  <p style="margin-bottom: 0;">Publicación: {{ formatDateToLocal(publicacion.fechaPublicacion) }}</p>
                 </div>
               <div class="acciones">
                 <p><i class="pi pi-heart" style="font-size: 1.5rem;" (click)="irAlLogin()"></i>{{ publicacion.numMeGustas }}</p>
@@ -116,7 +116,7 @@
                 <p (click)="irAlLogin()" style="cursor: pointer;">comentado por: {{ usuariosCargados[comentario.idUsuario].nombre }}</p>
               </ng-container>
               <p>{{ comentario.contenido }}</p>
-              <p>{{ comentario.fechaComentario | date:'dd/MM/yyyy'}}</p>
+              <p>{{ formatDateToLocal(comentario.fechaComentario) }}</p>
               <div class="botones">
                 <button *ngIf="comentario.idUsuario === usuarioIdFromLocalStorage" type="button" (click)="eliminarComentario(publicacion, comentario, comentario.idUsuario)">Eliminar</button>
               </div>

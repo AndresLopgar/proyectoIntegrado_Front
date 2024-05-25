@@ -157,7 +157,8 @@ formatDateToLocal(date: string): string {
 
   eliminarNotificacion(id: number){
     this.notificacionService.deleteNotificacion(id).subscribe(() =>
-    location.reload())
+      this.router.navigateByUrl('/home')
+  )  
   }
 
   eliminarNotificaciones() {

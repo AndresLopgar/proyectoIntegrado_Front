@@ -16,6 +16,8 @@ import { LoaderComponent } from '../../layout/loader/loader.component';
 import { Notificacion } from '../../model/notificacion';
 import { NotificacionService } from '../../services/notificacion.service';
 import { AmistadService } from '../../services/amistad.service';
+import { addHours, format } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
 
 @Component({
   selector: 'app-home',
@@ -91,10 +93,17 @@ export class HomeComponent implements OnInit {
         console.log('Error al recuperar usuarios:', error);
       }
     );
-
+  
     this.publicacionService.getAllPublicaciones().subscribe(
       publicaciones => {
         this.publicaciones = publicaciones;
+        // Ordenar las publicaciones por fecha, más recientes primero
+        this.publicaciones.sort((a, b) => {
+          const dateA = new Date(a.fechaPublicacion).getTime();
+          const dateB = new Date(b.fechaPublicacion).getTime();
+          return dateB - dateA;
+        });
+  
         this.publicaciones.forEach(publicacion => {
           if (publicacion.idCompania !== null) {
             this.loadCompaniaById(publicacion.idCompania);
@@ -107,12 +116,18 @@ export class HomeComponent implements OnInit {
         console.error('Error al cargar las publicaciones:', error);
       }
     );
-    
+  
     setTimeout(() => {
       this.loader = true;
-  }, 1500);
-  
+    }, 1500);
   }
+
+  formatDateToLocal(date: string): string {
+    const zonedDate = toZonedTime(new Date(date), 'Europe/Madrid');
+    const zonedDatePlusTwoHours = addHours(zonedDate, 2); // Agrega dos horas
+    return format(zonedDatePlusTwoHours, 'dd/MM/yyyy HH:mm');
+  }
+  
 
   eliminarComentario(publicacion: Publicacion, comentario: Comentario, comentarioIdUsuario: number) {
     // Verificar si el usuario que inició sesión es el mismo que hizo el comentario
