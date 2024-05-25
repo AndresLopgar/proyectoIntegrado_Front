@@ -49,6 +49,7 @@ export class ChatService {
         return this.messageSubject.asObservable();
     }
 
+    
     loadMessage(roomId: String): void{
         this.httpClient.get<any[]>(`http://localhost:8081/api/chat/${roomId}`).pipe(
             map((result: { user_name: any; message: any; }[]) => {
@@ -68,4 +69,28 @@ export class ChatService {
             }
         })
     }
+    
+
+    /*
+    loadMessage(roomId: String): void {
+        this.httpClient.get<any[]>(`https://artconnect-9bc127224463.herokuapp.com/api/chat/${roomId}`).pipe(
+            map((result: { user_name: any; message: any; }[]) => {
+                return result.map((res: { user_name: any; message: any; }) => {
+                    return {
+                        usuarioId: res.user_name,
+                        message: res.message
+                    } as ChatMessage;
+                });
+            })
+        ).subscribe({
+            next: (chatMessage: ChatMessage[]) => {
+                this.messageSubject.next(chatMessage);
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        });
+    }
+    */
+    
 }
