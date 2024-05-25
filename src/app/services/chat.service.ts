@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { ChatMessage } from '../model/chatMessage';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
@@ -18,7 +19,7 @@ export class ChatService {
     //localhost
     private baseUrl = 'http://localhost:8081/chat-socket';
 
-    constructor(){
+    constructor(private httpClient: HttpClient){
         this.initConnectionSocket();
     }
 
@@ -36,13 +37,35 @@ export class ChatService {
                 this.messageSubject.next(currentMessages);
             })
         })
+        this.loadMessage(roomId);
     }
 
     sendMessage(roomId : string, chatMessage: ChatMessage){
-        this.stompClient.send(`/app/chat/${roomId}`, {}, JSON.stringify(chatMessage))
+        this.stompClient.send(`/app/chat/${roomId}`, {}, JSON.stringify(chatMessage));
+        this.loadMessage(roomId);
     }
 
     getMessageSubject(){
         return this.messageSubject.asObservable();
+    }
+
+    loadMessage(roomId: String): void{
+        this.httpClient.get<any[]>(`http://localhost:8081/api/chat/${roomId}`).pipe(
+            map((result: { user_name: any; message: any; }[]) => {
+                return result.map((res: { user_name: any; message: any; })=>{
+                    return{
+                        usuarioId: res.user_name,
+                        message: res.message
+                    } as ChatMessage
+                })
+            })
+        ).subscribe({
+            next: (chatMessage: ChatMessage[]) => {
+                this.messageSubject.next(chatMessage);
+            },
+            error:(error) => {
+                console.log(error);
+            }
+        })
     }
 }

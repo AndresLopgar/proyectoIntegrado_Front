@@ -1,5 +1,5 @@
 export interface ChatMessage{
     message :string;
-    usuarioId: number;
+    usuarioId: String;
     message_side?: string;
 }
