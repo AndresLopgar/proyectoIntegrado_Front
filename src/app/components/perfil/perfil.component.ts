@@ -96,7 +96,7 @@ export class PerfilComponent implements OnInit {
       if (usuarioLocalStorage) {
         const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
         this.usuarioIdFromLocalStorage = usuarioAlmacenado.id;
-  
+        this.cargarUsuarioStorage();
         // Actualizar el idCreador después de obtenerlo del localStorage
         this.compania = {
           id: 0,
@@ -147,6 +147,18 @@ export class PerfilComponent implements OnInit {
   irAlPerfilUsuario(idUsuario: number) {
     // Navegar al perfil del usuario
     this.router.navigate(['/perfil', idUsuario]);
+  }
+
+  irAModeracion(){
+    this.router.navigateByUrl('/moderar');
+  }
+
+  cargarUsuarioStorage(){
+    this.usuarioService.getUsuarioById(this.usuarioIdFromLocalStorage).subscribe(
+      usuario => {
+        this.usuarioStorage = usuario;
+      }
+    )
   }
 
   darMeGusta(publicacion: Publicacion) {

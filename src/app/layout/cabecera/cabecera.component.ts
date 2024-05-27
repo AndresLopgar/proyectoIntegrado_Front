@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit} from '@angular/core';
 import { Router, NavigationEnd} from '@angular/router';
 import { filter } from 'rxjs';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -88,5 +89,41 @@ export class CabeceraComponent implements OnInit {
 
   navegarHome(){
     this.router.navigateByUrl('/home'); 
+  }
+
+  async cerrarSesion() {
+    const confirmacion = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Estás seguro de que quieres cerrar la sesión?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar'
+    });
+    
+    if (confirmacion.isConfirmed) {
+      try {
+        localStorage.removeItem('usuario');
+        localStorage.setItem('tipoUsuario', 'noRegistrado');
+        await Swal.fire({
+          icon: 'success',
+          title: 'Cierre de sesión exitoso',
+          text: '¡Sesión cerrada correctamente!'
+        });
+        await this.router.navigateByUrl('/login');
+        window.location.reload();
+      } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '¡Error al cerrar sesión!'
+        });
+      }
+    } else {
+      console.log('Cierre de sesión cancelado por el usuario');
+    }
   }
 }

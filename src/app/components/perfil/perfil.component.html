@@ -229,19 +229,27 @@
           <h3>Edad:  {{ usuario.edad }}</h3>
           <h3>Profesión:  {{ usuario.profesion }}</h3>
           <div class="botones">
-            <ng-container *ngIf="!estaEnAmistad; else dejarDeSeguir">
-              <button type="button" (click)="seguirUsuario()" class="botonSeguirPerfil" pButton>
-                Seguir<i class="pi pi-user-plus" style="font-size: 1.2rem;"></i>
+            <ng-container *ngIf="usuarioStorage.tipoUsuario === 'admin'; else usuarioOpciones">
+              <button type="button" (click)="irAModeracion()" class="botonModeracion" pButton>
+                ir a Moderación<i class="pi pi-wrench" style="font-size: 1.2rem;"></i>
               </button>
             </ng-container>
-            <ng-template #dejarDeSeguir>
-              <ng-container>
-                <button type="button" (click)="dejarDeSeguirUsuario(usuarioId)" class="botonDejarDeSeguirPerfil" pButton>
-                  Dejar de seguir<i class="pi pi-user-minus" style="font-size: 1.2rem;"></i>
+            <ng-template #usuarioOpciones>
+              <ng-container *ngIf="!estaEnAmistad; else dejarDeSeguir">
+                <button type="button" (click)="seguirUsuario()" class="botonSeguirPerfil" pButton>
+                  Seguir<i class="pi pi-user-plus" style="font-size: 1.2rem;"></i>
                 </button>
               </ng-container>
+              <ng-template #dejarDeSeguir>
+                <ng-container>
+                  <button type="button" (click)="dejarDeSeguirUsuario(usuarioId)" class="botonDejarDeSeguirPerfil" pButton>
+                    Dejar de seguir<i class="pi pi-user-minus" style="font-size: 1.2rem;"></i>
+                  </button>
+                </ng-container>
+              </ng-template>
             </ng-template>
           </div>
+          
         </div>
         <div class="col-md-5 order-0 order-md-1">
           <h1>Publicaciones</h1>

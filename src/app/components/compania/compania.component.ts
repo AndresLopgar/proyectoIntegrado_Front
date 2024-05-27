@@ -495,6 +495,10 @@ eliminarPublicacion(id: number) {
   });
 }
 
+irAModeracion(){
+  this.router.navigateByUrl('/moderar');
+}
+
   mostrarFormularioModificar(): void {
     this.mostrandoFormularioModificar = true;
     this.companiaTemporal = { ...this.compania };
