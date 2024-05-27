@@ -7,7 +7,10 @@
           <h4>Descripción:  {{ compania.descripcion }}</h4>
           <h4>Miembros:  {{ compania.miembros }}</h4>
           <h4>Fecha Creación: {{ compania.fechaCreacion | date:'dd/MM/yyyy' }}</h4>
-          @if(compania.portafolio === null || compania.portafolio === ""){
+          @if(compania.portafolio === null || compania.portafolio === "" && usuarioIdFromLocalStorage != compania.idCreador){
+            <h4>Portafolio:  No tiene portafolio</h4>
+          }
+          @if(compania.portafolio === null || compania.portafolio === "" && usuarioIdFromLocalStorage === compania.idCreador){
             <div class="portafolio">
               <h4>Portafolio: </h4>
               <div class="botones">
