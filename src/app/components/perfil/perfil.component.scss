@@ -211,6 +211,13 @@
                 border: solid 2px var(--color-primario);
             }
 
+            .portafolio{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+
             .avatares{
                 display: grid;
                 grid-template-columns: auto auto;

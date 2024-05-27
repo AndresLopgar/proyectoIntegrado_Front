@@ -43,7 +43,8 @@ usuario: Usuario = {
   fotoPerfil: '',
   tipoUsuario: 'estandar', // Dependiendo de tu lógica de negocio
   companiaSeguida: 0,
-  publicacionesLiked: []
+  publicacionesLiked: [],
+  portafolio: ""
 };
 
   togglePasswordVisibility() {

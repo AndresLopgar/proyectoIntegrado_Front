@@ -7,4 +7,5 @@ export class Compania{
     fechaCreacion!: string;
     miembros!: number;
     idCreador!: number;
+    portafolio!: string;
 }

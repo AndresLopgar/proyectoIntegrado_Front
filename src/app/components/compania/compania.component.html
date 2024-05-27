@@ -7,6 +7,25 @@
           <h4>Descripción:  {{ compania.descripcion }}</h4>
           <h4>Miembros:  {{ compania.miembros }}</h4>
           <h4>Fecha Creación: {{ compania.fechaCreacion | date:'dd/MM/yyyy' }}</h4>
+          @if(compania.portafolio === null || compania.portafolio === ""){
+            <div class="portafolio">
+              <h4>Portafolio: </h4>
+              <div class="botones">
+                <button type="button" (click)="mostrarCrearPortafolio()" pButton style="font-size: medium; width: 100%; margin-left: 40%;">Añadir</button>
+              </div>
+            </div>
+            @if(mostrarCreaPortafolio){
+              <form [formGroup]="createPortafolioForm">
+              <input type="text" id="portafolio" name="portafolio" formControlName="portafolio" pInputText>
+              <div class="botones2">
+                <button type="button" (click)="agregarPortafolio()" [disabled]="createPortafolioForm.invalid" pButton>Guardar</button>
+                <button type="button" (click)="cancelarCreaPortafolio()" pButton>Cancelar</button>
+              </div>
+            </form>
+            }
+          }@else{
+            <h4>Portafolio: <a [href]="compania.portafolio" target="_blank" style="color: var(--color-enlaces-hover);">{{ compania.portafolio }}</a></h4>
+          }
           <div class="botones" *ngIf="compania.idCreador === usuarioId">
             <button type="button" (click)="mostrarCrearPublicacion()" pButton>Crear Publicación</button>
             <button type="button" (click)="generaInforme()" pButton>Generar informe compañía<i class="pi pi-download" style="font-size: 1rem"></i></button>
@@ -43,6 +62,10 @@
               <div class="form-group">
                 <label for="correo">Descripción:</label>
                 <input type="text" id="descripcion" name="descripcion" [(ngModel)]="companiaTemporal.descripcion">
+              </div>
+              <div class="form-group">
+                <label for="portafolio">Portafolio:</label>
+                <input type="text" id="portafolio" name="portafolio" [(ngModel)]="companiaTemporal.portafolio" pInputText>
               </div>
               <div class="form-group">
                 <label for="fotoPerfil">Foto de perfil:</label>

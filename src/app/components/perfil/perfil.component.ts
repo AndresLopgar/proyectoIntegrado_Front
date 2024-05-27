@@ -38,6 +38,7 @@ export class PerfilComponent implements OnInit {
     private comentarioService: ComentarioService,
     private notificacionService: NotificacionService) { }
   
+  mostrarCreaPortafolio: boolean = false;
   usuarioStorage!: Usuario;
   companias: Compania[] = [];
   usuarioId!: number;
@@ -105,7 +106,8 @@ export class PerfilComponent implements OnInit {
           fotoPerfil: "",
           fechaCreacion: "",
           miembros: 1,
-          idCreador: this.usuarioIdFromLocalStorage
+          idCreador: this.usuarioIdFromLocalStorage,
+          portafolio: ""
         };
 
         // Llamar a loadCompaniasByIdCreador después de obtener usuarioIdFromLocalStorage
@@ -142,6 +144,44 @@ export class PerfilComponent implements OnInit {
     setTimeout(() => {
       this.loader = true;
   }, 1500);
+  }
+
+  mostrarCrearPortafolio(){
+    this.mostrarCreaPortafolio = true;
+  }
+
+  cancelarCreaPortafolio() {
+    this.mostrarCreaPortafolio = false;
+    Swal.fire({
+      title: 'Advertencia',
+      text: 'Has cancelado la adición del portafolio.',
+      icon: 'warning',
+      confirmButtonText: 'Entendido'
+    });
+  }
+  
+  agregarPortafolio() {
+    if (this.updateForm.valid) {
+      this.usuarioStorage.portafolio = this.updateForm.value.portafolio;
+      this.usuarioService.updateUsuario(this.usuarioIdFromLocalStorage, this.usuarioStorage)
+        .subscribe(
+          response => {
+            Swal.fire(
+              '¡Éxito!',
+              'El portafolio ha sido actualizado.',
+              'success'
+            );
+            this.router.navigateByUrl('/home');
+          },
+          error => {
+            Swal.fire(
+              'Error',
+              'Hubo un problema al actualizar el portafolio.',
+              'error'
+            );
+          }
+        );
+    }
   }
 
   irAlPerfilUsuario(idUsuario: number) {

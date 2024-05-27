@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { Compania } from '../../model/compania';
 import { CompaniaService } from '../../services/compania.service';
@@ -21,12 +21,13 @@ import { NotificacionService } from '../../services/notificacion.service';
 @Component({
   selector: 'app-compania',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, LoaderComponent],
+  imports: [CommonModule, FormsModule, ButtonModule, LoaderComponent, ReactiveFormsModule],
   templateUrl: './compania.component.html',
   styleUrl: './compania.component.scss'
 })
 export class CompaniaComponent  implements OnInit{
   @ViewChild('upadteForm') CreacionCompaniaForm!: NgForm; // Referencia al formulario
+  createPortafolioForm!: FormGroup;
   compania!: Compania;
   companiaId!: number;
   usuarioId!: number;
@@ -61,8 +62,10 @@ export class CompaniaComponent  implements OnInit{
   publicacionesLiked: Set<number> = new Set();
   loader: boolean = false;
   notificacion!: Notificacion;
+  mostrarCreaPortafolio: boolean = false;
 
   constructor(private companiaService: CompaniaService, 
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private usuarioService: UsuarioService,
@@ -111,11 +114,52 @@ export class CompaniaComponent  implements OnInit{
         this.getAllPublicacionesActuales(this.companiaId);
         this.getAllPublicacionesNoActuales(this.companiaId);
       }
+      this.createPortafolioForm = this.fb.group({
+        portafolio: ['', Validators.required]
+      });
     });
 
     setTimeout(() => {
       this.loader = true;
   }, 1500);
+  }
+
+  mostrarCrearPortafolio(){
+    this.mostrarCreaPortafolio = true;
+  }
+
+  cancelarCreaPortafolio() {
+    this.mostrarCreaPortafolio = false;
+    Swal.fire({
+      title: 'Advertencia',
+      text: 'Has cancelado la adición del portafolio.',
+      icon: 'warning',
+      confirmButtonText: 'Entendido'
+    });
+  }
+  
+  agregarPortafolio() {
+    if (this.createPortafolioForm.valid) {
+      this.compania.portafolio = this.createPortafolioForm.value.portafolio;
+      this.companiaService.updateCompania(this.compania.id, this.compania)
+        .subscribe(
+          response => {
+            Swal.fire(
+              '¡Éxito!',
+              'El portafolio ha sido actualizado.',
+              'success'
+            );
+            this.router.navigateByUrl('/home');
+          },
+          error => {
+            Swal.fire(
+              'Error',
+              'Hubo un problema al actualizar el portafolio.',
+              'error'
+            );
+          }
+        );
+      }
   }
 
   elegirFotoPerfilCompania(indice: number) {
@@ -306,9 +350,7 @@ export class CompaniaComponent  implements OnInit{
         }).then(() => {
           // Ocultar el formulario de modificación
           this.mostrandoFormularioModificar = false;
-  
-          // Recargar la compañía después de la modificación
-          this.loadCompania();
+          this.router.navigateByUrl('/home');
         });
       } catch (error) {
         // Error al modificar la compañía
