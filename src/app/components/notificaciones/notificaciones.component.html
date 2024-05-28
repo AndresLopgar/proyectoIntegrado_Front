@@ -17,13 +17,14 @@
                     <option value="meGustaCompania">Me gusta Compañía</option>
                     <option value="dejaCompania">Dejar Compañía</option>
                     <option value="PublicacionSeguido">Publicaciones Seguidos</option>
+                    <option value="advertencias">Advertencias</option>
                 </select>
               </div>
               <button (click)="eliminarNotificaciones()" type="button" pButton>Eliminar notificaciones</button>
         @for (notificacion of notificacionesFiltradas; track $index) {
             <div class="notificacion">
                 @if (usuariosCargados[notificacion.idUsuarioEmisor]) {
-                    @if (notificacion.tipoNotificacion != "publicacionCompania") {
+                    @if (notificacion.tipoNotificacion != "publicacionCompania" && notificacion.tipoNotificacion != "advertenciaUsuario" && notificacion.tipoNotificacion != "advertenciaCompania" && notificacion.tipoNotificacion != "advertenciaPublicacion") {
                         <img (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)"  [src]="usuariosCargados[notificacion.idUsuarioEmisor].fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
                     }
                     @if (notificacion.tipoNotificacion === "seguimiento") {
@@ -53,12 +54,26 @@
                     @if(esSeguidor && notificacion.tipoNotificacion === "PublicacionSeguido"){
                         <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">{{usuariosCargados[notificacion.idUsuarioEmisor].nombre.toLocaleUpperCase()}} a quien sigues ha subido una publicación</p>
                     }
+                    @if (notificacion.tipoNotificacion === "advertenciaUsuario") {
+                        <i class="pi pi-exclamation-triangle" style="font-size: 1.5rem;"></i><p (click)="irAlPerfilUsuario(notificacion.idUsuarioRemitente)" style="cursor: pointer;">Tu perfil no cumple con las reglas de la comunidad</p>
+                    }
+                    @if (notificacion.tipoNotificacion === "advertenciaCompania") {
+                        <i class="pi pi-exclamation-triangle" style="font-size: 1.5rem;"></i><p (click)="irAlPerfilUsuario(notificacion.idUsuarioRemitente)" style="cursor: pointer;">Tu compañía</p><p (click)="irAlPerfilCompania(compania.id)" style="cursor: pointer;">{{compania.nombre.toLocaleUpperCase()}}</p><p (click)="irAlPerfilUsuario(notificacion.idUsuarioRemitente)" style="cursor: pointer;">no cumple con las reglas de la comunidad</p>
+                    }
+                    @if (notificacion.tipoNotificacion === "advertenciaPublicacion") {
+                        <i class="pi pi-exclamation-triangle" style="font-size: 1.5rem;"></i><p (click)="irAlPerfilUsuario(notificacion.idUsuarioRemitente)" style="cursor: pointer;">Alguna de tus publicaciones no cumplen con las reglas de la comunidad</p>
+                    }
                     @if(notificacion.tipoNotificacion === "publicacionCompania"){
                         <img [src]="compania.fotoPerfil" (click)="irAlPerfilCompania(compania.id)" style="cursor: pointer;" class="perfilAvatar">
                         <p (click)="irAlPerfilCompania(compania.id)" style="cursor: pointer;">{{compania.nombre.toLocaleUpperCase()}} a quien perteneces ha subido una publicación</p>
                     }
+                }
+                @if(notificacion.tipoNotificacion != "advertenciaUsuario" && notificacion.tipoNotificacion != "advertenciaCompania" && notificacion.tipoNotificacion != "advertenciaPublicacion"){
+                    <p (click)="irAlPerfilUsuario(notificacion.idUsuarioRemitente)" style="cursor: pointer;">Fecha Notificación: {{ formatDateToLocal(notificacion.fechaNotificacion) }}</p>     
+                }@else {
+                    <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">Fecha Notificación: {{ formatDateToLocal(notificacion.fechaNotificacion) }}</p>     
                 }         
-                <p (click)="irAlPerfilUsuario(notificacion.idUsuarioEmisor)" style="cursor: pointer;">Fecha Notificación: {{ formatDateToLocal(notificacion.fechaNotificacion) }}</p>     
+                
                 <i class="pi pi-trash" style="font-size: 1rem; cursor: pointer;" (click)="eliminarNotificacion(notificacion.id)"></i>
             </div>
         }}@else{

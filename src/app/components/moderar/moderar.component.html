@@ -1,14 +1,50 @@
-<div class="container">
-    <div *ngFor="let comentario of comentariosCargados" class="comentarios">
-            <!-- Mostrar el nombre del usuario -->
-            <p>{{ comentario.idUsuario }}</p>
-    
-            <!-- Mostrar el contenido del comentario -->
-            <p>{{ comentario.contenido }}</p>
-    
-            <!-- Mostrar la fecha del comentario -->
-            <p>{{ comentario.fechaComentario | date }}</p>
-
-            <button (click)="eliminarComentario(comentario.id)">Eliminar Comentario</button>
+<app-loader *ngIf="!loader"></app-loader>
+<div class="container" *ngIf="loader">
+    <div class="row flex-sm-row flex-column custom-margin-bottom">
+        <div class="col-md-3 order-0 order-md-0">
+            <h1>USUARIOS</h1>
+            <div class="busqueda">
+                <input type="text" placeholder="Buscar..." (input)="filtrarUsuarios($event)">
+            </div>
+            <div class="usuarios">
+                <div *ngFor="let usuario of usuariosFiltrados; let i = index; trackBy: trackByIdUsuario">
+                    <div class="usuario">
+                        <img (click)="irAlPerfilUsuario(usuario.id)" [src]="usuario.fotoPerfil" class="perfilAvatar">
+                        <p (click)="irAlPerfilUsuario(usuario.id)">{{usuario.nombre}}</p>
+                        <i class="pi pi-exclamation-triangle" (click)="enviarNotiUsuario(usuario.id)" style="font-size: 1.5rem; margin-top: 3%; cursor: pointer;"></i>
+                        <button type="button" pButton (click)="eliminarUsuario(usuario.id)">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 order-1 order-md-1">
+            <h1>COMPAÑIAS</h1>
+            <div class="busqueda">
+                <input type="text" placeholder="Buscar..." (input)="filtrarCompanias($event)">
+            </div>
+            <div class="companias">
+                <div *ngFor="let compania of companiasFiltradas; let i = index; trackBy: trackByIdCompania">
+                    <div class="compania">
+                        <img (click)="irAlPerfilCompania(compania.id)" [src]="compania.fotoPerfil" class="perfilAvatar" style="cursor: pointer;">
+                        <p (click)="irAlPerfilCompania(compania.id)">{{compania.nombre}}</p>
+                        <i class="pi pi-exclamation-triangle" (click)="enviarNotiCompania(compania.idCreador)" style="font-size: 1.5rem; margin-top: 3%; cursor: pointer;"></i>
+                        <button type="button" pButton (click)="eliminarCompania(compania.id)">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 order-2 order-md-2">
+            <h1>PUBLICACIONES</h1>
+            <div class="publicaciones">
+                <div *ngFor="let publicacion of publicaciones; let i = index; trackBy: trackByIdPublicacion">
+                    <div class="publicacion">
+                        <p class="contenido" (click)="irAlPerfilUsuario(publicacion.idUsuario)">{{ truncateContent(publicacion.contenido) }}</p>
+                        <p (click)="irAlPerfilUsuario(publicacion.idUsuario)">{{publicacion.fechaPublicacion | date:'dd/MM/yyyy'}}</p>
+                        <i class="pi pi-exclamation-triangle" (click)="enviarNotiPublicacion(publicacion.idUsuario)" style="font-size: 1.5rem; margin-top: 3%; cursor: pointer;"></i>
+                        <button type="button" pButton (click)="eliminarPublicacion(publicacion.id)">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

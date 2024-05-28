@@ -99,12 +99,17 @@ formatDateToLocal(date: string): string {
   
     if (tipo === 'todos') {
       this.notificacionesFiltradas = [...this.notificaciones];
+    } else if (tipo === 'advertencias') {
+      this.notificacionesFiltradas = this.notificaciones.filter(notificacion => 
+        notificacion.tipoNotificacion.startsWith('advertencia')
+      );
     } else {
-      this.notificacionesFiltradas = this.notificaciones.filter(notificacion => notificacion.tipoNotificacion === tipo);
-      console.log(this.notificacionesFiltradas);
-      
+      this.notificacionesFiltradas = this.notificaciones.filter(notificacion => 
+        notificacion.tipoNotificacion === tipo
+      );
     }
   }
+  
   
   loadUsuarioFromLocalStorage(){
     this.usuarioService.getUsuarioById(this.usuarioIdFromLocalStorage).subscribe(

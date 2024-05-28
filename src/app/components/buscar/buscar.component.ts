@@ -56,7 +56,7 @@ export class BuscarComponent implements OnInit {
         } else {
           this.usuarios = usuarios;
         }
-        this.usuariosFiltrados = [...this.usuarios]; // Inicialmente, mostrar todos los usuarios
+        this.usuariosFiltrados = [...this.usuarios];
       },
       error => {
         console.log('Error al recuperar usuarios:', error);

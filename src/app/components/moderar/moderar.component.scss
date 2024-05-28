@@ -1,5 +1,230 @@
 .container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    max-width: 100%;
+
+    .row {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        flex-wrap: nowrap;
+        color: white;
+        margin: 0;
+
+        .col-md-3 {
+            padding: 1%;
+            border-radius: 10px;
+            display: flex;
+            text-align: center;
+            background-color: var(--color-primario);
+            max-height: 100%;
+            flex-direction: column;
+            overflow: auto;
+            margin-bottom: 20px;
+            max-height: 70vh;
+
+            h1{
+                padding-bottom: 2%;
+                border-bottom: 2px solid var(--color-enlaces-hover);
+            }
+
+            .busqueda {
+                background-color: var(--color-primario);
+                border-radius: 10px;
+                padding: 1%;
+                display: flex;
+                align-items: center;
+    
+                input[type="text"] {
+                    font-size: large;
+                    border-radius: 10px;
+                    flex: 1;
+                    height: 100%;
+                    padding: 2%;
+                    border-color: var(--color-primario);
+                }
+            }
+
+            .usuarios{
+                overflow: auto;
+
+                &::-webkit-scrollbar {
+                    width: 10px;
+                }
+            
+                &::-webkit-scrollbar-track {
+                    background: var(--color-primario);
+                }
+            
+                &::-webkit-scrollbar-thumb {
+                    background-color: var(--color-enlaces-hover);
+                    border-radius: 10px;
+                    border: solid 2px var(--color-primario);
+                }
+
+                .usuario {
+                    background-color: var(--color-enlaces-hover);
+                    margin-top: 2%;
+                    padding: 1%;
+                    margin-bottom: 3%;
+                    display: flex; 
+                    align-items: stretch; 
+                    justify-content: space-around;
+                    flex-direction: row;
+                    width: 100%;
+                    border: solid 2px white;
+                    border-radius: 10px;
+            
+                    &:hover{
+                        cursor: pointer;
+                    }
+            
+                    img {
+                        width: 50px; // Ajusta el tamaño de la imagen según sea necesario
+                        height: 50px; // Ajusta el tamaño de la imagen según sea necesario
+                        margin-right: 10px; // Añade un espacio entre la imagen y los textos
+                        border-radius: 50%;
+                        border: 2px solid white; /* Borde blanco */
+                        text-align: center;
+                        line-height: 40px; /* Ajusta según el tamaño deseado */
+                    }
+            
+                    p {
+                        margin-top: 2.5%;// Centra los elementos p dentro de la clase .usuario
+                    }
+
+                    button {
+                        color: black;
+                        border-radius: 10px;
+                        background-color: white;
+                        border: 1px solid black;
+                        cursor: pointer;
+                        padding: 2%;
+                        margin-bottom: 1%;
+                        align-self: flex-end;
+                      }
+                }
+            }
+
+            .companias{
+                overflow: auto;
+
+                &::-webkit-scrollbar {
+                    width: 10px;
+                }
+            
+                &::-webkit-scrollbar-track {
+                    background: var(--color-primario);
+                }
+            
+                &::-webkit-scrollbar-thumb {
+                    background-color: var(--color-enlaces-hover);
+                    border-radius: 10px;
+                    border: solid 2px var(--color-primario);
+                }
+
+                .compania {
+                    background-color: var(--color-enlaces-hover);
+                    margin-top: 2%;
+                    padding: 1%;
+                    margin-bottom: 3%;
+                    display: flex; 
+                    align-items: stretch; 
+                    justify-content: space-around;
+                    flex-direction: row;
+                    width: 100%;
+                    border: solid 2px white;
+                    border-radius: 10px;
+            
+                    &:hover{
+                        cursor: pointer;
+                    }
+            
+                    img {
+                        width: 50px; // Ajusta el tamaño de la imagen según sea necesario
+                        height: 50px; // Ajusta el tamaño de la imagen según sea necesario
+                        margin-right: 10px; // Añade un espacio entre la imagen y los textos
+                        border-radius: 50%;
+                        border: 2px solid white; /* Borde blanco */
+                        text-align: center;
+                        line-height: 40px; /* Ajusta según el tamaño deseado */
+                    }
+            
+                    p {
+                        margin-top: 2.5%;// Centra los elementos p dentro de la clase .usuario
+                    }
+
+                    button {
+                        color: black;
+                        border-radius: 10px;
+                        background-color: white;
+                        border: 1px solid black;
+                        cursor: pointer;
+                        padding: 2%;
+                        margin-bottom: 1%;
+                        align-self: flex-end;
+                      }
+                }
+            }
+
+            .publicaciones{
+                overflow: auto;
+
+                &::-webkit-scrollbar {
+                    width: 10px;
+                }
+            
+                &::-webkit-scrollbar-track {
+                    background: var(--color-primario);
+                }
+            
+                &::-webkit-scrollbar-thumb {
+                    background-color: var(--color-enlaces-hover);
+                    border-radius: 10px;
+                    border: solid 2px var(--color-primario);
+                }
+
+                .publicacion {
+                    background-color: var(--color-enlaces-hover);
+                    margin-top: 2%;
+                    padding: 1%;
+                    margin-bottom: 3%;
+                    display: flex; 
+                    align-items: stretch; 
+                    justify-content: space-around;
+                    flex-direction: row;
+                    width: 100%;
+                    border: solid 2px white;
+                    border-radius: 10px;
+            
+                    &:hover{
+                        cursor: pointer;
+                    }
+            
+                    img {
+                        width: 50px; // Ajusta el tamaño de la imagen según sea necesario
+                        height: 50px; // Ajusta el tamaño de la imagen según sea necesario
+                        margin-right: 10px; // Añade un espacio entre la imagen y los textos
+                        border-radius: 50%;
+                        border: 2px solid white; /* Borde blanco */
+                        text-align: center;
+                        line-height: 40px; /* Ajusta según el tamaño deseado */
+                    }
+            
+                    p {
+                        margin-top: 2.5%;// Centra los elementos p dentro de la clase .usuario
+                    }
+
+                    button {
+                        color: black;
+                        border-radius: 10px;
+                        background-color: white;
+                        border: 1px solid black;
+                        cursor: pointer;
+                        padding: 2%;
+                        margin-bottom: 1%;
+                        align-self: flex-end;
+                      }
+                }
+            }
+        }
+    }
 }
