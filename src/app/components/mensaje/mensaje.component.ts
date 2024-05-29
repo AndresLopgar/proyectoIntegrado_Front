@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsuarioService } from '../../services/usuario.service';
 import { CommonModule } from '@angular/common';
 import { Usuario } from '../../model/usuario';
@@ -9,7 +9,7 @@ import { LoaderComponent } from '../../layout/loader/loader.component';
 import { ChatService } from '../../services/chat.service';
 import { ChatMessage } from '../../model/chatMessage';
 import { FormsModule } from '@angular/forms';
-import { forkJoin, map } from 'rxjs';
+import { forkJoin, map, Subscription } from 'rxjs';
 import { NotificacionService } from '../../services/notificacion.service';
 import { Notificacion } from '../../model/notificacion';
 import Swal from 'sweetalert2';
@@ -21,7 +21,7 @@ import Swal from 'sweetalert2';
   templateUrl: './mensaje.component.html',
   styleUrls: ['./mensaje.component.scss']
 })
-export class MensajesComponent implements OnInit {
+export class MensajesComponent implements OnInit, OnDestroy {
   allUsuarios!: Usuario[];
   usuariosEnAmistad!: Usuario[];
   amistadesBySeguidor!: Amistad[];
@@ -43,6 +43,7 @@ export class MensajesComponent implements OnInit {
   ];
   notificacion!: Notificacion;
   otherUserId!: number;
+  messageSubscription!: Subscription;
 
   constructor(
     private usuarioService: UsuarioService, 
@@ -54,8 +55,6 @@ export class MensajesComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioId = this.route.snapshot.params["id"];
-    this.chatService.joinRoom(this.currentRoom);
-    this.listenerMessage();
     const usuarioLocalStorage = localStorage.getItem('usuario');
     if (usuarioLocalStorage) {
       const usuarioAlmacenado = JSON.parse(usuarioLocalStorage);
@@ -74,6 +73,21 @@ export class MensajesComponent implements OnInit {
     setTimeout(() => {
       this.loader = true;
     }, 1500);
+
+    this.chatService.getMessageSubject().subscribe(
+      (messages: any[]) => {
+        this.updateMessagesWithUsers(messages);
+      },
+      (error) => {
+        console.error('Error al recibir mensajes:', error);
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe();
+    }
   }
 
   loadUsuarioSeguidos(id: number) {
@@ -122,9 +136,7 @@ export class MensajesComponent implements OnInit {
   }
 
   sendMessage() {
-    // Verificar si el mensaje está en blanco o solo contiene espacios en blanco
     if (!this.messageInput.trim()) {
-      // Mostrar alerta utilizando SweetAlert si el mensaje está vacío
       Swal.fire({
         icon: 'warning',
         title: 'Mensaje vacío',
@@ -133,13 +145,11 @@ export class MensajesComponent implements OnInit {
       });
       return;
     }
-  
-    // Si el mensaje no está en blanco, continuar con el envío del mensaje
+
     const chatMessage: ChatMessage = {
       message: this.messageInput,
       usuarioId: this.usuarioIdFromLocalStorage.toString()
     }
-    this.listenerMessage();
     this.chatService.sendMessage(this.currentRoom, chatMessage);
     this.messageInput = "";
     this.notificacion.fechaNotificacion = new Date().toISOString();
@@ -151,33 +161,23 @@ export class MensajesComponent implements OnInit {
       }
     );
   }
-  
-  
 
-  listenerMessage() {
-    this.chatService.getMessageSubject().subscribe(
-      (messages: any[]) => {
-        const messageObservables = messages.map((item: any) => 
-          this.usuarioService.getUsuarioById(item.usuarioId)
-            .pipe(map(usuario => ({ ...item, usuario })))
-        );
-  
-        forkJoin(messageObservables).subscribe(
-          (messagesWithUsers: any[]) => {
-            this.messageList = messagesWithUsers.map((message: any) => ({
-              ...message,
-              message_side: message.usuario.id === this.usuarioIdFromLocalStorage ? 'sender' : 'reciever'
-            }));
-          },
-          (error) => {
-            console.error('Error al obtener los usuarios para los mensajes:', error);
-          }
-        );
+  updateMessagesWithUsers(messages: any[]) {
+    const messageObservables = messages.map((item: any) => 
+      this.usuarioService.getUsuarioById(item.usuarioId)
+        .pipe(map(usuario => ({ ...item, usuario })))
+    );
+
+    forkJoin(messageObservables).subscribe(
+      (messagesWithUsers: any[]) => {
+        this.messageList = messagesWithUsers.map((message: any) => ({
+          ...message,
+          message_side: message.usuario.id === this.usuarioIdFromLocalStorage ? 'sender' : 'reciever'
+        }));
       },
       (error) => {
-        console.error('Error al recibir mensajes:', error);
+        console.error('Error al obtener los usuarios para los mensajes:', error);
       }
     );
   }
-  
 }
