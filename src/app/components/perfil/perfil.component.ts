@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from '../../model/usuario';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CompaniaService } from '../../services/compania.service';
 import { Compania } from '../../model/compania';
@@ -22,7 +22,7 @@ import { NotificacionService } from '../../services/notificacion.service';
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, LoaderComponent],
+  imports: [CommonModule, FormsModule, ButtonModule, LoaderComponent, ReactiveFormsModule],
   styleUrl: './perfil.component.scss'
 })
 export class PerfilComponent implements OnInit {
@@ -115,7 +115,6 @@ export class PerfilComponent implements OnInit {
         this.loadCompaniaById(this.usuarioId);
         this.getAllpublicacionesActualByUsario(this.usuarioIdFromLocalStorage);
         this.getAllpublicacionesNoActualByUsario(this.usuarioId);
-
         this.amistad = {
           id:0,
           idSeguidor: 0,
@@ -159,10 +158,20 @@ export class PerfilComponent implements OnInit {
       confirmButtonText: 'Entendido'
     });
   }
+
+  cargarUsuarioStorage(){
+    this.usuarioService.getUsuarioById(this.usuarioIdFromLocalStorage).subscribe(
+      usuario => {
+        this.usuarioStorage = usuario;
+      }
+    )
+  }
   
   agregarPortafolio() {
     if (this.updateForm.valid) {
       this.usuarioStorage.portafolio = this.updateForm.value.portafolio;
+      console.log(this.updateForm.value.portafolio);
+      
       this.usuarioService.updateUsuario(this.usuarioIdFromLocalStorage, this.usuarioStorage)
         .subscribe(
           response => {
@@ -171,6 +180,7 @@ export class PerfilComponent implements OnInit {
               'El portafolio ha sido actualizado.',
               'success'
             );
+            this.mostrarCreaPortafolio = false;
             this.router.navigateByUrl('/home');
           },
           error => {
@@ -191,14 +201,6 @@ export class PerfilComponent implements OnInit {
 
   irAModeracion(){
     this.router.navigateByUrl('/moderar');
-  }
-
-  cargarUsuarioStorage(){
-    this.usuarioService.getUsuarioById(this.usuarioIdFromLocalStorage).subscribe(
-      usuario => {
-        this.usuarioStorage = usuario;
-      }
-    )
   }
 
   darMeGusta(publicacion: Publicacion) {

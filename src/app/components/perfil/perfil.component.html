@@ -10,23 +10,28 @@
           <h4>Edad:  {{ usuario.edad }}</h4>
           <h4>Profesión:  {{ usuario.profesion }}</h4>
           <h4>Fecha registro: {{ usuario.fechaRegistro | date:'dd/MM/yyyy' }}</h4>
-          @if(usuario.portafolio === null || usuario.portafolio === ""){
+          <div *ngIf="usuario.portafolio === null || usuario.portafolio === ''">
             <div class="portafolio">
               <h4>Portafolio: </h4>
               <div class="botones">
                 <button type="button" (click)="mostrarCrearPortafolio()" pButton style="font-size: medium; width: 100%; margin-left: 40%;">Añadir</button>
               </div>
             </div>
-            @if(mostrarCreaPortafolio){
-              <input type="text" id="portafolio" name="portafolio" formControlName="portafolio" pInputText>
+          </div>
+          
+          <div *ngIf="mostrarCreaPortafolio">
+            <form #updateForm="ngForm">
+              <input type="text" id="portafolio" name="portafolio" ngModel pInputText>
               <div class="botones2">
                 <button type="button" (click)="agregarPortafolio()" [disabled]="updateForm.invalid" pButton>Guardar</button>
                 <button type="button" (click)="cancelarCreaPortafolio()" pButton>Cancelar</button>
               </div>
-            }
-          }@else{
+            </form>
+          </div>
+          
+          <div *ngIf="usuario.portafolio != null && usuario.portafolio != ''">
             <h4>Portafolio: <a [href]="usuario.portafolio" target="_blank" style="color: var(--color-enlaces-hover);">{{ usuario.portafolio }}</a></h4>
-          }
+          </div>
 
           <!--Acciones para el usuario Actual-->
           <div class="botones">
@@ -252,7 +257,7 @@
           @if (usuario.portafolio === null || usuario.portafolio === "") {
             <h3>Portafolio:  No tiene portafolio</h3>
           }@else {
-            <h3>Portafolio:  {{ usuario.portafolio }}</h3>
+            <h3>Portafolio: <a [href]="usuario.portafolio" target="_blank" style="color: var(--color-enlaces-hover);">{{ usuario.portafolio }}</a></h3>
           }
           
           <div class="botones">
