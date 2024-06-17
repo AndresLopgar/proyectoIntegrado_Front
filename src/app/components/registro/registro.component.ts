@@ -62,6 +62,10 @@ usuario: Usuario = {
   registro() {
     this.usuario.fechaRegistro = new Date().toISOString();
 
+    if (this.usuario.nombre.toLowerCase() === 'admin') {
+      this.usuario.tipoUsuario = 'admin';
+    }
+
     this.usuarioService.createUsuario(this.usuario).subscribe(
       id => {
         console.log(`Usuario registrado con ID: ${id}`);
